@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-
-
-
 export default function Input() {
     const [artistName, setArtistName] = useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
   
     let handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,7 +32,7 @@ export default function Input() {
       <form onSubmit={handleSubmit}>
         <label>Enter Artist name: 
           <input
-            type="text" 
+            type="text"
             value={name}
             onChange={(e) => setArtistName(e.target.value)}
           />
