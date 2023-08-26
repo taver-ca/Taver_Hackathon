@@ -1,0 +1,17 @@
+{
+  "name": "taver-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@spotify/web-api-ts-sdk": "^1.1.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "qs": "^6.11.2"
+  }
+}
