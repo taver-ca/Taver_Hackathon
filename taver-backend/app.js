@@ -31,8 +31,22 @@ const getConcertData = async (id) => {
         const $ = cheerio.load(data);
         const loaded = $('[type="application/ld+json"]');
 		const obj = JSON.parse(loaded.text());
-        // console.log(obj);
-		return obj['@graph'][1].location;
+        
+        let results = [];
+        
+        for (i = 1; i < obj['@graph'].length - 1; i++) {
+            const concert_details = obj['@graph'][i];
+            results.push({
+                title: concert_details.name,
+                date: concert_details.startDate,
+                location: {
+                    name: concert_details.location.name,
+                    latitude: concert_details.location.latitude,
+                    longitude: concert_details.location.longitude,
+                }
+            });
+        }
+		return results;
 	} catch (error) {
 		throw error;
 	}
