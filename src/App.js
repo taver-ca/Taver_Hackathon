@@ -11,9 +11,7 @@ function App() {
         <Input />       
       </header>      
       <GoogleApiWrapper />
-    </div>
-    
+    </div>    
   );
 }
-
 export default App;

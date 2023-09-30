@@ -1,8 +1,10 @@
 import { useState } from "react";
+import GoogleApiWrapper from './map';
 
 export default function Input() {
   const [artistName, setArtistName] = useState("");
   const [message, setMessage] = useState("");
+
 
   let handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +21,7 @@ export default function Input() {
       let resJson = await res.json();
       if (res.status === 200) {
         message = resJson;
-        setMessage("User created successfully"+message);
+        setMessage("User created successfully" + message);
       } else {
         setMessage("Some error occured");
       }
@@ -31,13 +33,16 @@ export default function Input() {
   return (
     <form onSubmit={handleSubmit}>
       <label>Enter Artist Name:
+      </label>
+      <div>
         <input
           type="text"
           value={artistName}
           onChange={(e) => setArtistName(e.target.value)}
         />
-      </label>
+      </div>
       <button type="submit">Submit</button>
+
     </form>
   )
 }
