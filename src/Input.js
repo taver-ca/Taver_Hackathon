@@ -67,7 +67,7 @@ export default function Input({ setConcerts, setArtist }) {
 
       let resJson = await res.json()
       if (res.status === 200) {
-        setConcerts(resJson);
+        setConcerts((prev) => (prev.concat(resJson)));
         setArtist(artistName);
       } else {
         console.log("Some error occured");

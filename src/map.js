@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { GoogleMap, InfoWindow, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, InfoWindow, MarkerF, PolylineF } from "@react-google-maps/api";
 
 const concertToMarker = (concert) => {
   return {
-    id: concert.title,
+    id: concert.title + concert.date,
     name: concert.title,
     position: {
       lat: concert.location.latitude,
@@ -11,6 +11,8 @@ const concertToMarker = (concert) => {
     }
   };
 }
+
+let pathOptions = {};
 
 function Map({ artist, concerts }) {
   const [activeMarker, setActiveMarker] = useState(null);
@@ -29,7 +31,43 @@ function Map({ artist, concerts }) {
     markers.forEach(({ position }) => bounds.extend(position));
     map.fitBounds(bounds);
     console.log('Placed Markers' + markers);
+
+    pathOptions = {
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      clickable: false,
+      draggable: false,
+      editable: false,
+      visible: true,
+      radius: 30000,
+      zIndex: 1,
+      icons: [
+        {
+          icon: {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, // eslint-disable-line
+            fillColor: '#FF0000',
+            strokeColor: '#FF0000',
+          },
+          offset: '100%',
+          repeat: '20px',
+        }
+      ]
+    };
   };
+
+  const sortedConcerts = concerts.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const path = sortedConcerts.map(concert => (
+    {
+      lat: concert.location.latitude,
+      lng: concert.location.longitude
+    }
+  ));
+
+  console.log('Concerts' + JSON.stringify(concerts.map(concert => concert.date)));
+  console.log('Path' + JSON.stringify(path));
 
   return (
     <GoogleMap
@@ -51,6 +89,10 @@ function Map({ artist, concerts }) {
           ) : null}
         </MarkerF>
       ))}
+      <PolylineF
+        path={path}
+        options={pathOptions}
+      />
     </GoogleMap>
   );
 }
