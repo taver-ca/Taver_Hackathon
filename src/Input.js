@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Input() {
+export default function Input({ setConcerts, setArtist }) {
   const [artistName, setArtistName] = useState("");
 
   let handleSubmit = async (e) => {
@@ -18,9 +18,8 @@ export default function Input() {
 
       let resJson = await res.json()
       if (res.status === 200) {
-        for (const obj of resJson) {
-          //console.log(`location: ${obj['location'].name}`);
-        }        
+        setConcerts(resJson);
+        setArtist(artistName);
       } else {
         console.log("Some error occured");
       }
