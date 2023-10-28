@@ -77,6 +77,8 @@ app.post('/concerts', async function (req, res) {
 
         const artist = await getArtist(query);
         let concert_response = await getConcertData(artist.id);
+        concert_response = concert_response.map(res => 
+            ({...res, image: artist.images[2]}));
         res.send(concert_response)
     }
     catch (e) {

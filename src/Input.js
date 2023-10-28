@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function Input({ setConcerts, setArtist }) {
-  const [artistName, setArtistName] = useState("");
+  const [artistName, setArtistName] = useState("Taylor Swift");
 
   let handleSubmit = async (e) => {
     e.preventDefault();

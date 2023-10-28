@@ -28,6 +28,14 @@
   color: #61dafb;
 }
 
+img.artist {
+  border-radius: 9999px;
+}
+
+div.info {
+  display: flex;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
