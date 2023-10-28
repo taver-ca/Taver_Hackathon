@@ -74,7 +74,7 @@ function Map({ artist, concerts }) {
     <GoogleMap
       key={artist}
       onLoad={handleOnLoad}
-      // onClick={() => setActiveMarker(null)}
+      onClick={() => setActiveMarker(null)}
       mapContainerStyle={{ width: "100vw", height: "100vh" }}
     >
       {markers.map(({ id, name, position, artistImageUrl }) => (
