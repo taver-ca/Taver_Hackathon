@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { GoogleMap, InfoWindow, MarkerF, PolylineF } from "@react-google-maps/api";
+import { GoogleMap, InfoWindowF, MarkerF, PolylineF } from "@react-google-maps/api";
 
 const concertToMarker = (concert) => {
   return {
@@ -74,7 +74,7 @@ function Map({ artist, concerts }) {
     <GoogleMap
       key={artist}
       onLoad={handleOnLoad}
-      onClick={() => setActiveMarker(null)}
+      // onClick={() => setActiveMarker(null)}
       mapContainerStyle={{ width: "100vw", height: "100vh" }}
     >
       {markers.map(({ id, name, position, artistImageUrl }) => (
@@ -84,14 +84,14 @@ function Map({ artist, concerts }) {
           icon={{url: artistImageUrl, scaledSize: { width: 35, height: 35} }}
           onClick={(e) => { e.stop(); handleActiveMarker(id)}}
         >
-          { activeMarker === id ? 
+          { activeMarker === id ?
           (
-            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+            <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
               <div className="info">
                 <img src={artistImageUrl} width={45} height={45} className="artist"/>
                 <div>{name}</div>
               </div>
-            </InfoWindow>
+            </InfoWindowF>
           ) : null}
         </MarkerF>
       ))}
