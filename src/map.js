@@ -5,6 +5,7 @@ const concertToMarker = (concert) => {
   return {
     id: concert.title + concert.date,
     name: concert.title,
+    artistImageUrl: concert.image.url,
     position: {
       lat: concert.location.latitude,
       lng: concert.location.longitude
@@ -76,15 +77,20 @@ function Map({ artist, concerts }) {
       onClick={() => setActiveMarker(null)}
       mapContainerStyle={{ width: "100vw", height: "100vh" }}
     >
-      {markers.map(({ id, name, position }) => (
+      {markers.map(({ id, name, position, artistImageUrl }) => (
         <MarkerF
           key={id}
           position={position}
-          onClick={() => handleActiveMarker(id)}
+          icon={{url: artistImageUrl, scaledSize: { width: 35, height: 35} }}
+          onClick={(e) => { e.stop(); handleActiveMarker(id)}}
         >
-          {activeMarker === id ? (
+          { activeMarker === id ? 
+          (
             <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-              <div>{name}</div>
+              <div className="info">
+                <img src={artistImageUrl} width={45} height={45} className="artist"/>
+                <div>{name}</div>
+              </div>
             </InfoWindow>
           ) : null}
         </MarkerF>

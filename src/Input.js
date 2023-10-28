@@ -39,7 +39,7 @@ async function generateCodeChallengeFromVerifier(v) {
 }
 
 export default function Input({ setConcerts, setArtist }) {
-  const [artistName, setArtistName] = useState("");
+  const [artistName, setArtistName] = useState("Taylor Swift");
 
   var redirect_uri = "http://localhost:3000/";
   var client_id = "03443a9e213f4dacb4e591779a560834";
