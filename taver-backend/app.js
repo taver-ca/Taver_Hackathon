@@ -19,7 +19,6 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
-  
 
 const port = 3001
 
@@ -45,7 +44,7 @@ const getConcertData = async (id) => {
 
         let results = [];
 
-        for (i = 1; i < obj['@graph'].length - 1; i++) {
+        for (let i = 1; i < obj['@graph'].length - 1; i++) {
             const concert_details = obj['@graph'][i];
             results.push({
                 title: concert_details.name,
@@ -77,12 +76,11 @@ app.post('/concerts', async function (req, res) {
         // const artist = response.data.artists.items[0]
 
         const artist = await getArtist(query);
-
         let concert_response = await getConcertData(artist.id);
-
         res.send(concert_response)
     }
     catch (e) {
+        console.log(e);
         res.sendStatus(500);
     }
 

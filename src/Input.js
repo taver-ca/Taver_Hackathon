@@ -1,7 +1,6 @@
 import { useState } from "react";
-import GoogleApiWrapper from './map';
 
-export default function Input() {
+export default function Input({ setConcerts, setArtist }) {
   const [artistName, setArtistName] = useState("");
   const [message, setMessage] = useState("");
 
@@ -20,7 +19,8 @@ export default function Input() {
       });
       let resJson = await res.json();
       if (res.status === 200) {
-        message = resJson;
+        setConcerts(resJson);
+        setArtist(artistName);
         setMessage("User created successfully" + message);
       } else {
         setMessage("Some error occured");
