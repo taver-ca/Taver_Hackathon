@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+
+var redirectUri = "http://localhost:3000/";
+var clientId = "03443a9e213f4dacb4e591779a560834";
 
 // GENERATING CODE VERIFIER
 function dec2hex(dec) {
@@ -9,7 +13,6 @@ function generateCodeVerifier() {
   window.crypto.getRandomValues(array);
   return Array.from(array, dec2hex).join("");
 }
-
 
 // GENERATING CODE CHALLENGE FROM VERIFIER
 function sha256(plain) {
@@ -41,15 +44,11 @@ async function generateCodeChallengeFromVerifier(v) {
 export default function Input({ setConcerts, setArtist }) {
   const [artistName, setArtistName] = useState("Taylor Swift");
 
-  var redirect_uri = "http://localhost:3000/";
-  var client_id = "03443a9e213f4dacb4e591779a560834";
   let handleSpotifySignIn = () => {
     generateCodeChallengeFromVerifier(generateCodeVerifier()).then((result) => {
-      window.location.href = `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=user-follow-read&code_challenge_method=S256&code_challenge=${result}`;
-
+      localStorage.setItem("codechallenge", result);
+      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-follow-read&code_challenge_method=S256&code_challenge=${result}`;
     });
-
-
   };
 
   let handleSubmit = async (e) => {
