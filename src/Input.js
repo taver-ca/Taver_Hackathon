@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 
 var redirectUri = "http://localhost:3000/";
 var clientId = "03443a9e213f4dacb4e591779a560834";
@@ -46,7 +45,7 @@ export default function Input({ setConcerts, setArtist }) {
 
   let handleSpotifySignIn = () => {
     generateCodeChallengeFromVerifier(generateCodeVerifier()).then((result) => {
-      localStorage.setItem("codechallenge", result);
+      localStorage.setItem("code_verifier", result);
       window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-follow-read&code_challenge_method=S256&code_challenge=${result}`;
     });
   };
