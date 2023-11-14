@@ -4,8 +4,6 @@ const cheerio = require('cheerio');
 const { SpotifyApi } = require("@spotify/web-api-ts-sdk");
 const dotenv = require("dotenv");
 
-const { getAuth } = require('./auth');
-
 dotenv.config();
 
 const app = express()
@@ -33,12 +31,38 @@ const getArtist = async (query) => {
     return items.artists.items[0];
 };
 
+
+const getToken = async (code, code_verifier) => {
+
+    const payload = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: process.env.SPOTIFY_CLIENT_ID,
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: process.env.PLAYLISTIC_REDIRECT_URI,
+        code_verifier: code_verifier,
+      }),
+    }
+
+    const body = await fetch("https://accounts.spotify.com/api/token", payload);
+    const response = await body.json();
+    
+    console.log(response);
+
+    return {token : response.access_token}
+  }
+
+
 const getConcertData = async (id) => {
     try {
-        const { data } = await axios.get(
+        const { data } = await get(
             `https://open.spotify.com/artist/${id}/concerts`
         );
-        const $ = cheerio.load(data);
+        const $ = load(data);
         const loaded = $('[type="application/ld+json"]');
         const obj = JSON.parse(loaded.text());
 
@@ -80,6 +104,22 @@ app.post('/concerts', async function (req, res) {
         concert_response = concert_response.map(res => 
             ({...res, image: artist.images[2]}));
         res.send(concert_response)
+    }
+    catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+
+})
+
+app.post('/spotifyauth', async function(req, res){
+    try {
+        console.log("code: ");
+        console.log(req.body.code);
+        console.log("code verifier: ")
+        console.log(req.body.code_verifier)
+        let response = getToken(req.body.code, req.body.code_verifier);
+        res.send(response)
     }
     catch (e) {
         console.log(e);
