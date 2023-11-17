@@ -10,30 +10,32 @@ const generateRandomString = (length) => {
   return values.reduce((acc, x) => acc + possible[x % possible.length], "");
 }
 
-async function getCodeCallenge()
-{
-  let randomString = generateRandomString(64);
+const sha256 = async (plain) => {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(plain)
+  return window.crypto.subtle.digest('SHA-256', data)
+}
 
-   // Convert the bytes array to a base64 string
-   var code_verifier = btoa(randomString)
-   // Remove any trailing '=' characters
-   .replace(/=+$/, '')
-   // Replace '+' with '-' and '/' with '_'
-   .replace(/\+/g, '-')
-   .replace(/\//g, '_');
-   localStorage.setItem("code_verifier", code_verifier);
+const base64encode = (input) => {
+  return btoa(String.fromCharCode(...new Uint8Array(input)))
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+}
 
-   var sha256 = CryptoJS.algo.SHA256.create()
-   var challengeBytes = sha256.finalize(code_verifier);
-   var code_challenge = challengeBytes.toString(CryptoJS.enc.Base64).replace('/=+$/', '') .replace('/+/g', '-') .replace('///g', '_');
-   return code_challenge;
+async function getCodeCallenge() {
+
+  const codeVerifier = generateRandomString(64);
+  window.localStorage.setItem('code_verifier', codeVerifier);
+  const hashed = await sha256(codeVerifier)
+  const codeChallenge = base64encode(hashed);
+  return codeChallenge;
 
 }
 
 
 export default function Input({ setConcerts, setArtist }) {
   const [artistName, setArtistName] = useState("Taylor Swift");
-
   let handleSpotifySignIn = () => {
     getCodeCallenge().then((result) => {
       window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-follow-read&code_challenge_method=S256&code_challenge=${result}`;
