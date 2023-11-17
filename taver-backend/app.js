@@ -49,11 +49,14 @@ const getToken = async (code, code_verifier) => {
     }
 
     const body = await fetch("https://accounts.spotify.com/api/token", payload);
-    const response = await body.json();
-    
-    console.log(response);
-
-    return {token : response.access_token}
+    console.log("status: ");
+    console.log(body.status);
+    if(body.status == 200)
+    {
+        const response = await body.json();
+        return response;
+    }
+    throw new Error('bad response for access token');
   }
 
 
@@ -117,14 +120,27 @@ app.post('/spotifyauth', async function(req, res){
         console.log("code: ");
         console.log(req.body.code);
         console.log("code verifier: ")
-        console.log(req.body.code_verifier)
-        let response = getToken(req.body.code, req.body.code_verifier);
-        res.send(response)
+        console.log(req.body.code_verifier)        
     }
     catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
+
+    try
+    {
+        let response = await getToken(req.body.code, req.body.code_verifier);
+        console.log("response: ")
+        console.log(response);
+        const jsonContent = JSON.stringify(response.access_token);        
+        res.send(jsonContent)
+    }
+    catch (e)
+    {
+        console.log(e);
+        res.sendStatus(400);
+    }
+  
 
 })
 
