@@ -7,11 +7,20 @@ function YourFavoriteSpotifyArtists() {
   let code_verifier = localStorage.getItem('code_verifier');
   let searchParams = new URLSearchParams(location.search);
   let code = searchParams.get("code");
-  const [token, setToken] = useState("");
   const [trigger, setTrigger] = useState(false);
+  const [followedArtists, setFollowedArtists] = useState([]);
+
+  const commaSeparatedfollowedArtists = followedArtists.map((item, index) => (
+    <span key={index}>
+      {item}
+      {index < followedArtists.length - 1 ? ", " : ""}
+    </span>
+  ));
+
+
 
   useEffect(() => {
-
+    
     const getToken = async (code, code_verifier) => {
 
       if (trigger) {
@@ -21,7 +30,7 @@ function YourFavoriteSpotifyArtists() {
       setTrigger(true);
 
       try {
-        let res = await fetch("http://localhost:3001/spotifyauth", {
+        let res = await fetch("http://localhost:3001/getFollowedArtists", {
           method: "POST",
           headers: {
             'content-type': 'application/json;charset=utf-8'
@@ -34,9 +43,10 @@ function YourFavoriteSpotifyArtists() {
 
         if (res.status === 200) {
           let resJson = await res.json();
-          setToken(resJson);
-        }       
-        
+          setFollowedArtists(resJson);
+          return resJson;
+        }
+
       } catch (err) {
         console.log("Some error occured");
         console.log(err);
@@ -48,21 +58,17 @@ function YourFavoriteSpotifyArtists() {
       console.log("code is empty, abort access token acquisition");
       return;
     }
-    
-    if(code_verifier !== null && code_verifier !== '')
-    {
+
+    if (code_verifier !== null && code_verifier !== '') {
       getToken(code, code_verifier);
     }
-
-
   });
-
 
   // Display spotify token 
   return (
     <div>
-      <p>Code: {code}</p>
-      <p>Token: {token}</p>
+      <p>Followed Artists: </p>
+      <p>{commaSeparatedfollowedArtists}</p>
     </div>
   );
 }

@@ -25,9 +25,9 @@ const api = SpotifyApi.withClientCredentials(
     process.env.SPOTIFY_CLIENT_SECRET
 );
 
+
 const getArtist = async (query) => {
     const items = await api.search(query, ["artist"]);
-
     return items.artists.items[0];
 };
 
@@ -94,14 +94,6 @@ app.post('/concerts', async function (req, res) {
         console.log(req.body.artistName);
         let query = req.body.artistName;
 
-        // const spotify_config = {
-        //     headers: {
-        //         'Authorization': getAuth()
-        //     }
-        // };
-        // let response = await axios.get(`https://api.spotify.com/v1/search?q=${query}&type=artist`, spotify_config);
-        // const artist = response.data.artists.items[0]
-
         const artist = await getArtist(query);
         let concert_response = await getConcertData(artist.id);
         concert_response = concert_response.map(res => 
@@ -115,24 +107,34 @@ app.post('/concerts', async function (req, res) {
 
 })
 
-app.post('/spotifyauth', async function(req, res){
+app.post('/getFollowedArtists', async function(req, res)
+{
     try {
         console.log("code: ");
         console.log(req.body.code);
         console.log("code verifier: ")
         console.log(req.body.code_verifier)        
     }
-    catch (e) {
+    catch (e) 
+    {
         console.log(e);
         res.sendStatus(500);
     }
 
     try
     {
-        let response = await getToken(req.body.code, req.body.code_verifier);
-        console.log("response: ")
-        console.log(response);
-        const jsonContent = JSON.stringify(response.access_token);        
+        let token = await getToken(req.body.code, req.body.code_verifier); 
+        var userApi = SpotifyApi.withAccessToken(process.env.SPOTIFY_CLIENT_ID, token);
+        var artistList = await userApi.currentUser.followedArtists();
+
+        console.log("followed artists:");
+        console.log(artistList);
+
+        let response = artistList.artists.items.map(function(artist){ return artist.name});
+        var jsonContent = JSON.stringify(response);
+        console.log("followed artist names:");
+        console.log(jsonContent);
+        
         res.send(jsonContent)
     }
     catch (e)
