@@ -49,7 +49,11 @@ function YourFavoriteSpotifyArtists() {
       return;
     }
     
-    getToken(code, code_verifier);
+    if(code_verifier !== null && code_verifier !== '')
+    {
+      getToken(code, code_verifier);
+    }
+
 
   });
 
