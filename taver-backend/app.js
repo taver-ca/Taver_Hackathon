@@ -12,11 +12,11 @@ app.use(express.urlencoded({ extended: true }));
 // parse requests of content-type - application/json
 app.use(express.json());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
-  });
+});
 
 const port = 3001
 
@@ -35,29 +35,28 @@ const getArtist = async (query) => {
 const getToken = async (code, code_verifier) => {
 
     const payload = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        client_id: process.env.SPOTIFY_CLIENT_ID,
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: process.env.PLAYLISTIC_REDIRECT_URI,
-        code_verifier: code_verifier,
-      }),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            client_id: process.env.SPOTIFY_CLIENT_ID,
+            grant_type: 'authorization_code',
+            code: code,
+            redirect_uri: process.env.PLAYLISTIC_REDIRECT_URI,
+            code_verifier: code_verifier,
+        }),
     }
 
     const body = await fetch("https://accounts.spotify.com/api/token", payload);
     console.log("status: ");
     console.log(body.status);
-    if(body.status == 200)
-    {
+    if (body.status == 200) {
         const response = await body.json();
         return response;
     }
     throw new Error('bad response for access token');
-  }
+}
 
 
 const getConcertData = async (id) => {
@@ -71,8 +70,8 @@ const getConcertData = async (id) => {
 
         let results = [];
 
-        for (let i = 1; i < obj['@graph'].length - 1; i++) {
-            const concert_details = obj['@graph'][i];
+        if (obj['@graph'].length > 1) {
+            const concert_details = obj['@graph'][1];
             results.push({
                 title: concert_details.name,
                 date: concert_details.startDate,
@@ -96,8 +95,8 @@ app.post('/concerts', async function (req, res) {
 
         const artist = await getArtist(query);
         let concert_response = await getConcertData(artist.id);
-        concert_response = concert_response.map(res => 
-            ({...res, image: artist.images[2]}));
+        concert_response = concert_response.map(res =>
+            ({ ...res, image: artist.images[2] }));
         res.send(concert_response)
     }
     catch (e) {
@@ -107,42 +106,48 @@ app.post('/concerts', async function (req, res) {
 
 })
 
-app.post('/getFollowedArtists', async function(req, res)
-{
+app.post('/getFollowedArtists', async function (req, res) {
     try {
         console.log("code: ");
         console.log(req.body.code);
         console.log("code verifier: ")
-        console.log(req.body.code_verifier)        
+        console.log(req.body.code_verifier)
     }
-    catch (e) 
-    {
+    catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 
-    try
-    {
-        let token = await getToken(req.body.code, req.body.code_verifier); 
+    try {
+        let token = await getToken(req.body.code, req.body.code_verifier);
         var userApi = SpotifyApi.withAccessToken(process.env.SPOTIFY_CLIENT_ID, token);
         var artistList = await userApi.currentUser.topItems("artists");
 
         console.log("followed artists:");
         console.log(artistList);
 
-        let response = artistList.items.map(function(artist){ return artist.name});
+        let response = await Promise.all(artistList.items.map(async function (artist) {
+
+            let artistConcertData = await getConcertData(artist.id);
+
+            if (artistConcertData.length > 0) {
+                return artist.name;
+            }
+            else {
+                return artist.name + " (no concerts)";
+            }
+        }));
         var jsonContent = JSON.stringify(response);
         console.log("followed artist names:");
         console.log(jsonContent);
-        
+
         res.send(jsonContent)
     }
-    catch (e)
-    {
+    catch (e) {
         console.log(e);
         res.sendStatus(400);
     }
-  
+
 
 })
 

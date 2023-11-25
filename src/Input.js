@@ -1,5 +1,4 @@
-import { useState } from "react";
-var CryptoJS = require("crypto-js");
+import { useState, forwardRef, useImperativeHandle } from "react";
 
 var redirectUri = "http://localhost:3000/";
 var clientId = "03443a9e213f4dacb4e591779a560834";
@@ -33,17 +32,22 @@ async function getCodeCallenge() {
 
 }
 
+const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
+  useImperativeHandle(ref, () => ({
+    handleRequestFromParent: (artistName) => {
+      //do something
+      submitArtist(artistName);
+   }
+  }));
 
-export default function Input({ setConcerts, setArtist }) {
   const [artistName, setArtistName] = useState("Taylor Swift");
   let handleSpotifySignIn = () => {
     getCodeCallenge().then((result) => {
-      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-top-read&code_challenge_method=S256&code_challenge=${result}`;
+      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-top-read%20&code_challenge_method=S256&code_challenge=${result}`;
     });
   };
 
-  let handleSubmit = async (e) => {
-    e.preventDefault();
+  const submitArtist = async (incomingArtistName) => {
     try {
       let res = await fetch("http://localhost:3001/concerts", {
         method: "POST",
@@ -51,20 +55,25 @@ export default function Input({ setConcerts, setArtist }) {
           'content-type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify({
-          artistName: artistName,
+          artistName: incomingArtistName,
         }),
       });
 
       let resJson = await res.json()
       if (res.status === 200) {
         setConcerts((prev) => (prev.concat(resJson)));
-        setArtist(artistName);
+        setArtist(incomingArtistName);
       } else {
         console.log("Some error occured");
       }
     } catch (err) {
       console.log(err);
     }
+  }
+
+  let handleSubmit = async (e) => {
+    e.preventDefault();
+    submitArtist(artistName);
   };
 
   return (
@@ -87,4 +96,7 @@ export default function Input({ setConcerts, setArtist }) {
     </div>
 
   )
-}
+});
+
+
+export default Input;

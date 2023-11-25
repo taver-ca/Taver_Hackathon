@@ -53,7 +53,7 @@ function Map({ artist, concerts }) {
             strokeColor: '#FF0000',
           },
           offset: '100%',
-          repeat: '20px',
+          repeat: '100px',
         }
       ]
     };
