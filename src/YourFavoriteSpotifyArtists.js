@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom";
 
-function YourFavoriteSpotifyArtists() {
-
+function YourFavoriteSpotifyArtists({ onChildClick }) {
   let location = useLocation();
   let code_verifier = localStorage.getItem('code_verifier');
   let searchParams = new URLSearchParams(location.search);
@@ -10,10 +9,15 @@ function YourFavoriteSpotifyArtists() {
   const [trigger, setTrigger] = useState(false);
   const [followedArtists, setFollowedArtists] = useState([]);
 
-  const commaSeparatedfollowedArtists = followedArtists.map((item, index) => (
+  const handleClick = (artistName) => {
+    onChildClick(artistName);
+  };
+
+
+  const commaSeparatedfollowedArtists = followedArtists.map((artistName, index) => (
     <span key={index}>
-      {item}
-      {index < followedArtists.length - 1 ? ", " : ""}
+      <button onClick={() => handleClick(artistName)}>{artistName}</button>
+      {index < followedArtists.length - 1 ? " " : ""}
     </span>
   ));
 
