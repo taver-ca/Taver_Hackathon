@@ -38,7 +38,7 @@ export default function Input({ setConcerts, setArtist }) {
   const [artistName, setArtistName] = useState("Taylor Swift");
   let handleSpotifySignIn = () => {
     getCodeCallenge().then((result) => {
-      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-follow-read&code_challenge_method=S256&code_challenge=${result}`;
+      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-top-read&code_challenge_method=S256&code_challenge=${result}`;
     });
   };
 

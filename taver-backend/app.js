@@ -62,10 +62,10 @@ const getToken = async (code, code_verifier) => {
 
 const getConcertData = async (id) => {
     try {
-        const { data } = await get(
+        const { data } = await axios.get(
             `https://open.spotify.com/artist/${id}/concerts`
         );
-        const $ = load(data);
+        const $ = cheerio.load(data);
         const loaded = $('[type="application/ld+json"]');
         const obj = JSON.parse(loaded.text());
 
@@ -125,12 +125,12 @@ app.post('/getFollowedArtists', async function(req, res)
     {
         let token = await getToken(req.body.code, req.body.code_verifier); 
         var userApi = SpotifyApi.withAccessToken(process.env.SPOTIFY_CLIENT_ID, token);
-        var artistList = await userApi.currentUser.followedArtists();
+        var artistList = await userApi.currentUser.topItems("artists");
 
         console.log("followed artists:");
         console.log(artistList);
 
-        let response = artistList.artists.items.map(function(artist){ return artist.name});
+        let response = artistList.items.map(function(artist){ return artist.name});
         var jsonContent = JSON.stringify(response);
         console.log("followed artist names:");
         console.log(jsonContent);
