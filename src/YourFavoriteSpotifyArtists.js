@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 function YourFavoriteSpotifyArtists({ onChildClick }) {
   let location = useLocation();
-  let code_verifier = localStorage.getItem('code_verifier');
+  let code_verifier = localStorage.getItem("code_verifier");
   let searchParams = new URLSearchParams(location.search);
   let code = searchParams.get("code");
   const [trigger, setTrigger] = useState(false);
@@ -13,20 +13,17 @@ function YourFavoriteSpotifyArtists({ onChildClick }) {
     onChildClick(artistName);
   };
 
-
-  const commaSeparatedfollowedArtists = followedArtists.map((artistName, index) => (
-    <span key={index}>
-      <button onClick={() => handleClick(artistName)}>{artistName}</button>
-      {index < followedArtists.length - 1 ? " " : ""}
-    </span>
-  ));
-
-
+  const commaSeparatedfollowedArtists = followedArtists.map(
+    (artistName, index) => (
+      <span key={index}>
+        <button onClick={() => handleClick(artistName)}>{artistName}</button>
+        {index < followedArtists.length - 1 ? " " : ""}
+      </span>
+    )
+  );
 
   useEffect(() => {
-    
     const getToken = async (code, code_verifier) => {
-
       if (trigger) {
         console.log("already attempted access token acquistion, aborting");
         return;
@@ -34,14 +31,14 @@ function YourFavoriteSpotifyArtists({ onChildClick }) {
       setTrigger(true);
 
       try {
-        let res = await fetch("http://localhost:3001/getFollowedArtists", {
-          method: "POST",
+        let res = await fetch("http://localhost:3001/artists/top", {
+          method: "GET",
           headers: {
-            'content-type': 'application/json;charset=utf-8'
+            "content-type": "application/json;charset=utf-8",
           },
           body: JSON.stringify({
             code: code,
-            code_verifier: code_verifier
+            code_verifier: code_verifier,
           }),
         });
 
@@ -50,25 +47,24 @@ function YourFavoriteSpotifyArtists({ onChildClick }) {
           setFollowedArtists(resJson);
           return resJson;
         }
-
       } catch (err) {
         console.log("Some error occured");
         console.log(err);
         return;
       }
-    }
+    };
 
     if (code === null) {
       console.log("code is empty, abort access token acquisition");
       return;
     }
 
-    if (code_verifier !== null && code_verifier !== '') {
+    if (code_verifier !== null && code_verifier !== "") {
       getToken(code, code_verifier);
     }
   });
 
-  // Display spotify token 
+  // Display spotify token
   return (
     <div>
       <p>Followed Artists: </p>

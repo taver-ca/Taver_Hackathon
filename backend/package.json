@@ -21,10 +21,19 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.1.17",
+    "@spotify/web-api-ts-sdk": "^1.1.2",
+    "@types/spotify-web-api-node": "^5.0.11",
+    "axios": "^1.6.2",
+    "cheerio": "^1.0.0-rc.12",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "spotify-web-api-node": "^5.0.2",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
