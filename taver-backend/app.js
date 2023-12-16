@@ -72,6 +72,7 @@ const getConcertData = async (id) => {
 
         if (obj['@graph'].length > 1) {
             const concert_details = obj['@graph'][1];
+            console.log(concert_details);
             results.push({
                 title: concert_details.name,
                 date: concert_details.startDate,
@@ -133,10 +134,8 @@ app.post('/getFollowedArtists', async function (req, res) {
             if (artistConcertData.length > 0) {
                 return artist.name;
             }
-            else {
-                return artist.name + " (no concerts)";
-            }
         }));
+        response = response.filter(Boolean);
         var jsonContent = JSON.stringify(response);
         console.log("followed artist names:");
         console.log(jsonContent);
