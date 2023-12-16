@@ -96,8 +96,9 @@ const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
         </div>
         <button type="submit">Submit</button>
       </form>
-      <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
-      <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
+      <div>StartDate: <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} /></div>
+      <div>EndDate: <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} /></div>
+
       <button onClick={handleSpotifySignIn}>
         Sign in to Spotify
       </button>
