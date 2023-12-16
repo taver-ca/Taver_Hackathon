@@ -91,7 +91,7 @@ const getConcertData = async (id) => {
 
 app.post('/concerts', async function (req, res) {
     try {
-        console.log(req.body.artistName);
+        console.log(req.body);
         let query = req.body.artistName;
 
         const artist = await getArtist(query);

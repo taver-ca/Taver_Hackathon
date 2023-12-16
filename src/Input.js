@@ -1,4 +1,7 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 var redirectUri = "http://localhost:3000/";
 var clientId = "03443a9e213f4dacb4e591779a560834";
@@ -37,9 +40,10 @@ const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
     handleRequestFromParent: (artistName) => {
       //do something
       submitArtist(artistName);
-   }
+    }
   }));
-
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [artistName, setArtistName] = useState("Taylor Swift");
   let handleSpotifySignIn = () => {
     getCodeCallenge().then((result) => {
@@ -56,6 +60,8 @@ const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
         },
         body: JSON.stringify({
           artistName: incomingArtistName,
+          startDate: startDate,
+          endDate: endDate
         }),
       });
 
@@ -90,6 +96,8 @@ const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
         </div>
         <button type="submit">Submit</button>
       </form>
+      <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+      <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
       <button onClick={handleSpotifySignIn}>
         Sign in to Spotify
       </button>
