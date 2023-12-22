@@ -35,7 +35,7 @@ async function getCodeCallenge() {
 
 }
 
-const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
+const Input = forwardRef(({ setConcerts, setArtist, setUserLocation}, ref) => {
   useImperativeHandle(ref, () => ({
     handleRequestFromParent: (artistName) => {
       //do something
@@ -45,6 +45,7 @@ const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [artistName, setArtistName] = useState("Taylor Swift");
+
   let handleSpotifySignIn = () => {
     getCodeCallenge().then((result) => {
       window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-top-read%20&code_challenge_method=S256&code_challenge=${result}`;
@@ -69,6 +70,16 @@ const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
       if (res.status === 200) {
         setConcerts((prev) => (prev.concat(resJson)));
         setArtist(incomingArtistName);
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        }
+        else{console.log("failed")}
+
+        function showPosition(position) {
+          setUserLocation(position);
+          console.log(position);
+        }
+        
       } else {
         console.log("Some error occured");
       }

@@ -11,6 +11,7 @@ import YourFavoriteSpotifyArtists from './YourFavoriteSpotifyArtists.js';
 
 function App() {
   const [concerts, setConcerts] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
   const [artist, setArtist] = useState("");
   const childRef = useRef();
   const { isLoaded } = useLoadScript({
@@ -25,7 +26,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Input setConcerts={setConcerts} setArtist={setArtist} ref={childRef}/>
+        <Input setConcerts={setConcerts} setArtist={setArtist} setUserLocation={setUserLocation} ref={childRef}/>
         <Router>
           <Routes>
             <Route path="/" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick}></YourFavoriteSpotifyArtists>} />
@@ -33,7 +34,7 @@ function App() {
         </Router>
       </header>
 
-      {isLoaded ? <Map artist={artist} concerts={concerts} /> : null}
+      {isLoaded ? <Map artist={artist} concerts={concerts} userLocation={userLocation}/> : null}
 
     </div>
   );
