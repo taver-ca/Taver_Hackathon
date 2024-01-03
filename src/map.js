@@ -59,10 +59,6 @@ function Map({ artist, concerts, userLocation }) {
     };
   };
 
-
-
-
-
   const sortedConcerts = concerts.sort((a, b) => new Date(a.date) - new Date(b.date));
   const path = userLocation != null ? [
     { 
@@ -110,7 +106,7 @@ function Map({ artist, concerts, userLocation }) {
           {activeMarker === id ? (
             <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
               <div className="info">
-                <img src={artistImageUrl} width={45} height={45} className="artist" />
+                <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} />
                 <div>{name}</div>
               </div>
             </InfoWindowF>
