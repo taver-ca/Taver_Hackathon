@@ -59,52 +59,70 @@ function Map({ artist, concerts, userLocation }) {
     };
   };
 
+
+
+
+
   const sortedConcerts = concerts.sort((a, b) => new Date(a.date) - new Date(b.date));
-  const path = userLocation != null ? [{ lat: userLocation.coords.latitude, lng: userLocation.coords.longitude }, ...sortedConcerts.map(concert => concert.location)] : sortedConcerts.map(concert => concert.location);
+  const path = userLocation != null ? [
+    { 
+      lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
+      lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)) 
+    }, ...sortedConcerts.map(concert => (
+    {
+      lat: concert.location.latitude,
+      lng: concert.location.longitude
+    }
+  ))] : sortedConcerts.map(concert => (
+    {
+      lat: concert.location.latitude,
+      lng: concert.location.longitude
+    }
+  ));
 
   console.log('Concerts' + JSON.stringify(concerts.map(concert => concert.date)));
   console.log('Path' + JSON.stringify(path));
-  
+
   return (
     <GoogleMap
-  key={artist}
-  onLoad={handleOnLoad}
-  onClick={() => setActiveMarker(null)}
-  mapContainerStyle={{ width: "100vw", height: "100vh" }}
->{
-  userLocation &&
-  <MarkerF
-    position={{ lat: userLocation.coords.latitude, lng: userLocation.coords.longitude }}
-    icon={{
-      url: 'https://cdn-icons-png.flaticon.com/512/6676/6676575.png',
-      scaledSize: { width: 35, height: 35 }
-    }}
-  />
-}
+      key={artist}
+      onLoad={handleOnLoad}
+      onClick={() => setActiveMarker(null)}
+      mapContainerStyle={{ width: "100vw", height: "100vh" }}
+    >{
+        userLocation &&
+        <MarkerF
+          position={{ lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)), lng: Number(parseFloat(userLocation.coords.longitude).toLocaleString(4)) }}
+          icon={{
+            url: 'https://cdn-icons-png.flaticon.com/512/6676/6676575.png',
+            scaledSize: { width: 35, height: 35 }
+          }}
+        />
+      }
 
-  {markers.map(({ id, name, position, artistImageUrl }) => (
-    <MarkerF
-      key={id}
-      position={position}
-      icon={{ url: artistImageUrl, scaledSize: { width: 35, height: 35 } }}
-      onClick={(e) => { e.stop(); handleActiveMarker(id) }}
-    >
-      {activeMarker === id ? (
-        <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
-          <div className="info">
-            <img src={artistImageUrl} width={45} height={45} className="artist"/>
-            <div>{name}</div>
-          </div>
-        </InfoWindowF>
-      ) : null}
-    </MarkerF>
-  ))}
+      {markers && markers.map(({ id, name, position, artistImageUrl }) => (
+        <MarkerF
+          key={id}
+          position={position}
+          icon={{ url: artistImageUrl, scaledSize: { width: 35, height: 35 } }}
+          onClick={(e) => { e.stop(); handleActiveMarker(id) }}
+        >
+          {activeMarker === id ? (
+            <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
+              <div className="info">
+                <img src={artistImageUrl} width={45} height={45} className="artist" />
+                <div>{name}</div>
+              </div>
+            </InfoWindowF>
+          ) : null}
+        </MarkerF>
+      ))}
 
-  <PolylineF
-    path={path}
-    options={pathOptions}
-  />
-</GoogleMap>
+      <PolylineF
+        path={path}
+        options={pathOptions}
+      />
+    </GoogleMap>
 
   );
 }

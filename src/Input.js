@@ -35,7 +35,7 @@ async function getCodeCallenge() {
 
 }
 
-const Input = forwardRef(({ setConcerts, setArtist, setUserLocation}, ref) => {
+const Input = forwardRef(({ setConcerts, setArtist, setUserLocation }, ref) => {
   useImperativeHandle(ref, () => ({
     handleRequestFromParent: (artistName) => {
       //do something
@@ -67,19 +67,25 @@ const Input = forwardRef(({ setConcerts, setArtist, setUserLocation}, ref) => {
       });
 
       let resJson = await res.json()
-      if (res.status === 200) {
-        setConcerts((prev) => (prev.concat(resJson)));
-        setArtist(incomingArtistName);
-        if (navigator.geolocation) {
+      if (res.status === 200) 
+      {
+        function showPosition(position) 
+        {
+          setUserLocation(position);
+          console.log('home position: '+ position.coords.latitude + ',' + position.coords.longitude );
+        }
+
+        if (navigator.geolocation) 
+        {
           navigator.geolocation.getCurrentPosition(showPosition);
         }
-        else{console.log("failed")}
-
-        function showPosition(position) {
-          setUserLocation(position);
-          console.log(position);
+        else 
+        { 
+          console.log("failed") 
         }
-        
+
+        setConcerts((prev) => (prev.concat(resJson)));
+        setArtist(incomingArtistName);
       } else {
         console.log("Some error occured");
       }
