@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -35,10 +35,27 @@ async function getCodeCallenge() {
 
 }
 
-const Input = forwardRef(({ setConcerts, setArtist, setUserLocation }, ref) => {
+
+
+
+const Input = forwardRef(({ setConcerts, setUserLocation }, ref) => {
+
+  useEffect(() => {
+    function showPosition(position) {
+      setUserLocation(position);
+      console.log('home position: ' + position.coords.latitude + ',' + position.coords.longitude);
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    }
+    else {
+      console.log("failed")
+    }
+  }, []);
+
   useImperativeHandle(ref, () => ({
     handleRequestFromParent: (artistName) => {
-      //do something
       submitArtist(artistName);
     }
   }));
@@ -67,25 +84,8 @@ const Input = forwardRef(({ setConcerts, setArtist, setUserLocation }, ref) => {
       });
 
       let resJson = await res.json()
-      if (res.status === 200) 
-      {
-        function showPosition(position) 
-        {
-          setUserLocation(position);
-          console.log('home position: '+ position.coords.latitude + ',' + position.coords.longitude );
-        }
-
-        if (navigator.geolocation) 
-        {
-          navigator.geolocation.getCurrentPosition(showPosition);
-        }
-        else 
-        { 
-          console.log("failed") 
-        }
-
+      if (res.status === 200) {
         setConcerts((prev) => (prev.concat(resJson)));
-        setArtist(incomingArtistName);
       } else {
         console.log("Some error occured");
       }
