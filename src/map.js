@@ -84,6 +84,7 @@ function Map({ artist, concerts, userLocation }) {
       key={artist}
       onLoad={handleOnLoad}
       onClick={() => setActiveMarker(null)}
+      options={{ mapId: "1fc21c527f198d4e" }}
       mapContainerStyle={{ width: "100vw", height: "100vh" }}
     >{
         userLocation &&

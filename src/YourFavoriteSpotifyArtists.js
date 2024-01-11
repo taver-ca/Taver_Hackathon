@@ -35,7 +35,7 @@ function YourFavoriteSpotifyArtists({ onChildClick }) {
 
       try {
         let res = await fetch("http://localhost:3001/getFollowedArtists", {
-          method: "POST",
+          method: 'POST',
           headers: {
             'content-type': 'application/json;charset=utf-8'
           },

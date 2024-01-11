@@ -54,8 +54,8 @@ const Input = forwardRef(({ setConcerts, setArtist, setUserLocation }, ref) => {
 
   const submitArtist = async (incomingArtistName) => {
     try {
-      let res = await fetch("http://localhost:3001/concerts", {
-        method: "POST",
+      let res = await fetch('http://localhost:3001/concerts', {
+        method: 'POST',
         headers: {
           'content-type': 'application/json;charset=utf-8'
         },
