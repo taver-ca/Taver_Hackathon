@@ -21,6 +21,8 @@ function sortConcerts(concerts, startingLocation) {
 
   console.log("concerts left to go:");
   console.log(concerts);
+  console.log("concert 0 location:");
+  //console.log(concerts[0].location);
   console.log("starting location:");
   console.log(startingLocation);
 
@@ -28,13 +30,14 @@ function sortConcerts(concerts, startingLocation) {
   if (concerts.length === 0) {
     return;
   }
-  // Step 1: Sort the concerts by date
-  concerts = concerts.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  // Step 2: Sort the concerts by distance to the starting location 
-
-  concerts = concerts.sort((a, b) => getDistance(startingLocation.lat, startingLocation.lng, a.lat, a.lng) - getDistance(startingLocation.lat, startingLocation.lng, b.lat, b.lng));
-
+  concerts = concerts.sort((a, b) => {
+    if (new Date(a.date) === new Date(b.date)) {
+      return getDistance(startingLocation.lat, startingLocation.lng, a.lat, a.lng) - getDistance(startingLocation.lat, startingLocation.lng, b.lat, b.lng);
+    }
+    return new Date(a.date) - new Date(b.date);
+  });
+  
   // go to this concert 
   result.push(concerts[0]);
 
@@ -61,7 +64,8 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 function Map({ concerts, userLocation }) {
   const [activeMarker, setActiveMarker] = useState(null);
-
+  // clear the concert corting from before, so the path can be recalculated
+  result = [];
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
       return;
