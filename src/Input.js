@@ -1,4 +1,7 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 var redirectUri = "http://localhost:3000/";
 var clientId = "03443a9e213f4dacb4e591779a560834";
@@ -32,15 +35,34 @@ async function getCodeCallenge() {
 
 }
 
-const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
+
+
+
+const Input = forwardRef(({ setConcerts, setUserLocation }, ref) => {
+
+  useEffect(() => {
+    function showPosition(position) {
+      setUserLocation(position);
+      console.log('home position: ' + position.coords.latitude + ',' + position.coords.longitude);
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    }
+    else {
+      console.log("failed")
+    }
+  }, []);
+
   useImperativeHandle(ref, () => ({
     handleRequestFromParent: (artistName) => {
-      //do something
       submitArtist(artistName);
-   }
+    }
   }));
-
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [artistName, setArtistName] = useState("Taylor Swift");
+
   let handleSpotifySignIn = () => {
     getCodeCallenge().then((result) => {
       window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-top-read%20&code_challenge_method=S256&code_challenge=${result}`;
@@ -49,20 +71,21 @@ const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
 
   const submitArtist = async (incomingArtistName) => {
     try {
-      let res = await fetch("http://localhost:3001/concerts", {
-        method: "POST",
+      let res = await fetch('http://localhost:3001/concerts', {
+        method: 'POST',
         headers: {
           'content-type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify({
           artistName: incomingArtistName,
+          startDate: startDate,
+          endDate: endDate
         }),
       });
 
       let resJson = await res.json()
       if (res.status === 200) {
         setConcerts((prev) => (prev.concat(resJson)));
-        setArtist(incomingArtistName);
       } else {
         console.log("Some error occured");
       }
@@ -90,6 +113,9 @@ const Input = forwardRef(({ setConcerts, setArtist }, ref) => {
         </div>
         <button type="submit">Submit</button>
       </form>
+      <div>StartDate: <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} /></div>
+      <div>EndDate: <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} /></div>
+
       <button onClick={handleSpotifySignIn}>
         Sign in to Spotify
       </button>
