@@ -41,7 +41,7 @@ function sortConcerts(concerts, startingLocation) {
   // go to this concert 
   result.push(concerts[0]);
 
-  sortConcerts(concerts.filter(concert => concert.artist != concerts[0].artist), concerts[0].location)
+  sortConcerts(concerts.filter(concert => concert.artist !== concerts[0].artist), concerts[0].location)
 }
 
 // Convert degrees to radians

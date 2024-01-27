@@ -35,9 +35,6 @@ async function getCodeCallenge() {
 
 }
 
-
-
-
 const Input = forwardRef(({ setConcerts, setUserLocation }, ref) => {
 
   useEffect(() => {
