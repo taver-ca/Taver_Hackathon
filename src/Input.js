@@ -7,7 +7,7 @@ var clientId = "03443a9e213f4dacb4e591779a560834";
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
-  { mapId: "1fc21c527f198d4e", displayName: "Dark Theme", buttonColorCss: "#404040" },
+  { mapId: "53a5c2c14f51f10b", displayName: "Dark Theme", buttonColorCss: "#404040" },
 ];
 
 const generateRandomString = (length) => {

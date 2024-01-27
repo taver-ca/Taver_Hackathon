@@ -145,6 +145,7 @@ function Map({ concerts, userLocation, mapStyle }) {
 
   return (
     <GoogleMap
+      key={[mapStyle]}
       onLoad={handleOnLoad}
       onClick={() => setActiveMarker(null)}
       options={{ mapId: mapStyle }}
