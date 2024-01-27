@@ -38,6 +38,7 @@ async function getCodeCallenge() {
 }
 
 const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) => {
+
   useEffect(() => {
     function showPosition(position) {
       setUserLocation(position);
