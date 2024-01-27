@@ -115,21 +115,15 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) =>
       </div>
       <div>
         Map Style:{" "}
-        {mapStyles.map((mapStyle) => (
-          <button
-            key={mapStyle.mapId}
-            className="button-default"
-            style={{
-              margin: "5px",
-              backgroundColor: mapStyle.buttonColorCss,
-              border: "1px solid " + mapStyle.buttonColorCss,
-            }}
-            onClick={() => setMapStyle(mapStyle.mapId)}
-          >
-            {mapStyle.displayName}
-          </button>
-        ))}
+        <select name="mapStyle" id="mapStyle" onChange={(event) => setMapStyle(event.target.value)}>
+          {mapStyles.map((mapStyle) => (
+            <option key={mapStyle.mapId} value={mapStyle.mapId}>
+              {mapStyle.displayName}
+            </option>
+          ))}
+        </select>
       </div>
+
       <button onClick={handleSpotifySignIn}>Sign in to Spotify</button>
     </div>
   );
