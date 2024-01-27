@@ -2,62 +2,59 @@ import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-
 var redirectUri = "http://localhost:3000/";
 var clientId = "03443a9e213f4dacb4e591779a560834";
 
+const mapStyles = [
+  { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
+  { mapId: "1fc21c527f198d4e", displayName: "Dark Theme", buttonColorCss: "#404040" },
+];
+
 const generateRandomString = (length) => {
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const values = crypto.getRandomValues(new Uint8Array(length));
   return values.reduce((acc, x) => acc + possible[x % possible.length], "");
-}
+};
 
 const sha256 = async (plain) => {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(plain)
-  return window.crypto.subtle.digest('SHA-256', data)
-}
+  const encoder = new TextEncoder();
+  const data = encoder.encode(plain);
+  return window.crypto.subtle.digest("SHA-256", data);
+};
 
 const base64encode = (input) => {
   return btoa(String.fromCharCode(...new Uint8Array(input)))
-    .replace(/=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
-}
+    .replace(/=/g, "")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_");
+};
 
 async function getCodeCallenge() {
-
   const codeVerifier = generateRandomString(64);
-  window.localStorage.setItem('code_verifier', codeVerifier);
-  const hashed = await sha256(codeVerifier)
+  window.localStorage.setItem("code_verifier", codeVerifier);
+  const hashed = await sha256(codeVerifier);
   const codeChallenge = base64encode(hashed);
   return codeChallenge;
-
 }
 
-
-
-
-const Input = forwardRef(({ setConcerts, setUserLocation }, ref) => {
-
+const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) => {
   useEffect(() => {
     function showPosition(position) {
       setUserLocation(position);
-      console.log('home position: ' + position.coords.latitude + ',' + position.coords.longitude);
+      console.log("home position: " + position.coords.latitude + "," + position.coords.longitude);
     }
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
-    }
-    else {
-      console.log("failed")
+    } else {
+      console.log("failed");
     }
   }, []);
 
   useImperativeHandle(ref, () => ({
     handleRequestFromParent: (artistName) => {
       submitArtist(artistName);
-    }
+    },
   }));
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -65,34 +62,36 @@ const Input = forwardRef(({ setConcerts, setUserLocation }, ref) => {
 
   let handleSpotifySignIn = () => {
     getCodeCallenge().then((result) => {
-      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-top-read%20&code_challenge_method=S256&code_challenge=${result}`;
+      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(
+        redirectUri
+      )}&scope=user-top-read%20&code_challenge_method=S256&code_challenge=${result}`;
     });
   };
 
   const submitArtist = async (incomingArtistName) => {
     try {
-      let res = await fetch('http://localhost:3001/concerts', {
-        method: 'POST',
+      let res = await fetch("http://localhost:3001/concerts", {
+        method: "POST",
         headers: {
-          'content-type': 'application/json;charset=utf-8'
+          "content-type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
           artistName: incomingArtistName,
           startDate: startDate,
-          endDate: endDate
+          endDate: endDate,
         }),
       });
 
-      let resJson = await res.json()
+      let resJson = await res.json();
       if (res.status === 200) {
-        setConcerts((prev) => (prev.concat(resJson)));
+        setConcerts((prev) => prev.concat(resJson));
       } else {
         console.log("Some error occured");
       }
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   let handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,27 +101,38 @@ const Input = forwardRef(({ setConcerts, setUserLocation }, ref) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label>Enter Artist Name:
-        </label>
+        <label>Enter Artist Name:</label>
         <div>
-          <input
-            type="text"
-            value={artistName}
-            onChange={(e) => setArtistName(e.target.value)}
-          />
+          <input type="text" value={artistName} onChange={(e) => setArtistName(e.target.value)} />
         </div>
         <button type="submit">Submit</button>
       </form>
-      <div>StartDate: <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} /></div>
-      <div>EndDate: <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} /></div>
-
-      <button onClick={handleSpotifySignIn}>
-        Sign in to Spotify
-      </button>
+      <div>
+        StartDate: <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+      </div>
+      <div>
+        EndDate: <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
+      </div>
+      <div>
+        Map Style:{" "}
+        {mapStyles.map((mapStyle) => (
+          <button
+            key={mapStyle.mapId}
+            className="button-default"
+            style={{
+              margin: "5px",
+              backgroundColor: mapStyle.buttonColorCss,
+              border: "1px solid " + mapStyle.buttonColorCss,
+            }}
+            onClick={() => setMapStyle(mapStyle.mapId)}
+          >
+            {mapStyle.displayName}
+          </button>
+        ))}
+      </div>
+      <button onClick={handleSpotifySignIn}>Sign in to Spotify</button>
     </div>
-
-  )
+  );
 });
-
 
 export default Input;
