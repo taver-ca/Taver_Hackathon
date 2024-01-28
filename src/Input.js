@@ -77,9 +77,7 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) =>
           "content-type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-          artistName: incomingArtistName,
-          startDate: startDate,
-          endDate: endDate,
+          artistName: incomingArtistName
         }),
       });
 
