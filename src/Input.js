@@ -106,14 +106,14 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) =>
         <div>
           <input type="text" value={artistName} onChange={(e) => setArtistName(e.target.value)} />
         </div>
-        <button type="submit">Submit</button>
-      </form>
-      <div>
+        <div>
         StartDate: <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
       </div>
       <div>
         EndDate: <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
       </div>
+        <button type="submit">Submit</button>
+      </form>      
       <div>
         Map Style:{" "}
         <select name="mapStyle" id="mapStyle" onChange={(event) => setMapStyle(event.target.value)}>
