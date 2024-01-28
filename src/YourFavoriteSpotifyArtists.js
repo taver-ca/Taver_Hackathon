@@ -14,12 +14,18 @@ function YourFavoriteSpotifyArtists({ onChildClick }) {
   };
 
 
-  const commaSeparatedfollowedArtists = followedArtists.map((artistName, index) => (
-    <span key={index}>
-      <button onClick={() => handleClick(artistName)}>{artistName}</button>
-      {index < followedArtists.length - 1 ? " " : ""}
-    </span>
-  ));
+  const commaSeparatedfollowedArtists = followedArtists.map((artist, index) => 
+  {
+      if(artist.concertData.length>0)
+      {
+        return (
+          <span key={index}>
+            <button onClick={() => handleClick(artist)}>{artist.artistName}</button>
+            {index < followedArtists.length - 1 ? " " : ""}
+          </span>
+        );
+      }
+  });
 
 
 
