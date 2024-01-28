@@ -124,19 +124,19 @@ function Map({ concerts, userLocation, mapStyle }) {
   const path =
     userLocation != null
       ? [
-          {
-            lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
-            lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
-          },
-          ...result.map((concert) => ({
-            lat: concert.location.latitude,
-            lng: concert.location.longitude,
-          })),
-        ]
-      : result.map((concert) => ({
+        {
+          lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
+          lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
+        },
+        ...result.map((concert) => ({
           lat: concert.location.latitude,
           lng: concert.location.longitude,
-        }));
+        })),
+      ]
+      : result.map((concert) => ({
+        lat: concert.location.latitude,
+        lng: concert.location.longitude,
+      }));
 
   //console.log('Concerts' + JSON.stringify(result.map(concert => {concert.date, concert.location, concert.art})));
   const output = result.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location }));
@@ -148,7 +148,7 @@ function Map({ concerts, userLocation, mapStyle }) {
       key={[mapStyle]}
       onLoad={handleOnLoad}
       onClick={() => setActiveMarker(null)}
-      options={{ mapId: mapStyle }}
+      options={{ mapId: mapStyle, minZoom: 3, maxZoom: 5 }}
       mapContainerStyle={{ width: "100vw", height: "100vh" }}
     >
       {userLocation && (
