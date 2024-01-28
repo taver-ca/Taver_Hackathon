@@ -43,7 +43,7 @@ function sortConcerts(concerts, startingLocation) {
   result.push(concerts[0]);
 
   sortConcerts(
-    concerts.filter((concert) => concert.artist != concerts[0].artist),
+    concerts.filter((concert) => concert.artist !== concerts[0].artist),
     concerts[0].location
   );
 }
