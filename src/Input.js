@@ -1,6 +1,4 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 var redirectUri = "http://localhost:3000/";
 var clientId = "03443a9e213f4dacb4e591779a560834";
@@ -37,7 +35,7 @@ async function getCodeCallenge() {
   return codeChallenge;
 }
 
-const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) => {
+const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, endDate }, ref) => {
 
   useEffect(() => {
     function showPosition(position) {
@@ -57,8 +55,7 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) =>
       submitArtist(artistName);
     },
   }));
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+
   const [artistName, setArtistName] = useState("Taylor Swift");
 
   let handleSpotifySignIn = () => {
@@ -77,7 +74,9 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) =>
           "content-type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-          artistName: incomingArtistName
+          artistName: incomingArtistName,
+          startDate: startDate,
+          endDate: endDate
         }),
       });
 
@@ -104,14 +103,8 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle }, ref) =>
         <div>
           <input type="text" value={artistName} onChange={(e) => setArtistName(e.target.value)} />
         </div>
-        <div>
-        StartDate: <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
-      </div>
-      <div>
-        EndDate: <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
-      </div>
         <button type="submit">Submit</button>
-      </form>      
+      </form>
       <div>
         Map Style:{" "}
         <select name="mapStyle" id="mapStyle" onChange={(event) => setMapStyle(event.target.value)}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from "react-router-dom";
 
-function YourFavoriteSpotifyArtists({ onChildClick }) {
+function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
   let location = useLocation();
   let code_verifier = localStorage.getItem('code_verifier');
   let searchParams = new URLSearchParams(location.search);
@@ -14,23 +14,17 @@ function YourFavoriteSpotifyArtists({ onChildClick }) {
   };
 
 
-  const commaSeparatedfollowedArtists = followedArtists.map((artist, index) => 
-  {
-      if(artist.concertData.length>0)
-      {
-        return (
-          <span key={index}>
-            <button onClick={() => handleClick(artist)}>{artist.artistName}</button>
-            {index < followedArtists.length - 1 ? " " : ""}
-          </span>
-        );
-      }
+  const commaSeparatedfollowedArtists = followedArtists.map((artistName, index) => {
+    return (
+      <span key={index}>
+        <button onClick={() => handleClick(artistName)}>{artistName}</button>
+        {index < followedArtists.length - 1 ? " " : ""}
+      </span>
+    );
   });
 
-
-
   useEffect(() => {
-    
+
     const getToken = async (code, code_verifier) => {
 
       if (trigger) {
@@ -47,7 +41,9 @@ function YourFavoriteSpotifyArtists({ onChildClick }) {
           },
           body: JSON.stringify({
             code: code,
-            code_verifier: code_verifier
+            code_verifier: code_verifier,
+            startDate: startDate,
+            endDate: endDate
           }),
         });
 
