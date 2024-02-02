@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Grid,Stack } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
+import { concertList } from "./concertList.js"
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -71,6 +72,12 @@ function App() {
                 <Route
                   path="/"
                   element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate}></YourFavoriteSpotifyArtists>}
+                />
+              </Routes>
+              <Routes>
+                <Route
+                  path="/"
+                  element={<concertList onChildClick={handleChildClick} startDate={startDate} endDate={endDate}></concertList>}
                 />
               </Routes>
             </Router>

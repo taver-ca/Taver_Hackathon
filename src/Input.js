@@ -68,7 +68,7 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate
 
   const submitArtist = async (incomingArtistName) => {
     try {
-      let res = await fetch("http://localhost:3001/concerts", {
+      let res = await fetch("https://taver.azurewebsites.net/concerts", {
         method: "POST",
         headers: {
           "content-type": "application/json;charset=utf-8",
