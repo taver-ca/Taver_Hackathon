@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Grid,Stack } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
-import { ConcertList } from "./ConcertList.js"
+import ConcertList from "./ConcertList.js"
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -45,7 +45,12 @@ function App() {
   return (
     <div className="App">
       {width > 700 ? (
-        <Grid className="App-header" container spacing={2}>
+        <Grid
+        className="App-header" 
+        container 
+        spacing={2}
+        alignItems="center"
+        justifyContent="center">
           <Grid item xs={12} md={6}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <Input setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
@@ -64,7 +69,10 @@ function App() {
           </Grid>
         </Grid>
       ) : (
-        <Stack spacing={2}>
+        <Stack 
+        alignItems="center"
+        justifyContent="center"        
+        spacing={2}>
           <Grid container item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <Input setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
