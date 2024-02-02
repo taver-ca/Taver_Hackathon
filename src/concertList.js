@@ -7,7 +7,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography'
 
-export class concertList extends React.Component {
+class ConcertList extends React.Component {
     constructor(props) {
         super(props);
         this.renderConcertList = this.renderConcertList.bind(this);
@@ -52,14 +52,15 @@ export class concertList extends React.Component {
     }
 
     // Display spotify token 
-    return() {
-        <div>
+    render()  {
+        return <div>
             <p>Upcoming Concerts: </p>
             <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 {this.renderConcertList(this.state.concerts)}
             </List>
-        </div>
+        </div>;
     }
 
 }
 
+export default ConcertList;

@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Grid,Stack } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
-import { concertList } from "./concertList.js"
+import { ConcertList } from "./ConcertList.js"
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -57,6 +57,7 @@ function App() {
                 />
               </Routes>
             </Router>
+            <ConcertList concerts={concerts}></ConcertList>
           </Grid>
           <Grid item xs={12} md={6}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
@@ -73,14 +74,9 @@ function App() {
                   path="/"
                   element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate}></YourFavoriteSpotifyArtists>}
                 />
-              </Routes>
-              <Routes>
-                <Route
-                  path="/"
-                  element={<concertList onChildClick={handleChildClick} startDate={startDate} endDate={endDate}></concertList>}
-                />
-              </Routes>
+              </Routes>             
             </Router>
+            <ConcertList concerts={concerts}></ConcertList>
           </Grid>
           <Grid container item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
