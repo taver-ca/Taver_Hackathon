@@ -16,6 +16,14 @@ class ConcertList extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.concerts !== this.props.concerts) {
+          this.setState({
+            concerts: this.props.concerts
+          });
+        }
+    }
+
     // Display spotify token 
     render() {
         const renderConcertList =
@@ -50,12 +58,12 @@ class ConcertList extends React.Component {
 
 
         return <div>
-                        <p>Upcoming Concerts: </p>
-                        <List 
-                        dense 
-                        sx={{ width: '100%', maxWidth: 360 }}>
-                            {renderConcertList}
-                        </List>
+            <p>Upcoming Concerts: </p>
+            <List
+                dense
+                sx={{ width: '100%', maxWidth: 360 }}>
+                {renderConcertList}
+            </List>
         </div>;
     }
 }

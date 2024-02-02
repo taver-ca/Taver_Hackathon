@@ -5,7 +5,7 @@ import Map from "./map";
 import { useState, useRef, useLayoutEffect } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Grid,Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js"
@@ -44,13 +44,11 @@ function App() {
   };
   return (
     <div className="App">
-      {width > 700 ? (
+      {width > 500 ? (
         <Grid
-        className="App-header" 
-        container 
-        spacing={2}
-        alignItems="center"
-        justifyContent="center">
+          className="App-header"
+          container
+          spacing={2}>
           <Grid item xs={12} md={6}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <Input setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
@@ -69,11 +67,11 @@ function App() {
           </Grid>
         </Grid>
       ) : (
-        <Stack 
-        alignItems="center"
-        justifyContent="center"        
-        spacing={2}>
-          <Grid container item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
+        <Stack
+          className="App-header"
+          container
+          spacing={2}>
+          <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <Input setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
             <Router>
@@ -82,11 +80,11 @@ function App() {
                   path="/"
                   element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate}></YourFavoriteSpotifyArtists>}
                 />
-              </Routes>             
+              </Routes>
             </Router>
             <ConcertList concerts={concerts}></ConcertList>
           </Grid>
-          <Grid container item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
           </Grid>
         </Stack>
