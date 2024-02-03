@@ -1,4 +1,7 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -68,9 +71,9 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate
       <form onSubmit={handleSubmit}>
         <label>Enter Artist Name:</label>
         <div>
-          <input type="text" value={artistName} onChange={(e) => setArtistName(e.target.value)} />
+          <TextField type="text" value={artistName} onChange={(e) => setArtistName(e.target.value)} />
         </div>
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </form>
       <div>
         Map Style:{" "}
