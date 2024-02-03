@@ -9,6 +9,7 @@ import { Grid, Stack } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js"
+import AuthorizeSpotify from "./AuthorizeSpotify.js";
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -53,11 +54,11 @@ function App() {
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <Input setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
             <Router>
+            <Routes>
+                <Route path="/" element={<AuthorizeSpotify />} />
+              </Routes>
               <Routes>
-                <Route
-                  path="/"
-                  element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate}></YourFavoriteSpotifyArtists>}
-                />
+                <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate} />} />
               </Routes>
             </Router>
             <ConcertList concerts={concerts}></ConcertList>
@@ -75,11 +76,11 @@ function App() {
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <Input setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
             <Router>
+            <Routes>
+                <Route path="/" element={<AuthorizeSpotify />} />
+              </Routes>
               <Routes>
-                <Route
-                  path="/"
-                  element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate}></YourFavoriteSpotifyArtists>}
-                />
+                <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate} />} />
               </Routes>
             </Router>
             <ConcertList concerts={concerts}></ConcertList>
