@@ -1,7 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { TextField, Button } from '@mui/material';
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -11,7 +10,7 @@ const mapStyles = [
 
 
 
-const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, endDate }, ref) => {
+const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, endDate }, ref) => {
 
   useEffect(() => {
     function showPosition(position) {
@@ -69,11 +68,22 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label>Enter Artist Name:</label>
-        <div>
-          <TextField type="text" value={artistName} onChange={(e) => setArtistName(e.target.value)} />
-        </div>
-        <Button type="submit">Submit</Button>
+        <TextField
+        sx= { {
+          "& input": {
+            color: "white",
+          },
+          "& label": {
+            color: "white",
+          },
+        }}
+          label="Enter Artist Name:"
+          value={artistName} onChange={(e) => setArtistName(e.target.value)}
+        />
+        <p/>
+        <Button type="submit" variant="contained" color="primary">
+          Submit
+        </Button>
       </form>
       <div>
         Map Style:{" "}
@@ -84,9 +94,9 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate
             </option>
           ))}
         </select>
-      </div>      
+      </div>
     </div>
   );
 });
 
-export default Input;
+export default BaseInput;

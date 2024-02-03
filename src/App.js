@@ -1,6 +1,6 @@
 /*import logo from './logo.svg';*/
 import "./App.css";
-import Input from "./Input.js";
+import BaseInput from "./BaseInput.js";
 import Map from "./map";
 import { useState, useRef, useLayoutEffect } from "react";
 import { useLoadScript } from "@react-google-maps/api";
@@ -52,7 +52,8 @@ function App() {
           spacing={2}>
           <Grid item xs={12} md={6}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <Input setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
+            <p/>
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
             <Router>
             <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
@@ -74,7 +75,7 @@ function App() {
           spacing={2}>
           <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <Input setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
             <Router>
             <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
