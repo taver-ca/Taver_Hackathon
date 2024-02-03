@@ -16,6 +16,10 @@ jobs:
     name: Build and Deploy Job
     env:
      CI: false
+     REACT_APP_GCP_KEY: ${{secrets.REACT_APP_GCP_KEY}}
+     REACT_APP_SPOTIFY_CLIENTID:  ${{secrets.REACT_APP_SPOTIFY_CLIENTID}}
+     REACT_APP_BACKEND: ${{vars.REACT_APP_BACKEND}}
+     REACT_APP_REDIRECT_URL:  ${{vars.REACT_APP_REDIRECT_URL}}
     steps:
       - uses: actions/checkout@v3
         with:
