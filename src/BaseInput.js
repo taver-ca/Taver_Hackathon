@@ -69,19 +69,25 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
     <div>
       <form onSubmit={handleSubmit}>
         <TextField
-        sx= { {
-          "& input": {
-            color: "white",
-          },
-          "& label": {
-            color: "white",
-          },
-        }}
+          sx={{
+            "& input": {
+              color: "white",
+            },
+            "& label": {
+              color: "white",
+            },
+          }}
           label="Enter Artist Name:"
           value={artistName} onChange={(e) => setArtistName(e.target.value)}
         />
-        <p/>
-        <Button type="submit" variant="contained" color="primary">
+        <p />
+        <Button
+          sx={{
+            cursor: 'pointer',
+          }}
+          type="submit"
+          variant="contained"
+          color="primary">
           Submit
         </Button>
       </form>
