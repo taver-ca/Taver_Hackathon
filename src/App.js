@@ -45,7 +45,7 @@ function App() {
   };
   return (
     <div className="App">
-      {width/height < 1.5 ? (
+      {width/height < 1 ? (
         <Grid
           className="App-header"
           container
