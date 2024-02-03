@@ -1,7 +1,14 @@
 {
+    "navigationFallback": {
+        "rewrite": "/",
+        "exclude": [
+            "*.{css,scss,js,png,gif,ico,jpg,svg}"
+        ]
+    },
     "routes": [
-      {
-        "route": "/ShowSpotifyArtists"
-      }
+        {
+            "route": "/ShowSpotifyArtists",
+            "rewrite": "/"
+        }
     ]
-  }
+}
