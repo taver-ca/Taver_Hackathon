@@ -1,8 +1,5 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 
-var redirectUri = "http://localhost:3000/";
-var clientId = "03443a9e213f4dacb4e591779a560834";
-
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
   { mapId: "53a5c2c14f51f10b", displayName: "Dark Theme", buttonColorCss: "#404040" },
@@ -60,15 +57,13 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate
 
   let handleSpotifySignIn = () => {
     getCodeCallenge().then((result) => {
-      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(
-        redirectUri
-      )}&scope=user-top-read%20&code_challenge_method=S256&code_challenge=${result}`;
+      window.location.href = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_SPOTIFY_CLIENTID}&response_type=code&redirect_uri=${encodeURIComponent(process.env.REACT_APP_REDIRECT_URL)}&scope=user-top-read%20&code_challenge_method=S256&code_challenge=${result}`;
     });
   };
 
   const submitArtist = async (incomingArtistName) => {
     try {
-      let res = await fetch("https://taver.azurewebsites.net/concerts", {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND}/concerts`, {
         method: "POST",
         headers: {
           "content-type": "application/json;charset=utf-8",

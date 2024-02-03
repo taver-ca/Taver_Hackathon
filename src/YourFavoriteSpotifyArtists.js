@@ -34,7 +34,7 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
       setTrigger(true);
 
       try {
-        let res = await fetch("https://taver.azurewebsites.net/getFollowedArtists", {
+        let res = await fetch(`${process.env.REACT_APP_BACKEND}/getFollowedArtists`, {
           method: 'POST',
           headers: {
             'content-type': 'application/json;charset=utf-8'

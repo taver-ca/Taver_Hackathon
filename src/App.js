@@ -34,7 +34,7 @@ function App() {
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
   const childRef = useRef();
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyBrho3RkNlDaztsqX0paNbBW4Do98758a4", // Add your API key
+    googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
   });
 
   const handleChildClick = (artistName) => {
