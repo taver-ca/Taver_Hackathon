@@ -37,6 +37,7 @@ function AuthorizeSpotify() {
     // Display spotify token 
     return (
         <div>
+            <p>Authorize Spotify: </p>
             <button onClick={handleSpotifySignIn}>Sign in to Spotify</button>
         </div>
     );

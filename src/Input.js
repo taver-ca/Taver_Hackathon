@@ -81,9 +81,7 @@ const Input = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate
             </option>
           ))}
         </select>
-      </div>
-
-      
+      </div>      
     </div>
   );
 });
