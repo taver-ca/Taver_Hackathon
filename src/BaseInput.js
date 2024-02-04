@@ -99,7 +99,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
           console.log(`distancea: ${distancea}`);
           console.log(`distanceb: ${distanceb}`);
-          return (new Date(a.date) - new Date(b.date)) && (distancea - distanceb);
+          return (new Date(a.date) - new Date(b.date)) || (distancea - distanceb);
         });
 
         let result = [];
