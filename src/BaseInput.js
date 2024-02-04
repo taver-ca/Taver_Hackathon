@@ -51,7 +51,14 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
       let resJson = await res.json();
       if (res.status === 200) {
-        setConcerts((prev) => prev.concat(resJson));
+
+        resJson = resJson.sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
+
+        let result = [];
+        result.push(resJson[0]);
+        setConcerts((prev) => prev.concat(result));
       } else {
         console.log("Some error occured");
       }

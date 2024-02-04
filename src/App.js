@@ -45,12 +45,12 @@ function App() {
   };
   return (
     <div className="App">
-      {width/height < 1 ? (
+      {width/height > 1 ? (
         <Grid
           className="App-header"
           container
           spacing={2}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={6} md={6}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <p/>
             <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
@@ -64,7 +64,7 @@ function App() {
             </Router>
             <ConcertList concerts={concerts}></ConcertList>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={6} md={6}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
           </Grid>
         </Grid>
@@ -73,7 +73,7 @@ function App() {
           className="App-header"
           container
           spacing={2}>
-          <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Stack item xs={10} md={10} sx={{ display: { xs: 'flex', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
             <Router>
@@ -85,10 +85,10 @@ function App() {
               </Routes>
             </Router>
             <ConcertList concerts={concerts}></ConcertList>
-          </Grid>
-          <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
+          </Stack>
+          <Stack item xs={2} md={2} sx={{ display: { xs: 'flex', md: 'flex' } }}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
-          </Grid>
+          </Stack>
         </Stack>
       )}
     </div>
