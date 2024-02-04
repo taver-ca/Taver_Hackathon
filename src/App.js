@@ -50,7 +50,9 @@ function App() {
           className="App-header"
           container
           spacing={2}>
+          
           <Grid item xs={6} md={6}>
+          <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <p/>
             <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
