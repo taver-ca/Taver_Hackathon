@@ -88,7 +88,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    await submitArtist(artistName);
+    setConcerts([],submitArtist(artistName));
   };
 
   const sortArtist = (incomingAllConcerts , userLocation)=>{
