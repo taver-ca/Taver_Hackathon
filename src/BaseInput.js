@@ -8,9 +8,28 @@ const mapStyles = [
 ];
 
 
+// Convert degrees to radians
+function degreesToRadians(degrees) {
+  return degrees * Math.PI / 180;
+}
 
+// Calculate the distance in kilometers between two coordinates
+function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+  var earthRadiusKm = 6371;
 
-const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, endDate }, ref) => {
+  var dLat = degreesToRadians(lat2 - lat1);
+  var dLon = degreesToRadians(lon2 - lon1);
+
+  lat1 = degreesToRadians(lat1);
+  lat2 = degreesToRadians(lat2);
+
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return earthRadiusKm * c;
+}
+
+const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, endDate, concerts, userLocation }, ref) => {
 
   useEffect(() => {
     function showPosition(position) {
@@ -55,9 +74,32 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         if (resJson.length < 1) {
           return;
         }
-        
+
         resJson = resJson.sort((a, b) => {
-          return new Date(a.date) - new Date(b.date);
+          //get the last concert location in current list of concerts, if no concerts, use home location
+          var originPoint;
+
+          if (concerts.length > 0) {
+            //originPoint = new google.maps.LatLng(concerts[concerts.length - 1].location.latitude, concerts[concerts.length - 1].location.longitude);
+            originPoint = {
+              latitude: concerts[concerts.length - 1].location.latitude,
+              longitude: concerts[concerts.length - 1].location.longitude,
+            };
+          }
+          else {
+            //originPoint = new google.maps.LatLng(userLocation.coords.latitude, userLocation.coords.longitude);
+            originPoint = {
+              latitude: userLocation.coords.latitude,
+              longitude: userLocation.coords.longitude,
+            };
+          }
+
+          // Calculate the distance between the points
+          var distancea = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, a.location.latitude, a.location.longitude);
+          var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
+          console.log(`distancea: ${distancea}`);
+          console.log(`distanceb: ${distanceb}`);
+          return (new Date(a.date) - new Date(b.date)) && (distancea - distanceb);
         });
 
         let result = [];

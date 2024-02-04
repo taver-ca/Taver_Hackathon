@@ -55,7 +55,7 @@ function App() {
           <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <p/>
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} concerts={concerts} userLocation={userLocation} ref={childRef} />
             <Router>
             <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
@@ -77,7 +77,7 @@ function App() {
           spacing={2}>
           <Stack item xs={10} md={10} sx={{ display: { xs: 'flex', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} ref={childRef} />
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} concerts={concerts} userLocation={userLocation} ref={childRef} />
             <Router>
             <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
