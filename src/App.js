@@ -29,6 +29,8 @@ function App() {
   let cachedEndDate = localStorage.getItem('endDate');
   const [width, height] = useWindowSize();
   const [concerts, setConcerts] = useState([]);
+  //all concerts is used to reoptimize the whole route... based on incoming concert
+  const [allConcerts, setAllConcerts] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [startDate, setStartDate] = useState(cachedStartDate === null ? new Date() : new Date(cachedStartDate));
   const [endDate, setEndDate] = useState(cachedEndDate === null ? new Date() : new Date(cachedEndDate));
@@ -55,7 +57,7 @@ function App() {
           <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
             <p/>
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} concerts={concerts} userLocation={userLocation} ref={childRef} />
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts = {concerts} allConcerts = {allConcerts} userLocation={userLocation} ref={childRef} />
             <Router>
             <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
@@ -77,7 +79,7 @@ function App() {
           spacing={2}>
           <Stack item xs={10} md={10} sx={{ display: { xs: 'flex', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} startDate={startDate} endDate={endDate} concerts={concerts} userLocation={userLocation} ref={childRef} />
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle}  setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts = {concerts} allConcerts = {allConcerts} userLocation={userLocation} ref={childRef} />
             <Router>
             <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
