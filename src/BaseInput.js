@@ -52,6 +52,10 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
       let resJson = await res.json();
       if (res.status === 200) {
 
+        if (resJson.length < 1) {
+          return;
+        }
+        
         resJson = resJson.sort((a, b) => {
           return new Date(a.date) - new Date(b.date);
         });
