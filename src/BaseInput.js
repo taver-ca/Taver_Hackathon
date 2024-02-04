@@ -117,14 +117,14 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
           console.log(`distancea: ${distancea}`);
           console.log(`distanceb: ${distanceb}`);
-          return (new Date(a.date) - new Date(b.date)) || (distancea - distanceb);
+          return (new Date(a.date) - new Date(b.date)) && (distancea - distanceb);
         });
 
         console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
         var newConcerts = sortedAllConcerts.filter((value, index, self) => {
           return self.findIndex(v => v.artist === value.artist) === index;
         })
-
+        newConcerts = newConcerts.sort((a, b)=>{return (new Date(a.date) - new Date(b.date))});
         console.log(`concat the new concerts into the optimized`);
         setConcerts(newConcerts);
   }
