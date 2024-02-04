@@ -25,6 +25,9 @@ function useWindowSize() {
 }
 
 function App() {
+  useEffect(() => {
+    document.title = 'Taver';
+  }, []);
   let cachedStartDate = localStorage.getItem('startDate');
   let cachedEndDate = localStorage.getItem('endDate');
   const [width, height] = useWindowSize();
