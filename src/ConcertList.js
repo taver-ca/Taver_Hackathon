@@ -69,7 +69,8 @@ class ConcertList extends React.Component {
                                                     console.log(`concerts length after operation: ${filteredConcerts.length}`);
                                                     this.componentDidUpdate(filteredConcerts);
                                                     //set the new concert list 
-                                                    this.props.setConcerts(filteredConcerts, this.props.setAllConcerts((prev) => prev.filter((concertInQuestion) => concertInQuestion.artist === concert.artist)));
+                                                    this.props.setConcerts(filteredConcerts);
+                                                    this.props.setAllConcerts((prev) => prev.filter((concertInQuestion) => concertInQuestion.artist !== concert.artist));
                                                 }
                                             } aria-label="delete">
                                                 <DeleteIcon sx={{ color: "red" }}/>
