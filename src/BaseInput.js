@@ -74,7 +74,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         if (resJson.length < 1) {
           return;
         }
-        console.log(`resJson: ${resJson}`);
+        console.log(`resJson: ${resJson.length}`);
         console.log(`add incoming concerts into allconcerts`);
         console.log(`total Number Of Concerts Memorized: ${allConcerts.length}`);
         setAllConcerts((prev) => prev.concat(resJson), sortArtist(allConcerts.concat(resJson), userLocation));

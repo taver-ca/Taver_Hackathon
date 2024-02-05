@@ -66,7 +66,7 @@ function App() {
                 <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate} />} />
               </Routes>
             </Router>
-            <ConcertList concerts={concerts}></ConcertList>
+            <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
           </Grid>
           <Grid item xs={6} md={6}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
@@ -79,7 +79,7 @@ function App() {
           spacing={2}>
           <Stack item xs={10} md={10} sx={{ display: { xs: 'flex', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle}  setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts = {concerts} allConcerts = {allConcerts} userLocation={userLocation} ref={childRef} />
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts = {concerts} allConcerts = {allConcerts} userLocation={userLocation} ref={childRef} />
             <Router>
             <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
@@ -88,7 +88,7 @@ function App() {
                 <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate} />} />
               </Routes>
             </Router>
-            <ConcertList concerts={concerts}></ConcertList>
+            <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
           </Stack>
           <Stack item xs={2} md={2} sx={{ display: { xs: 'flex', md: 'flex' } }}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}

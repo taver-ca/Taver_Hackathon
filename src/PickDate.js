@@ -10,8 +10,6 @@ function PickDate({ updateStartDateInParent, updateEndDateInParent }) {
     const oneYearFromNow = new Date(today);
     oneYearFromNow.setFullYear(today.getFullYear() + 1);
 
-
-
     const [startDate, setStartDate] = useState(cachedStartDate === null ? new Date() : new Date(cachedStartDate));
     const [endDate, setEndDate] = useState(cachedEndDate === null ? oneYearFromNow : new Date(cachedEndDate));
 
