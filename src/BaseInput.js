@@ -154,6 +154,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           Submit
         </Button>
       </form>
+      <p />
       <div>
         Map Style:{" "}
         <select name="mapStyle" id="mapStyle" onChange={(event) => setMapStyle(event.target.value)}>
