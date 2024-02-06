@@ -3,15 +3,17 @@ import { useEffect, useState } from "react"
 import "react-datepicker/dist/react-datepicker.css";
 
 function PickDate({ updateStartDateInParent, updateEndDateInParent }) {
+    let cachedStartDate = localStorage.getItem('startDate');
+    let cachedEndDate = localStorage.getItem('endDate');
 
     const today = new Date();
     const oneYearFromNow = new Date(today);
     oneYearFromNow.setFullYear(today.getFullYear() + 1);
 
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
-    useEffect(()=>{setStartDate(today); setEndDate(oneYearFromNow);},[])
+    const [startDate, setStartDate] = useState(cachedStartDate === null ? new Date() : new Date(cachedStartDate));
+    const [endDate, setEndDate] = useState(cachedEndDate === null ? oneYearFromNow : new Date(cachedEndDate));
 
+    useEffect(() => { updateStartDateInParent(startDate); updateEndDateInParent(endDate) }, [])
     // Display spotify token 
     return (
         <div>
