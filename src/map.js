@@ -32,6 +32,12 @@ function Map({ concerts, userLocation, mapStyle }) {
 
   const handleOnLoad = (map) => {
     const bounds = new google.maps.LatLngBounds(); // eslint-disable-line
+    if (userLocation) {
+      mapBoundsRef.current.extend({
+        lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
+        lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
+      });
+    }
     map.fitBounds(bounds);
     map.setCenter(bounds.getCenter());
     console.log("Placed Markers" + markers);
@@ -94,6 +100,7 @@ function Map({ concerts, userLocation, mapStyle }) {
         });
       }
       mapRef.current.fitBounds(mapBoundsRef.current);
+      mapRef.current.setCenter(mapBoundsRef.current.getCenter());
     }
   }, [markers]);
 
