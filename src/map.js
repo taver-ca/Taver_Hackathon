@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, PolylineF } from "@react-google-maps/api";
 
 const concertToMarker = (concert) => {
@@ -19,7 +19,8 @@ let pathOptions = {};
 
 function Map({ concerts, userLocation, mapStyle }) {
   const [activeMarker, setActiveMarker] = useState(null);
-
+  const mapRef = useRef(null);
+  const mapBoundsRef = useRef(null);
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
       return;
@@ -67,6 +68,8 @@ function Map({ concerts, userLocation, mapStyle }) {
         },
       ],
     };
+    mapBoundsRef.current = bounds;
+    mapRef.current = map;
   };
 
   const path =
@@ -86,6 +89,22 @@ function Map({ concerts, userLocation, mapStyle }) {
         lng: concert.location.longitude,
       }));
 
+
+
+  useEffect(() => {
+    if (mapRef.current !== null && mapBoundsRef.current !== null) {
+      markers.forEach(({ position }) => mapBoundsRef.current.extend(position));
+
+      if (userLocation) {
+        mapBoundsRef.current.extend({
+          lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
+          lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
+        });
+      }
+      mapRef.current.fitBounds(mapBoundsRef.current);
+    }
+  }, [markers]);
+
   const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location }));
 
   console.log(output);
@@ -96,7 +115,7 @@ function Map({ concerts, userLocation, mapStyle }) {
       onLoad={handleOnLoad}
       onClick={() => setActiveMarker(null)}
       options={{ mapId: mapStyle, minZoom: 3, maxZoom: 5 }}
-      mapContainerStyle={{ width: "100vw", height: "100vh" }}y
+      mapContainerStyle={{ width: "100vw", height: "100vh" }} y
     >
       {userLocation && (
         <MarkerF
