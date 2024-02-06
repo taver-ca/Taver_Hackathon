@@ -72,12 +72,14 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
       if (res.status === 200) {
 
         if (resJson.length < 1) {
+          alert(`no upcoming concerts for ${incomingArtistName} found`);
           return;
         }
         console.log(`resJson: ${resJson.length}`);
         console.log(`add incoming concerts into allconcerts`);
         console.log(`total Number Of Concerts Memorized: ${allConcerts.length}`);
         setAllConcerts((prev) => prev.concat(resJson), sortArtist(allConcerts.concat(resJson), userLocation));
+
       } else {
         console.log("Some error occured");
       }
@@ -88,7 +90,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    setConcerts([], submitArtist(artistName));
+    submitArtist(artistName);
   };
 
   const sortArtist = (incomingAllConcerts, userLocation) => {
