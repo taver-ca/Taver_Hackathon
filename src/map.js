@@ -33,7 +33,7 @@ function Map({ concerts, userLocation, mapStyle }) {
   const handleOnLoad = (map) => {
     const bounds = new google.maps.LatLngBounds(); // eslint-disable-line
     if (userLocation) {
-      mapBoundsRef.current.extend({
+      bounds.current.extend({
         lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
         lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
       });
@@ -71,7 +71,7 @@ function Map({ concerts, userLocation, mapStyle }) {
   };
 
   const path =
-    userLocation != null
+    userLocation !== null
       ? [
         {
           lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
