@@ -49,10 +49,9 @@ function App() {
           container
           spacing={2}>
 
-          <Grid item xs={6} md={6}>
+          <Stack item xs={4} md={4} spacing={3}>
             <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <p />
             <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
             <Router>
               <Routes>
@@ -63,8 +62,8 @@ function App() {
               </Routes>
             </Router>
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
-          </Grid>
-          <Grid item xs={6} md={6}>
+          </Stack>
+          <Grid item xs={8} md={8} alignItems={'flex-start'} justifyContent={'flex-start'}>
             <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle}/>
           </Grid>
         </Grid>
@@ -75,6 +74,7 @@ function App() {
           spacing={2}>
           <Stack item xs={10} md={10} sx={{ display: { xs: 'flex', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
+            <p />
             <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
             <Router>
               <Routes>

@@ -21,6 +21,7 @@ function Map({ concerts, userLocation, mapStyle }) {
   const [activeMarker, setActiveMarker] = useState(null);
   const mapRef = useRef(null);
   const mapBoundsRef = useRef(null);
+  const freshBoundsRef = useRef(null);
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
       return;
@@ -66,6 +67,8 @@ function Map({ concerts, userLocation, mapStyle }) {
         },
       ],
     };
+
+    freshBoundsRef.current = new google.maps.LatLngBounds(); // eslint-disable-line
     mapBoundsRef.current = bounds;
     mapRef.current = map;
   };
@@ -90,7 +93,8 @@ function Map({ concerts, userLocation, mapStyle }) {
 
 
   useEffect(() => {
-    if (mapRef.current !== null && mapBoundsRef.current !== null) {
+    if (mapRef.current !== null && mapBoundsRef.current !== null && freshBoundsRef.current !== null) {
+      mapBoundsRef.current = freshBoundsRef.current;
       markers.forEach(({ position }) => mapBoundsRef.current.extend(position));
 
       if (userLocation) {
@@ -99,8 +103,8 @@ function Map({ concerts, userLocation, mapStyle }) {
           lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
         });
       }
-      mapRef.current.fitBounds(mapBoundsRef.current);
-      mapRef.current.setCenter(mapBoundsRef.current.getCenter());
+      mapRef.current.fitBounds(mapBoundsRef.current, 10);
+      //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
     }
   }, [markers]);
 
@@ -113,8 +117,8 @@ function Map({ concerts, userLocation, mapStyle }) {
       key={[mapStyle]}
       onLoad={handleOnLoad}
       onClick={() => setActiveMarker(null)}
-      options={{ mapId: mapStyle, minZoom: 3, maxZoom: 5 }}
-      mapContainerStyle={{ width: "100vw", height: "100vh" }} y
+      options={{ mapId: mapStyle, minZoom: 1, maxZoom: 10, streetViewControl: false,fullscreenControl:false, mapTypeControl: false, zoomControl: false, keyboardShortcuts:false }}
+      mapContainerStyle={{ width: "50vw", height: "50vh" }}
     >
       {userLocation && (
         <MarkerF

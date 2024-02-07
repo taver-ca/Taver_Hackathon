@@ -78,7 +78,8 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         console.log(`resJson: ${resJson.length}`);
         console.log(`add incoming concerts into allconcerts`);
         console.log(`total Number Of Concerts Memorized: ${allConcerts.length}`);
-        setAllConcerts((prev) => prev.concat(resJson), sortArtist(allConcerts.concat(resJson), userLocation));
+        setAllConcerts((prev) => prev.concat(resJson) );
+        sortArtist(allConcerts.concat(resJson), userLocation);
 
       } else {
         console.log("Some error occured");
@@ -90,13 +91,16 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    setConcerts([], submitArtist(artistName));
+    submitArtist(artistName);
   };
 
   const sortArtist = (incomingAllConcerts, userLocation) => {
     console.log(`total Number Of Concerts Memorized after submitArtist: ${incomingAllConcerts.length}`);
     console.log(`sort all concerts`);
-    var sortedAllConcerts = incomingAllConcerts.sort((a, b) => {
+    incomingAllConcerts = incomingAllConcerts.sort((a, b) => {  
+      return (new Date(a.date) - new Date(b.date));
+    });
+    incomingAllConcerts = incomingAllConcerts.sort((a,b)=>{
       console.log(`sort the entire concert list based on date and distance to home location of each concert...`);
       var originPoint;
 
@@ -112,18 +116,14 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           longitude: userLocation.coords.longitude,
         };
       }
-
-      // Calculate the distance between the points
-      console.log(`Calculate the distance between the points`);
-      var distancea = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, a.location.latitude, a.location.longitude);
-      var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
-      console.log(`distancea: ${distancea}`);
-      console.log(`distanceb: ${distanceb}`);
-      return (new Date(a.date) - new Date(b.date)) && (distancea - distanceb);
-    });
+ // Calculate the distance between the points
+ var distancea = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, a.location.latitude, a.location.longitude);
+ var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
+    return (distancea - distanceb);
+})
 
     console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
-    var newConcerts = sortedAllConcerts.filter((value, index, self) => {
+    var newConcerts = incomingAllConcerts.filter((value, index, self) => {
       return self.findIndex(v => v.artist === value.artist) === index;
     })
     newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
