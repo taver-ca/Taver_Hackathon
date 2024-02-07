@@ -1,15 +1,14 @@
 /*import logo from './logo.svg';*/
 import "./App.css";
 import BaseInput from "./BaseInput.js";
-import Map from "./map";
 import { useState, useRef, useLayoutEffect } from "react";
-import { useLoadScript } from "@react-google-maps/api";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Grid, Stack } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js"
 import AuthorizeSpotify from "./AuthorizeSpotify.js";
+import SharePage from "./SharePage.js";
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -36,9 +35,6 @@ function App() {
   const [endDate, setEndDate] = useState(cachedEndDate === null ? new Date() : new Date(cachedEndDate));
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
   const childRef = useRef();
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
-  });
 
   const handleChildClick = (artistName) => {
     //send artistName to input component
@@ -47,19 +43,19 @@ function App() {
   };
   return (
     <div className="App">
-      {width/height > 1 ? (
+      {width / height > 1 ? (
         <Grid
           className="App-header"
           container
           spacing={2}>
-          
+
           <Grid item xs={6} md={6}>
-          <img src={window.location.origin + '/Taver.png'} alt="Taver" />
+            <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <p/>
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts = {concerts} allConcerts = {allConcerts} userLocation={userLocation} ref={childRef} />
+            <p />
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
             <Router>
-            <Routes>
+              <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
               </Routes>
               <Routes>
@@ -69,7 +65,7 @@ function App() {
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
           </Grid>
           <Grid item xs={6} md={6}>
-            {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
+            <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle}/>
           </Grid>
         </Grid>
       ) : (
@@ -79,9 +75,9 @@ function App() {
           spacing={2}>
           <Stack item xs={10} md={10} sx={{ display: { xs: 'flex', md: 'flex' } }}>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts = {concerts} allConcerts = {allConcerts} userLocation={userLocation} ref={childRef} />
+            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
             <Router>
-            <Routes>
+              <Routes>
                 <Route path="/" element={<AuthorizeSpotify />} />
               </Routes>
               <Routes>
@@ -91,7 +87,7 @@ function App() {
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
           </Stack>
           <Stack item xs={2} md={2} sx={{ display: { xs: 'flex', md: 'flex' } }}>
-            {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
+            <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle}/>
           </Stack>
         </Stack>
       )}
