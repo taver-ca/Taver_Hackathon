@@ -30,7 +30,7 @@ const SharePage = ({ concerts, userLocation, mapStyle }) => {
     const renderConcertList1 =
         concerts1.map((concert, index) => {
             return (
-                <Grid item  key={index}>
+                <Grid item xs={12} sm={12} md={12} key={index}>
                     <ListItem
                         key={index}
                         disablePadding
@@ -94,14 +94,14 @@ const SharePage = ({ concerts, userLocation, mapStyle }) => {
         <Stack spacing={2} >
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
 
-            <Grid container spacing={{ xs: 2, md: 3 }} direction={'row'}>
+            <Stack container spacing={{ xs: 2, md: 3 }} direction={'row'}>
                 <List dense>
                     {renderConcertList1}
                 </List>
                 <List dense>
                     {renderConcertList2}
                 </List>
-            </Grid>
+            </Stack>
 
         </Stack>
     );
