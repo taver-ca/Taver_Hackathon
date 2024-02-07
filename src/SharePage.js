@@ -25,7 +25,7 @@ const SharePage = ({ concerts, userLocation, mapStyle }) => {
 
     const renderConcertList = concerts.map((concert, index) => {
         return (
-            <Grid item xs={4} sm={4} md={6} key={index}>
+            <Grid item xs={6} sm={6} md={6} key={index}>
                 <ListItem
                     key={index}
                     disablePadding

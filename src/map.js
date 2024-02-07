@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, PolylineF } from "@react-google-maps/api";
 
 const concertToMarker = (concert) => {
@@ -15,7 +15,18 @@ const concertToMarker = (concert) => {
 
 let pathOptions = {};
 
-
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+}
 
 function Map({ concerts, userLocation, mapStyle }) {
   const [activeMarker, setActiveMarker] = useState(null);
@@ -107,7 +118,7 @@ function Map({ concerts, userLocation, mapStyle }) {
       //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
     }
   }, [markers]);
-
+  const [width, height] = useWindowSize();
   const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location }));
 
   console.log(output);
@@ -117,8 +128,17 @@ function Map({ concerts, userLocation, mapStyle }) {
       key={[mapStyle]}
       onLoad={handleOnLoad}
       onClick={() => setActiveMarker(null)}
-      options={{ mapId: mapStyle, minZoom: 1, maxZoom: 10, streetViewControl: false,fullscreenControl:false, mapTypeControl: false, zoomControl: false, keyboardShortcuts:false }}
-      mapContainerStyle={{ width: "50vw", height: "50vh" }}
+      options={{
+        mapId: mapStyle,
+        minZoom: 1,
+        maxZoom: 10,
+        streetViewControl: false,
+        fullscreenControl: false,
+        mapTypeControl: false,
+        zoomControl: false,
+        keyboardShortcuts: false
+      }}
+      mapContainerStyle={ width / height >= 1 ? { width: "50vw", height: "50vh" }: { width: "100vw", height: "50vh" }}
     >
       {userLocation && (
         <MarkerF
