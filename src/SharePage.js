@@ -1,14 +1,8 @@
 import React from 'react';
-import { Grid, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Map from "./map";
 import { useLoadScript } from "@react-google-maps/api"
-import moment from 'moment';
 import SharePageList from './SharePageList';
-
-function formattedDate(incomingDate) {
-    var date = new Date(incomingDate);
-    return moment(date).format('YYYY/MM/DD');
-}
 
 const SharePage = ({ concerts, userLocation, mapStyle }) => {
     // Your component logic goes here
