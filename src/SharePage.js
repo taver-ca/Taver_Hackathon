@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, TextField } from '@mui/material';
+import { Stack, TextField, Box } from '@mui/material';
 import Map from "./map";
 import { useLoadScript } from "@react-google-maps/api"
 import SharePageList from './SharePageList';
@@ -15,16 +15,15 @@ const SharePage = ({ concerts, userLocation, mapStyle }) => {
     const concerts2 = concerts.slice(middleIndex);
 
     return (
-        <Stack spacing={2} >
-            <Stack container xs={6} sm={6} md={6}>
+        <Stack sx={{ width: '100wh' }} spacing={2}  >
+            <Stack >
                 {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
             </Stack>
-            <TextField id="standard-basic" variant="standard" placeholder="Write a cool name for your trip here"  InputProps={{ sx: { '& input': { textAlign: 'center', color:'white' } } }}/>
-            <Stack justifyContent="space-evenly" xs={12} sm={12} md={12} container spacing={{ xs: 2, md: 3 }} direction={'row'}>
+            <TextField variant="standard" placeholder="Write a cool name for your trip here" InputProps={{ sx: { '& input': { textAlign: 'center', color: 'white' } } }} />
+            <Stack justifyContent="space-evenly" container spacing={{ xs: 2, md: 3 }} direction={'row'}>
                 <SharePageList concerts={concerts1} />
                 <SharePageList concerts={concerts2} />
             </Stack>
-
         </Stack>
     );
 };

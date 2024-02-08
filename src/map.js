@@ -168,7 +168,7 @@ function Map({ concerts, userLocation, mapStyle }) {
               <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
                 <div className="info">
                   <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} />
-                  <div>{name}</div>
+                  <div><p style={{color:'black'}}>{name}</p><p style={{color:'black'}}>{position.lat},{position.lng}</p></div>
                 </div>
               </InfoWindowF>
             ) : null}

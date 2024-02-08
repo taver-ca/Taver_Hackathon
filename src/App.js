@@ -88,10 +88,9 @@ function App() {
               </Routes>
             </Router>
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
-          </Stack>
-          <Stack>
-            <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
-          </Stack>
+          </Stack>     
+          <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
+
         </Stack>
       )}
     </div>
