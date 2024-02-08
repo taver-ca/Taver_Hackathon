@@ -12,11 +12,10 @@ const SharePageList = ({ concerts }) => {
     return (
         <List dense>
             {concerts.map((concert, index) => (
-                <Grid item xs={12} sm={12} md={12} key={index}>
+                <Grid item  key={index}>
                     <ListItem
                         key={index}
                         disablePadding
-
                     >
                         <ListItemButton>
                             <ListItemAvatar>

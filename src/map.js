@@ -138,7 +138,7 @@ function Map({ concerts, userLocation, mapStyle }) {
         zoomControl: false,
         keyboardShortcuts: false
       }}
-      mapContainerStyle={ width / height >= 1 ? { width: "50vw", height: "50vh" }: { width: "100vw", height: "50vh" }}
+      mapContainerStyle={{ width: "auto", height: "50vh" }}
     >
       {userLocation && (
         <MarkerF

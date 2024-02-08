@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Grid, Chip, Stack, Box } from '@mui/material';
 import { useLocation } from "react-router-dom";
 
 function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
@@ -17,10 +18,11 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
 
   const commaSeparatedfollowedArtists = followedArtists.map((artistName, index) => {
     return (
-      <span key={index}>
-        <button onClick={() => handleClick(artistName)}>{artistName}</button>
-        {index < followedArtists.length - 1 ? " " : ""}
-      </span>
+
+      <Grid item key={index}>
+        <Chip sx={{ background: "limegreen" }} label={artistName} color="primary" onClick={() => handleClick(artistName)} />
+      </Grid>
+
     );
   });
 
@@ -66,7 +68,13 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
   // Display spotify token 
   return (
     <div>
-      {disableButton ? (<div><p>Followed Artists: </p> <p>{commaSeparatedfollowedArtists}</p></div>) : (<button onClick={getSpotifyArtist}>Get your top artists</button>)}
+      <p>Top Artists: </p>
+      {disableButton ? (
+      <div>
+        <Stack xs={4} md={4}  container spacing={1} direction="row">
+          {commaSeparatedfollowedArtists}
+        </Stack>
+      </div>) : (<Chip color="primary" label="Get your top artists" sx={{ background: "limegreen" }} onClick={getSpotifyArtist}></Chip>)}
     </div>
   );
 }

@@ -16,9 +16,11 @@ const SharePage = ({ concerts, userLocation, mapStyle }) => {
 
     return (
         <Stack spacing={2} >
-            {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
+            <Stack container xs={6} sm={6} md={6}>
+                {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
+            </Stack>
 
-            <Stack container spacing={{ xs: 2, md: 3 }} direction={'row'}>
+            <Stack justifyContent="space-evenly" xs={12} sm={12} md={12} container spacing={{ xs: 2, md: 3 }} direction={'row'}>
                 <SharePageList concerts={concerts1} />
                 <SharePageList concerts={concerts2} />
             </Stack>
