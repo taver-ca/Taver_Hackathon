@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { Grid, Chip, Stack, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Grid, Chip, Stack } from '@mui/material';
 import { useLocation } from "react-router-dom";
 
 function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
   let location = useLocation();
-  let code_verifier = localStorage.getItem('code_verifier');
   let searchParams = new URLSearchParams(location.search);
-  let code = searchParams.get("code");
-
+  const [code, setCode] = useState("");
+  const [codeVerifier, setCodeVerifier] = useState("");
   const [followedArtists, setFollowedArtists] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
 
@@ -28,26 +27,72 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
 
 
 
+  useEffect(() => {
+    async function fetchAccessData() {
 
-  let getSpotifyArtist = async () => {
-
-    console.log(`code: ${code}`);
-    if (code === null) {
-      console.log("code is empty, abort access token acquisition");
-      return;
-    }
-
-    if (code_verifier !== null && code_verifier !== null) {
-
-      setDisableButton(true);
-      await fetch(`${process.env.REACT_APP_BACKEND}/getFollowedArtists`, {
+      await fetch(`${process.env.REACT_APP_BACKEND}/authorization`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify({
           code: code,
-          code_verifier: code_verifier,
+          code_verifier: codeVerifier
+        }),
+      }).then(async (res) => {
+        console.log(`response status code: ${res.status}`);
+        if (res.status === 200) {
+          let resJson = await res.json();
+
+          console.log(`access_token: ${resJson.access_token}`);
+          localStorage.setItem("access_token", resJson.access_token);
+          console.log(`token_type: ${resJson.token_type}`);
+          localStorage.setItem("token_type", resJson.token_type);
+          console.log(`expires_in: ${resJson.expires_in}`);
+          localStorage.setItem("expires_in", resJson.expires_in);
+          console.log(`refresh_token: ${resJson.refresh_token}`);
+          localStorage.setItem("refresh_token", resJson.refresh_token);
+          console.log(`scope: ${resJson.scope}`);
+          localStorage.setItem("scope", resJson.scope);
+        }
+        return;
+      }).catch((err) => {
+        console.log("Some error occured");
+        console.log(err);
+      });
+    }
+    setCode(searchParams.get("code"));
+    setCodeVerifier(localStorage.getItem('code_verifier'))
+
+    if (code !== null && codeVerifier !== null) {
+      fetchAccessData();
+    }
+  }, [code, codeVerifier])
+
+
+
+
+  let getSpotifyArtist = async () => {
+
+    setDisableButton(true);
+    //get access token 
+    var access_token = localStorage.getItem("access_token");
+
+    if (access_token !== null) {
+      //call setFollowedArtists
+      await fetch(`${process.env.REACT_APP_BACKEND}/getFollowedArtists`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+          access_token: {
+            access_token: localStorage.getItem("access_token"),
+            token_type: localStorage.getItem("token_type"),
+            expires_in: localStorage.getItem("expires_in"),
+            refresh_token: localStorage.getItem("refresh_token"),
+            scope: localStorage.getItem("scope")
+          },
           startDate: startDate,
           endDate: endDate
         }),
@@ -70,11 +115,11 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
     <div>
       <p>Top Artists: </p>
       {disableButton ? (
-      <div>
-        <Stack xs={4} md={4}  container spacing={1} direction="row">
-          {commaSeparatedfollowedArtists}
-        </Stack>
-      </div>) : (<Chip color="primary" label="Get your top artists" sx={{ background: "limegreen" }} onClick={getSpotifyArtist}></Chip>)}
+        <div>
+          <Stack xs={4} md={4} container spacing={1} direction="row">
+            {commaSeparatedfollowedArtists}
+          </Stack>
+        </div>) : (<Chip color="primary" label="Get your top artists" sx={{ background: "limegreen" }} onClick={getSpotifyArtist}></Chip>)}
     </div>
   );
 }
