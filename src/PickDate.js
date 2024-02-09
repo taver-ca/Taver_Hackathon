@@ -1,7 +1,9 @@
-import DatePicker from "react-datepicker";
 import { useEffect, useState } from "react"
-import "react-datepicker/dist/react-datepicker.css";
-
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Stack } from "@mui/material";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from "dayjs";
 function PickDate({ updateStartDateInParent, updateEndDateInParent }) {
     let cachedStartDate = localStorage.getItem('startDate');
     let cachedEndDate = localStorage.getItem('endDate');
@@ -16,14 +18,34 @@ function PickDate({ updateStartDateInParent, updateEndDateInParent }) {
     useEffect(() => { updateStartDateInParent(startDate); updateEndDateInParent(endDate) }, [])
     // Display spotify token 
     return (
-        <div>
-            <div>
-                StartDate: <DatePicker selected={startDate} onChange={(date) => { setStartDate(date); window.localStorage.setItem("startDate", date); updateStartDateInParent(date); }} />
-            </div>
-            <div>
-                EndDate: <DatePicker selected={endDate} onChange={(date) => { setEndDate(date); window.localStorage.setItem("endDate", date); updateEndDateInParent(date); }} />
-            </div>
-        </div>
+        <Stack direction={'column'} spacing={2}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker sx={{
+                    "& input": {
+                        color: "white",
+                    },
+                    "& label": {
+                        color: "white",
+                    },
+                    "& svg": {
+                        color: "white",
+                    }
+                }}
+                    label="StartDate: " defaultValue={dayjs(startDate)} selected={startDate} onChange={(date) => { setStartDate(date); window.localStorage.setItem("startDate", date); updateStartDateInParent(date); }} />
+                <DatePicker sx={{
+                    "& input": {
+                        color: "white",
+                    },
+                    "& label": {
+                        color: "white",
+                    },
+                    "& svg": {
+                        color: "white",
+                    }
+                }}
+                    label="EndDate: " defaultValue={dayjs(endDate)} selected={endDate} onChange={(date) => { setEndDate(date); window.localStorage.setItem("endDate", date); updateEndDateInParent(date); }} />
+            </LocalizationProvider >
+        </Stack>
     );
 }
 

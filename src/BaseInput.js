@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Stack } from '@mui/material';
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -78,7 +78,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         console.log(`resJson: ${resJson.length}`);
         console.log(`add incoming concerts into allconcerts`);
         console.log(`total Number Of Concerts Memorized: ${allConcerts.length}`);
-        setAllConcerts((prev) => prev.concat(resJson) );
+        setAllConcerts((prev) => prev.concat(resJson));
         sortArtist(allConcerts.concat(resJson), userLocation);
 
       } else {
@@ -97,10 +97,10 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   const sortArtist = (incomingAllConcerts, userLocation) => {
     console.log(`total Number Of Concerts Memorized after submitArtist: ${incomingAllConcerts.length}`);
     console.log(`sort all concerts`);
-    incomingAllConcerts = incomingAllConcerts.sort((a, b) => {  
+    incomingAllConcerts = incomingAllConcerts.sort((a, b) => {
       return (new Date(a.date) - new Date(b.date));
     });
-    incomingAllConcerts = incomingAllConcerts.sort((a,b)=>{
+    incomingAllConcerts = incomingAllConcerts.sort((a, b) => {
       console.log(`sort the entire concert list based on date and distance to home location of each concert...`);
       var originPoint;
 
@@ -116,11 +116,11 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           longitude: userLocation.coords.longitude,
         };
       }
- // Calculate the distance between the points
- var distancea = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, a.location.latitude, a.location.longitude);
- var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
-    return (distancea - distanceb);
-})
+      // Calculate the distance between the points
+      var distancea = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, a.location.latitude, a.location.longitude);
+      var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
+      return (distancea - distanceb);
+    })
 
     console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
     var newConcerts = incomingAllConcerts.filter((value, index, self) => {
@@ -131,32 +131,34 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
     setConcerts(newConcerts);
   }
   return (
-    <div>
+    <Stack direction={'column'} spacing={2}>
       <form onSubmit={handleSubmit}>
-        <TextField
-          sx={{
-            "& input": {
-              color: "white",
-            },
-            "& label": {
-              color: "white",
-            },
-          }}
-          label="Enter Artist Name:"
-          value={artistName} onChange={(e) => setArtistName(e.target.value)}
-        />
-        <p />
-        <Button
-          sx={{
-            cursor: 'pointer',
-          }}
-          type="submit"
-          variant="contained"
-          color="primary">
-          Submit
-        </Button>
+        <Stack direction={'column'} spacing={2}>
+          <TextField
+            sx={{
+              "& input": {
+                color: "white",
+              },
+              "& label": {
+                color: "white",
+              },
+            }}
+            label="Enter Artist Name:"
+            value={artistName} onChange={(e) => setArtistName(e.target.value)}
+          />
+          <Button
+            sx={{
+              cursor: 'pointer',
+            }}
+            type="submit"
+            variant="contained"
+            color="primary">
+            Submit
+          </Button>
+        </Stack>
+
       </form>
-      <p />
+
       <div>
         Map Style:{" "}
         <select name="mapStyle" id="mapStyle" onChange={(event) => setMapStyle(event.target.value)}>
@@ -167,7 +169,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           ))}
         </select>
       </div>
-    </div>
+    </Stack>
   );
 });
 
