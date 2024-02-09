@@ -66,12 +66,10 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
   }, [code, codeVerifier])
 
   let getSpotifyArtist = async () => {
-
-    setDisableButton(true);
     //get access token 
     var access_token = localStorage.getItem("access_token");
-
     if (access_token !== null) {
+      setDisableButton(true);
       //call setFollowedArtists
       await fetch(`${process.env.REACT_APP_BACKEND}/getFollowedArtists`, {
         method: 'POST',
