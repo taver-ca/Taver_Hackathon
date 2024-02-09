@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 
 function AuthorizeSpotify() {
 
@@ -38,7 +39,14 @@ function AuthorizeSpotify() {
     return (
         <div>
             <p>Authorize Spotify: </p>
-            <button onClick={handleSpotifySignIn}>Sign in to Spotify</button>
+            <Button
+                sx={{ background: "limegreen" }}
+                type="submit"
+                variant="contained"
+                color="success"
+                onClick={handleSpotifySignIn}>
+                Sign in to Spotify
+            </Button>
         </div>
     );
 }

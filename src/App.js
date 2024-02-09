@@ -48,7 +48,7 @@ function App() {
           className="App-header"
           container
           spacing={2}>
-          <Stack item xs={4} md={4} spacing={3}>
+          <Stack item xs={6} md={6} spacing={3}>
             <Box>
               <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             </Box>
@@ -64,7 +64,7 @@ function App() {
             </Router>
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
           </Stack>
-          <Grid sx={{ height: '100vh' }} item xs={8} md={8}>
+          <Grid sx={{ height: '100vh' }} item xs={6} md={6}>
             <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
           </Grid>
         </Grid>

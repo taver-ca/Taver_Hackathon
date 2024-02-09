@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Chip, Stack } from '@mui/material';
+import { Grid, Chip, Button, Box } from '@mui/material';
 import { useLocation } from "react-router-dom";
 
 function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
@@ -19,7 +19,7 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
     return (
 
       <Grid item key={index}>
-        <Chip sx={{ background: "limegreen" }} label={artistName} color="primary" onClick={() => handleClick(artistName)} />
+        <Chip sx={{ background: "limegreen" }} label={artistName} color="success" onClick={() => handleClick(artistName)} />
       </Grid>
 
     );
@@ -103,15 +103,27 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
 
   // Display spotify token 
   return (
-    <div>
+    <Grid>
       <p>Top Artists: </p>
       {disableButton ? (
-        <div>
-          <Stack xs={4} md={4} container spacing={1} direction="row">
+        <Box
+        display="flex"
+  justifyContent="center"
+  alignItems="center"
+        
+        >
+          <Grid xs={6} md={6}  container spacing={1} direction="row" justifyContent="center">
             {commaSeparatedfollowedArtists}
-          </Stack>
-        </div>) : (<Chip color="primary" label="Get your top artists" sx={{ background: "limegreen" }} onClick={getSpotifyArtist}></Chip>)}
-    </div>
+          </Grid>
+        </Box>) : (
+        <Button
+          sx={{ background: "limegreen" }}
+          variant="contained"
+          color="success"
+          onClick={getSpotifyArtist}>
+          Get your top artists
+        </Button>)}
+    </Grid>
   );
 }
 

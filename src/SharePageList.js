@@ -12,7 +12,7 @@ const SharePageList = ({ concerts }) => {
     return (
         <List dense>
             {concerts.map((concert, index) => (
-                <Grid item  key={index}>
+                <Grid item key={index}>
                     <ListItem
                         key={index}
                         disablePadding

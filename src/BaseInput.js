@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack } from '@mui/material';
+import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect } from '@mui/material';
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -62,7 +62,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           "content-type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-          artistName: incomingArtistName,
+          artistName: incomingArtistName.toLowerCase(),
           startDate: startDate,
           endDate: endDate
         }),
@@ -147,9 +147,6 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
             value={artistName} onChange={(e) => setArtistName(e.target.value)}
           />
           <Button
-            sx={{
-              cursor: 'pointer',
-            }}
             type="submit"
             variant="contained"
             color="primary">
@@ -159,16 +156,28 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
       </form>
 
-      <div>
-        Map Style:{" "}
-        <select name="mapStyle" id="mapStyle" onChange={(event) => setMapStyle(event.target.value)}>
-          {mapStyles.map((mapStyle) => (
-            <option key={mapStyle.mapId} value={mapStyle.mapId}>
-              {mapStyle.displayName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <FormControl fullWidth>
+          <InputLabel
+          sx={{
+            color: 'white'
+          }}
+            variant="standard" htmlFor="mapStyle">
+            Map Style:
+          </InputLabel>
+          <NativeSelect
+            sx={{
+              color: 'white'
+            }}
+            defaultValue={mapStyles[0]}
+            id="mapStyle"
+            onChange={(event) => setMapStyle(event.target.value)}>
+            {mapStyles.map((mapStyle) => (
+              <option style={{backgroundColor: 'darkgrey'}} key={mapStyle.mapId} value={mapStyle.mapId}>
+                {mapStyle.displayName}
+              </option >
+            ))}
+          </NativeSelect>
+        </FormControl>
     </Stack>
   );
 });
