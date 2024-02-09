@@ -47,6 +47,7 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
           localStorage.setItem("access_token", resJson.access_token);
           localStorage.setItem("token_type", resJson.token_type);
           localStorage.setItem("expires_in", resJson.expires_in);
+          //bad practice, need to find a better way to store this
           localStorage.setItem("refresh_token", resJson.refresh_token);
           localStorage.setItem("scope", resJson.scope);
         }
