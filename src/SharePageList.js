@@ -12,31 +12,28 @@ const SharePageList = ({ concerts }) => {
     return (
         <List dense>
             {concerts.map((concert, index) => (
-                <Grid item key={index}>
-                    <ListItem
-                        key={index}
-                        disablePadding
-                    >
-                        <ListItemButton>
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt={`${concert.artist}`}
-                                    src={`${concert.image.url}`}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={`${concert.artist}`}
-                                secondary={
-                                    <React.Fragment>
-                                        <Stack direction="row" spacing={1}>
-                                            <Chip color="primary" label={`${concert.location.name}`} />
-                                            <Chip color="primary" label={`${formattedDate(concert.date)}`} />
-                                        </Stack>
-                                    </React.Fragment>
-                                } />
-                        </ListItemButton>
-                    </ListItem>
-                </Grid>
+                <ListItem
+                    key={index}
+                    disablePadding>
+                    <ListItemButton>
+                        <ListItemAvatar>
+                            <Avatar
+                                alt={`${concert.artist}`}
+                                src={`${concert.image.url}`}
+                            />
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={`${concert.artist}`}
+                            secondary={
+                                <React.Fragment>
+                                    <Stack direction="row" spacing={1} >
+                                        <Chip color="primary" label={`${concert.location.name}`} />
+                                        <Chip color="primary" label={`${formattedDate(concert.date)}`} />
+                                    </Stack>
+                                </React.Fragment>
+                            } />
+                    </ListItemButton>
+                </ListItem>
             ))}
         </List>
     );

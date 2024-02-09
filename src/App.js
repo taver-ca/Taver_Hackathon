@@ -43,13 +43,11 @@ function App() {
   };
   return (
     <div className="App">
-      {width / height > 1 ? (
-        <Grid
+      <Grid
           className="App-header"
           container
-          spacing={2}
-          alignItems={'stretch'}>
-          <Stack item xs={6} md={6} spacing={3}>
+          spacing={2}>
+          <Stack item xs={6} md={6} spacing={2}>
             <Box>
               <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             </Box>
@@ -65,35 +63,10 @@ function App() {
             </Router>
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
           </Stack>
-          <Grid item xs={6} md={6}>
+          <Grid item xs={10} md={6} direction={'row'}>
             <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
           </Grid>
         </Grid>
-      ) : (
-        <Grid
-          className="App-header"
-          container
-          spacing={1}
-          direction={'column'}>
-          <Stack spacing={1}>
-            <Box>
-              <img src={window.location.origin + '/Taver.png'} alt="Taver" />
-            </Box>
-            <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
-            <Router>
-              <Routes>
-                <Route path="/" element={<AuthorizeSpotify />} />
-              </Routes>
-              <Routes>
-                <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate} />} />
-              </Routes>
-            </Router>
-            <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
-            <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
-          </Stack>
-        </Grid>
-      )}
     </div>
   );
 }
