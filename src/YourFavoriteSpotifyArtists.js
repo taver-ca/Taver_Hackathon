@@ -44,15 +44,10 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
         if (res.status === 200) {
           let resJson = await res.json();
 
-          console.log(`access_token: ${resJson.access_token}`);
           localStorage.setItem("access_token", resJson.access_token);
-          console.log(`token_type: ${resJson.token_type}`);
           localStorage.setItem("token_type", resJson.token_type);
-          console.log(`expires_in: ${resJson.expires_in}`);
           localStorage.setItem("expires_in", resJson.expires_in);
-          console.log(`refresh_token: ${resJson.refresh_token}`);
           localStorage.setItem("refresh_token", resJson.refresh_token);
-          console.log(`scope: ${resJson.scope}`);
           localStorage.setItem("scope", resJson.scope);
         }
         return;
@@ -68,9 +63,6 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
       fetchAccessData();
     }
   }, [code, codeVerifier])
-
-
-
 
   let getSpotifyArtist = async () => {
 
