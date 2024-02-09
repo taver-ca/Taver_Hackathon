@@ -15,15 +15,13 @@ const SharePage = ({ concerts, userLocation, mapStyle }) => {
     const concerts2 = concerts.slice(middleIndex);
 
     return (
-        <Stack sx={{ width: '100wh' }} spacing={2} >
-           <Stack container xs={6} sm={6} md={6}>
-                    {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
-                </Stack>
-                <TextField variant="standard" placeholder="Write a cool name for your trip here" InputProps={{ sx: { '& input': { textAlign: 'center', color: 'white' } } }} />
-                <Stack justifyContent="space-evenly" container spacing={{ xs: 2, md: 3 }} direction={'row'}>
-                    <SharePageList concerts={concerts1} />
-                    <SharePageList concerts={concerts2} />
-                </Stack>
+        <Stack>
+            {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
+            <TextField variant="standard" placeholder="Write a cool name for your trip here" InputProps={{ sx: { '& input': { textAlign: 'center', color: 'white' } } }} />
+            <Stack justifyContent="space-evenly" container direction={'row'}>
+                <SharePageList concerts={concerts1} />
+                <SharePageList concerts={concerts2} />
+            </Stack>
         </Stack>
     );
 };

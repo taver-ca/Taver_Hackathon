@@ -47,7 +47,8 @@ function App() {
         <Grid
           className="App-header"
           container
-          spacing={2}>
+          spacing={2}
+          alignItems={'stretch'}>
           <Stack item xs={6} md={6} spacing={3}>
             <Box>
               <img src={window.location.origin + '/Taver.png'} alt="Taver" />
@@ -64,16 +65,17 @@ function App() {
             </Router>
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
           </Stack>
-          <Grid sx={{ height: '100vh' }} item xs={6} md={6}>
+          <Grid item xs={6} md={6}>
             <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
           </Grid>
         </Grid>
       ) : (
-        <Stack
+        <Grid
           className="App-header"
           container
-          spacing={2}>
-          <Stack item xs={2} md={2} spacing={3} sx={{ display: { xs: 'flex', md: 'flex' } }}>
+          spacing={1}
+          direction={'column'}>
+          <Stack spacing={1}>
             <Box>
               <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             </Box>
@@ -88,10 +90,9 @@ function App() {
               </Routes>
             </Router>
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
-          </Stack>     
-          <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
-
-        </Stack>
+            <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
+          </Stack>
+        </Grid>
       )}
     </div>
   );
