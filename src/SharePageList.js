@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack } from '@mui/material';
-import { Grid, List, ListItem, ListItemText, ListItemAvatar, ListItemButton, Avatar, Chip } from '@mui/material';
+import { List, ListItem, ListItemText, ListItemAvatar, ListItemButton, Avatar, Chip } from '@mui/material';
 import moment from 'moment';
 
 function formattedDate(incomingDate) {
@@ -27,7 +27,7 @@ const SharePageList = ({ concerts }) => {
                             secondary={
                                 <React.Fragment>
                                     <Stack direction="row" spacing={1} >
-                                        <Chip color="primary" label={`${concert.location.name}`} />
+                                        <Chip color="primary" label={`${concert.location.address}`} />
                                         <Chip color="primary" label={`${formattedDate(concert.date)}`} />
                                     </Stack>
                                 </React.Fragment>

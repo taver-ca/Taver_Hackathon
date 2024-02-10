@@ -6,6 +6,7 @@ const concertToMarker = (concert) => {
     id: concert.title + concert.date,
     name: concert.title,
     artistImageUrl: concert.image.url,
+    address: concert.location.address,
     position: {
       lat: concert.location.latitude,
       lng: concert.location.longitude,
@@ -119,7 +120,7 @@ function Map({ concerts, userLocation, mapStyle }) {
     }
   }, [markers]);
   const [width, height] = useWindowSize();
-  const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location }));
+  const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location, address: concert.location.address }));
 
   console.log(output);
 
@@ -138,7 +139,7 @@ function Map({ concerts, userLocation, mapStyle }) {
         zoomControl: false,
         keyboardShortcuts: false
       }}
-      mapContainerStyle={(width / height) >= 1 ?{ width: "100wh", height: "50vh" }:{ width: "100wh", height: "25vh" }}
+      mapContainerStyle={(width / height) >= 1 ? { width: "100wh", height: "50vh" } : { width: "100wh", height: "25vh" }}
     >
       {userLocation && (
         <MarkerF
@@ -154,7 +155,7 @@ function Map({ concerts, userLocation, mapStyle }) {
       )}
 
       {markers &&
-        markers.map(({ id, name, position, artistImageUrl }) => (
+        markers.map(({ id, name, position, artistImageUrl, address }) => (
           <MarkerF
             key={id}
             position={position}
@@ -168,7 +169,7 @@ function Map({ concerts, userLocation, mapStyle }) {
               <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
                 <div className="info">
                   <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} />
-                  <div><p style={{color:'black'}}>{name}</p><p style={{color:'black'}}>{position.lat},{position.lng}</p></div>
+                  <div><p style={{ color: 'black' }}>{name}</p><p style={{ color: 'black' }}>{address}</p></div>
                 </div>
               </InfoWindowF>
             ) : null}

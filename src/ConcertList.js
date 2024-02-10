@@ -6,10 +6,15 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
-import { Grid, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import moment from 'moment';
 
+function formattedDate(incomingDate) {
+    var date = new Date(incomingDate);
+    return moment(date).format('YYYY/MM/DD hh:mm A');
+}
 
 class ConcertList extends React.Component {
     constructor(props) {
@@ -53,7 +58,7 @@ class ConcertList extends React.Component {
                                         <Stack sx={{ width: '100%' }} direction="row" spacing={2} justifyContent={'space-between'} display={'flex'} >
                                             <Stack direction="row" item spacing={1}>
                                                 <Chip color="primary" label={`${concert.location.name}`} />
-                                                <Chip color="primary" label={`${concert.date}`} />
+                                                <Chip color="primary" label={`${formattedDate(concert.date)}`} />
                                             </Stack>
                                             <IconButton onClick={
                                                 () => {

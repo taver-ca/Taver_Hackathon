@@ -46,7 +46,8 @@ function App() {
       <Grid
           className="App-header"
           container
-          spacing={2}>
+          spacing={2}
+          alignItems="flex-start">
           <Stack item xs={6} md={6} spacing={2}>
             <Box>
               <img src={window.location.origin + '/Taver.png'} alt="Taver" />
