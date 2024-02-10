@@ -112,7 +112,7 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
   alignItems="center"
         
         >
-          <Grid xs={6} md={6}  container spacing={1} direction="row" justifyContent="center">
+          <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
             {commaSeparatedfollowedArtists}
           </Grid>
         </Box>) : (

@@ -48,7 +48,7 @@ function App() {
           container
           spacing={2}
           alignItems="flex-start">
-          <Stack item xs={6} md={6} spacing={2}>
+          <Grid direction={'column'} item xs={10} md={3} spacing={2}>
             <Box>
               <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             </Box>
@@ -63,8 +63,8 @@ function App() {
               </Routes>
             </Router>
             <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
-          </Stack>
-          <Grid item xs={10} md={6} direction={'row'}>
+          </Grid>
+          <Grid item xs={10} md={5} direction={'row'}>
             <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
           </Grid>
         </Grid>
