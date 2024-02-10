@@ -56,7 +56,7 @@ class ConcertList extends React.Component {
                                 secondary={
                                     <React.Fragment>
                                         <Stack sx={{ width: '100%' }} direction="row" spacing={2} justifyContent={'space-between'} display={'flex'} >
-                                            <Stack direction={{xs:"column", md:"row"}} item spacing={1}>
+                                            <Stack direction={{xs:"column", sm:"row", md:"row"}} item spacing={1}>
                                                 <Chip color="primary" label={`${concert.location.name}`} />
                                                 <Chip color="primary" label={`${formattedDate(concert.date)}`} />
                                             </Stack>
