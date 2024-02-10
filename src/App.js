@@ -48,11 +48,12 @@ function App() {
           container
           spacing={2}
           alignItems="flex-start">
-          <Grid direction={'column'} item xs={10} md={3} spacing={2}>
+          <Grid direction={'column'} xs={10} md={3} spacing={2}>
             <Box>
               <img src={window.location.origin + '/Taver.png'} alt="Taver" />
             </Box>
             <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
+            <p/>
             <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
             <Router>
               <Routes>
