@@ -122,12 +122,24 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
       return (distancea - distanceb);
     })
 
-    console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
+    console.log(`filter the sorted concert by date , so we're only left with no more than 1 concert on the same date `);
     var newConcerts = incomingAllConcerts.filter((value, index, self) => {
+      return self.findIndex((v) => {     
+        
+        var vDate = new Date(v.date).toDateString();
+var valueDate = new Date(value.date).toDateString();
+
+        return  vDate.valueOf() == valueDate.valueOf();
+      }) === index;
+    });
+
+    console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
+    newConcerts = newConcerts.filter((value, index, self)=>{
       return self.findIndex(v => v.artist === value.artist) === index;
-    })
+    }); 
+
     newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
-    console.log(`concat the new concerts into the optimized`);
+    console.log(`concat the new concerts into the optimized list`);
     setConcerts(newConcerts);
   }
   return (
