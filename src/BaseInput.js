@@ -78,7 +78,18 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         console.log(`resJson: ${resJson.length}`);
         console.log(`add incoming concerts into allconcerts`);
         console.log(`total Number Of Concerts Memorized: ${allConcerts.length}`);
-        setAllConcerts((prev) => prev.concat(resJson));
+        //avoid adding the same concert.. check the title of the concert
+        const found = allConcerts.some((concert)=> { 
+          
+          alert(`${incomingArtistName} is already playing as part of ${concert.title}`);
+          
+          return resJson.includes(concert);});
+
+        if(!found)
+        {
+          setAllConcerts((prev) => prev.concat(resJson));
+        }
+
         sortArtist(allConcerts.concat(resJson), userLocation);
 
       } else {
@@ -135,7 +146,7 @@ var valueDate = new Date(value.date).toDateString();
 
     console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
     newConcerts = newConcerts.filter((value, index, self)=>{
-      return self.findIndex(v => v.artist === value.artist) === index;
+      return self.findIndex(v => v.artist === value.artist || v.title == value.title) === index;
     }); 
 
     newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
