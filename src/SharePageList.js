@@ -26,7 +26,7 @@ const SharePageList = ({ concerts }) => {
                             primary={`${concert.artist}`}
                             secondary={
                                 <React.Fragment>
-                                    <Stack direction="row" spacing={1} >
+                                    <Stack direction="row" spacing={1} justifyContent={'space-between'}>
                                         <Chip color="primary" label={`${concert.location.address}`} />
                                         <Chip color="primary" label={`${formattedDate(concert.date)}`} />
                                     </Stack>
