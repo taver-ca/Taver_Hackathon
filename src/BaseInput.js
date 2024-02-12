@@ -61,6 +61,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
 
   const submitArtist = async (incomingArtistName) => {
+    incomingArtistName = incomingArtistName.toLowerCase();
     try {
       let res = await fetch(`${process.env.REACT_APP_BACKEND}/concerts`, {
         method: "POST",
@@ -68,37 +69,51 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           "content-type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-          artistName: incomingArtistName.toLowerCase(),
+          artistName: incomingArtistName,
           startDate: startDate,
           endDate: endDate
         }),
       });
 
-      let resJson = await res.json();
+      let incomingConcerts = await res.json();
       if (res.status === 200) {
 
-        if (resJson.length < 1) {
+        if (incomingConcerts.length < 1) {
           alert(`no upcoming concerts for ${incomingArtistName} found`);
           return;
         }
-        console.log(`resJson: ${resJson.length}`);
-        console.log(`add incoming concerts into allconcerts`);
-        console.log(`total Number Of Concerts Memorized: ${allConcerts.length}`);
+        console.log(`incoming concerts: ${incomingConcerts.length}`);
+        //console.log(`add incoming concerts into allconcerts`);
+        //console.log(`total Number Of Concerts Memorized: ${allConcerts.length}`);
         //avoid adding the same concert.. check the title of the concert
-        const found = concerts.some((concert) => {
+        var incomingConcertTitles = incomingConcerts.map(concert => concert.title);
 
-          var found = resJson.map(concert => concert.title).includes(concert.title);
+        var found = concerts.some((concert) => {
 
-          if (found) {
-            alert(`${incomingArtistName} is already performing as part of ${concert.title} on ${formattedDate(concert.date)}`);
-            return found;
+          var concertFound = incomingConcertTitles.includes(concert.title);
+          var artistFound = false;
+          var artistFoundConcert = concerts.find((concert) => {
+            return concert.title.includes(concert.artist);
+          });
+
+          if (concertFound) {
+            if (incomingArtistName !== concert.artist.toLowerCase()) {
+              alert(`${concert.artist} is already performing as part of ${concert.title} on ${formattedDate(concert.date)}`);
+            }
           }
+          if (artistFoundConcert) {
+            if (incomingArtistName !== artistFoundConcert.artist.toLowerCase()) {
+              alert(`${incomingArtistName} is already performing as part of ${artistFoundConcert.title} on ${formattedDate(artistFoundConcert.date)}`);
+            }
+            artistFound = true;
+          }
+          return concertFound || artistFound;
 
         });
 
         if (!found) {
-          setAllConcerts((prev) => prev.concat(resJson));
-          sortArtist(allConcerts.concat(resJson), userLocation);
+          setAllConcerts((prev) => prev.concat(incomingConcerts));
+          sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
 
       } else {
@@ -117,7 +132,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   const sortArtist = (incomingAllConcerts, userLocation) => {
     console.log(`total Number Of Concerts Memorized after submitArtist: ${incomingAllConcerts.length}`);
     console.log(`sort all concerts`);
-    
+
     incomingAllConcerts = incomingAllConcerts.sort((a, b) => {
       return (new Date(a.date) - new Date(b.date));
     });
