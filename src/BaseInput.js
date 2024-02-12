@@ -90,7 +90,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           var found = resJson.map(concert => concert.title).includes(concert.title);
 
           if (found) {
-            alert(`${incomingArtistName} is already playing as part of ${concert.title} on ${formattedDate(concert.date)}`);
+            alert(`${incomingArtistName} is already performing as part of ${concert.title} on ${formattedDate(concert.date)}`);
             return found;
           }
 
@@ -98,9 +98,8 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
         if (!found) {
           setAllConcerts((prev) => prev.concat(resJson));
+          sortArtist(allConcerts.concat(resJson), userLocation);
         }
-
-        sortArtist(allConcerts.concat(resJson), userLocation);
 
       } else {
         console.log("Some error occured");
