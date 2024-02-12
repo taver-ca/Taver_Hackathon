@@ -75,43 +75,39 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         }),
       });
 
-      let incomingConcerts = await res.json();
+
       if (res.status === 200) {
+
+        let incomingConcerts = await res.json();
 
         if (incomingConcerts.length < 1) {
           alert(`no upcoming concerts for ${incomingArtistName} found`);
           return;
         }
-        console.log(`incoming concerts: ${incomingConcerts.length}`);
-        //console.log(`add incoming concerts into allconcerts`);
-        //console.log(`total Number Of Concerts Memorized: ${allConcerts.length}`);
-        //avoid adding the same concert.. check the title of the concert
-        var incomingConcertTitles = incomingConcerts.map(concert => concert.title);
 
-        var found = concerts.some((concert) => {
+        //check if artist is already featured in somebody else's concert 
 
-          var concertFound = incomingConcertTitles.includes(concert.title);
-          var artistFound = false;
-          var artistFoundConcert = concerts.find((concert) => {
-            return concert.title.includes(concert.artist);
-          });
+        //in order to check this 
+        //check if existing concert titles includes incoming artist's concert titles
+        //check if existing concert titles includes incoming artist's name 
 
-          if (concertFound) {
-            if (incomingArtistName !== concert.artist.toLowerCase()) {
-              alert(`${concert.artist} is already performing as part of ${concert.title} on ${formattedDate(concert.date)}`);
-            }
-          }
-          if (artistFoundConcert) {
-            if (incomingArtistName !== artistFoundConcert.artist.toLowerCase()) {
-              alert(`${incomingArtistName} is already performing as part of ${artistFoundConcert.title} on ${formattedDate(artistFoundConcert.date)}`);
-            }
-            artistFound = true;
-          }
-          return concertFound || artistFound;
+        var duplicateFound = false;
+        var existingConcertTitles = concerts.map(concert => concert.title.toLowerCase());
+        var incomingConcertTitles = incomingConcerts.map(concert => concert.title.toLowerCase());
 
+        var checkDuplicatesIndex = existingConcertTitles.findIndex((concertTitle) => {
+          return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
         });
 
-        if (!found) {
+
+        if (checkDuplicatesIndex != -1) {
+          if (incomingArtistName !== concerts[checkDuplicatesIndex].artist.toLowerCase()) {
+            alert(`${incomingArtistName} is already performing as part of ${concerts[checkDuplicatesIndex].title} on ${formattedDate(concerts[checkDuplicatesIndex].date)}`);
+          }
+          duplicateFound = true;
+        }
+
+        if (!duplicateFound) {
           setAllConcerts((prev) => prev.concat(incomingConcerts));
           sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
@@ -177,8 +173,6 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
       return match;
 
     });
-
-
 
     newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
     console.log(`concat the new concerts into the optimized list`);
