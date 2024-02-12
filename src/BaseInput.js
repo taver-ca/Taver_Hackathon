@@ -99,7 +99,6 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
         });
 
-
         if (checkDuplicatesIndex != -1) {
           if (incomingArtistName !== concerts[checkDuplicatesIndex].artist.toLowerCase()) {
             alert(`${incomingArtistName} is already performing as part of ${concerts[checkDuplicatesIndex].title} on ${formattedDate(concerts[checkDuplicatesIndex].date)}`);
@@ -107,8 +106,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           duplicateFound = true;
         }
 
-        if (!duplicateFound) {
-          setAllConcerts((prev) => prev.concat(incomingConcerts));
+        if (!duplicateFound) {          
           sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
 
@@ -129,9 +127,13 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
     console.log(`total Number Of Concerts Memorized after submitArtist: ${incomingAllConcerts.length}`);
     console.log(`sort all concerts`);
 
+
+    //sort by date
     incomingAllConcerts = incomingAllConcerts.sort((a, b) => {
       return (new Date(a.date) - new Date(b.date));
     });
+
+    //sort by distance to last point
     incomingAllConcerts = incomingAllConcerts.sort((a, b) => {
       console.log(`sort the entire concert list based on date and distance to home location of each concert...`);
       var originPoint;
@@ -159,24 +161,34 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
       return self.findIndex(v => v.artist === value.artist || v.title == value.title) === index;
     });
 
-    var concertTitles = newConcerts.map(concert => concert.title);
-    newConcerts = newConcerts.filter((concert) => {
+    // filter the concert list by
+    // if artist name is included in titles of concerts performed by other artists 
 
-      var match = false;
+    if(concerts.length > 0)
+    {
+      newConcerts = newConcerts.filter((concert) => {
 
-      concertTitles.forEach((concertTitle) => {
-        if (concertTitle.toLowerCase().includes(concert.artist.toLowerCase())) {
-          match = true;
+        var match = true;
+        var matchindex = newConcerts.findIndex((findConcert)=>{
+          return findConcert.title.includes(concert.artist) && (findConcert.artist !== concert.artist);
+        })
+
+        if(matchindex != -1)
+        {
+          alert(`${concert.artist} is performing as part of ${newConcerts[matchindex].title} by ${newConcerts[matchindex].artist}, consolidating schedule`);
+          match = false;
         }
+
+        return match;
+  
       });
-
-      return match;
-
-    });
+    }   
+    
 
     newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
     console.log(`concat the new concerts into the optimized list`);
     setConcerts(newConcerts);
+    setAllConcerts(newConcerts);
   }
   return (
     <Stack direction={'column'} spacing={2}>
