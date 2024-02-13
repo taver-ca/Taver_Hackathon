@@ -3,30 +3,16 @@ import "./App.css";
 import BaseInput from "./BaseInput.js";
 import { useState, useRef, useLayoutEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Grid, Stack, Box } from '@mui/material';
+import { Grid, Box, Button } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js"
 import AuthorizeSpotify from "./AuthorizeSpotify.js";
 import SharePage from "./SharePage.js";
 
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-  return size;
-}
-
 function App() {
   let cachedStartDate = localStorage.getItem('startDate');
   let cachedEndDate = localStorage.getItem('endDate');
-  const [width, height] = useWindowSize();
   const [concerts, setConcerts] = useState([]);
   //all concerts is used to reoptimize the whole route... based on incoming concert
   const [allConcerts, setAllConcerts] = useState([]);
@@ -41,6 +27,7 @@ function App() {
     console.log(artistName);
     childRef.current.handleRequestFromParent(artistName);
   };
+
   return (
     <div className="App">
       <Grid
