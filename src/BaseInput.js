@@ -99,7 +99,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
         });
 
-        if (checkDuplicatesIndex != -1) {
+        if (checkDuplicatesIndex !== -1) {
           if (incomingArtistName !== concerts[checkDuplicatesIndex].artist.toLowerCase()) {
             alert(`${incomingArtistName} is already performing as part of ${concerts[checkDuplicatesIndex].title} on ${formattedDate(concerts[checkDuplicatesIndex].date)}`);
           }
@@ -158,7 +158,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
     console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
     var newConcerts = incomingAllConcerts.filter((value, index, self) => {
-      return self.findIndex(v => v.artist === value.artist || v.title == value.title) === index;
+      return self.findIndex(v => v.artist === value.artist || v.title === value.title) === index;
     });
 
     // filter the concert list by
@@ -173,7 +173,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           return findConcert.title.includes(concert.artist) && (findConcert.artist !== concert.artist);
         })
 
-        if(matchindex != -1)
+        if(matchindex !== -1)
         {
           alert(`${concert.artist} is performing as part of ${newConcerts[matchindex].title} by ${newConcerts[matchindex].artist}, consolidating schedule`);
           match = false;
