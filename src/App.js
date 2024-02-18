@@ -40,6 +40,7 @@ function App() {
       ignoreElements: (node) => {
         return node.nodeName === "IFRAME";
       },
+      scrollY: (window.scrollY * -1)
     }).then(canvas => {
       canvas2image.saveAsPNG(canvas, 'poster', canvas.width, canvas.height);    
     });
