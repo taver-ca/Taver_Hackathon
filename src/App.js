@@ -1,7 +1,7 @@
 /*import logo from './logo.svg';*/
 import "./App.css";
 import BaseInput from "./BaseInput.js";
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Grid, Box, Button } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
@@ -9,6 +9,8 @@ import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js"
 import AuthorizeSpotify from "./AuthorizeSpotify.js";
 import SharePage from "./SharePage.js";
+import html2canvas from 'html2canvas';
+import canvas2image from "@reglendo/canvas2image";
 
 function App() {
   let cachedStartDate = localStorage.getItem('startDate');
@@ -28,34 +30,50 @@ function App() {
     childRef.current.handleRequestFromParent(artistName);
   };
 
+  const handleDownloadImage = async () => {
+    const element = document.getElementById('sharepage');
+    html2canvas(element, {
+      logging: true, 
+      proxy: "http://localhost:8080/image-proxy",
+      backgroundColor: '#282c34',
+      
+      ignoreElements: (node) => {
+        return node.nodeName === "IFRAME";
+      },
+    }).then(canvas => {
+      canvas2image.saveAsPNG(canvas, 'poster', canvas.width, canvas.height);    
+    });
+  }
+
   return (
     <div className="App">
       <Grid
-          className="App-header"
-          container
-          spacing={2}
-          alignItems="flex-start">
-          <Grid direction={'column'} xs={10} md={3} spacing={2}>
-            <Box>
-              <img src={window.location.origin + '/Taver.png'} alt="Taver" />
-            </Box>
-            <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
-            <p/>
-            <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
-            <Router>
-              <Routes>
-                <Route path="/" element={<AuthorizeSpotify />} />
-              </Routes>
-              <Routes>
-                <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate} />} />
-              </Routes>
-            </Router>
-            <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
-          </Grid>
-          <Grid item xs={10} md={5} direction={'row'}>
-            <SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
-          </Grid>
+        className="App-header"
+        container
+        spacing={2}
+        alignItems="flex-start">
+        <Grid direction={'column'} xs={10} md={3} spacing={2}>
+          <Box>
+            <img src={window.location.origin + '/Taver.png'} alt="Taver" />
+          </Box>
+          <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
+          <p />
+          <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
+          <Router>
+            <Routes>
+              <Route path="/" element={<AuthorizeSpotify />} />
+            </Routes>
+            <Routes>
+              <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate} />} />
+            </Routes>
+          </Router>
+          <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
         </Grid>
+        <Grid item xs={10} md={5} direction={'row'}>
+          <div id="sharepage"><SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /></div>
+          <Button id="sharebutton" color="primary" onClick={handleDownloadImage} variant="contained">Share As Image</Button>
+        </Grid>
+      </Grid>
     </div>
   );
 }

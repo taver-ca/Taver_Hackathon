@@ -14,11 +14,12 @@ const SharePage = ({ concerts, userLocation, mapStyle }) => {
     const concerts1 = concerts.slice(0, middleIndex);
     const concerts2 = concerts.slice(middleIndex);
 
+
     return (
         <Stack disablePadding>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
             <TextField variant="standard" placeholder="Write a cool name for your trip here" InputProps={{ sx: { '& input': { textAlign: 'center', color: 'white' } } }} />
-            <Stack justifyContent="space-evenly" container sx={{ flexDirection: { xs: "column", sm:"row", md: "row"} }} >
+            <Stack justifyContent="space-evenly" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
                 <SharePageList concerts={concerts1} />
                 <SharePageList concerts={concerts2} />
             </Stack>

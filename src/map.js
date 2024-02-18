@@ -126,6 +126,7 @@ function Map({ concerts, userLocation, mapStyle }) {
 
   return (
     <GoogleMap
+      style={{overflow: "visible"}}
       key={[mapStyle]}
       onLoad={handleOnLoad}
       onClick={() => setActiveMarker(null)}
@@ -133,11 +134,7 @@ function Map({ concerts, userLocation, mapStyle }) {
         mapId: mapStyle,
         minZoom: 1,
         maxZoom: 10,
-        streetViewControl: false,
-        fullscreenControl: false,
-        mapTypeControl: false,
-        zoomControl: false,
-        keyboardShortcuts: false
+        disableDefaultUI: true
       }}
       mapContainerStyle={(width / height) >= 1 ? { width: "100wh", height: "50vh" } : { width: "100wh", height: "25vh" }}
     >
@@ -178,6 +175,7 @@ function Map({ concerts, userLocation, mapStyle }) {
 
       <PolylineF path={path} options={pathOptions} />
     </GoogleMap>
+
   );
 }
 
