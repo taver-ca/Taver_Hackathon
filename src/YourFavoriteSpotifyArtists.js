@@ -30,26 +30,29 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
   useEffect(() => {
     async function fetchAccessData() {
 
-      await fetch(`${process.env.REACT_APP_BACKEND}/authorization`, {
+      await fetch(`${process.env.REACT_APP_BACKEND}/Authorization`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify({
-          code: code,
-          code_verifier: codeVerifier
+          ClientId: process.env.REACT_APP_SPOTIFY_CLIENTID,
+          Code: code,
+          CodeVerifier: codeVerifier,
+          RedirectUri: process.env.REACT_APP_REDIRECT_URL
         }),
       }).then(async (res) => {
         console.log(`response status code: ${res.status}`);
         if (res.status === 200) {
           let resJson = await res.json();
 
-          localStorage.setItem("access_token", resJson.access_token);
-          localStorage.setItem("token_type", resJson.token_type);
-          localStorage.setItem("expires_in", resJson.expires_in);
+          localStorage.setItem("access_token", resJson.accessToken);
+          localStorage.setItem("token_type", resJson.tokenType);
+          localStorage.setItem("expires_in", resJson.expiresIn);
           //bad practice, need to find a better way to store this
-          localStorage.setItem("refresh_token", resJson.refresh_token);
+          localStorage.setItem("refresh_token", resJson.refreshToken);
           localStorage.setItem("scope", resJson.scope);
+          localStorage.setItem("created_at", resJson.createdAt)
         }
         return;
       }).catch((err) => {
@@ -71,18 +74,19 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
     if (access_token !== null) {
       setDisableButton(true);
       //call setFollowedArtists
-      await fetch(`${process.env.REACT_APP_BACKEND}/getFollowedArtists`, {
+      await fetch(`${process.env.REACT_APP_BACKEND}/FindTopArtistWithShows`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify({
           access_token: {
-            access_token: localStorage.getItem("access_token"),
-            token_type: localStorage.getItem("token_type"),
-            expires_in: localStorage.getItem("expires_in"),
-            refresh_token: localStorage.getItem("refresh_token"),
-            scope: localStorage.getItem("scope")
+            AccessToken: localStorage.getItem("access_token"),
+            TokenType: localStorage.getItem("token_type"),
+            ExpiresIn: localStorage.getItem("expires_in"),
+            Scope: localStorage.getItem("scope"),
+            RefreshToken: localStorage.getItem("refresh_token"),
+            CreatedAt: localStorage.getItem("created_at")
           },
           startDate: startDate,
           endDate: endDate
@@ -107,10 +111,10 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
       <p>Top Artists: </p>
       {disableButton ? (
         <Box
-        display="flex"
-  justifyContent="center"
-  alignItems="center"
-        
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+
         >
           <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
             {commaSeparatedfollowedArtists}

@@ -63,7 +63,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   const submitArtist = async (incomingArtistName) => {
     incomingArtistName = incomingArtistName.toLowerCase();
     try {
-      let res = await fetch(`${process.env.REACT_APP_BACKEND}/concerts`, {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND}/FindConcertsForArtist`, {
         method: "POST",
         headers: {
           "content-type": "application/json;charset=utf-8",
