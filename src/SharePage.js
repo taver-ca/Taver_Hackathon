@@ -4,7 +4,7 @@ import Map from "./map";
 import { useLoadScript } from "@react-google-maps/api"
 import SharePageList from './SharePageList';
 
-const SharePage = ({ concerts, userLocation, mapStyle }) => {
+const SharePage = ({ concerts, userLocation, mapStyle,setPostName }) => {
     // Your component logic goes here
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
