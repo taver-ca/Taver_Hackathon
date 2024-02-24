@@ -60,24 +60,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   const submitArtist = async (incomingArtistName) => {
     incomingArtistName = incomingArtistName.toLowerCase();
     try {
-      let res;
-      if (isChecked) {
-        // Fetch all concert for the given artist
-        res = await fetch(`${process.env.REACT_APP_BACKEND}/concerts`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json;charset=utf-8",
-          },
-          body: JSON.stringify({
-            artistName: incomingArtistName,
-            startDate: startDate,
-            endDate: endDate
-          }),
-        });
-      } 
-      if (!isChecked) {
-       // Fetch only one concert for the given artist
-      res = await fetch(`${process.env.REACT_APP_BACKEND}/concerts`, {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND}/concerts`, {
         method: "POST",
         headers: {
           "content-type": "application/json;charset=utf-8",
@@ -88,23 +71,51 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           endDate: endDate
         }),
       });
-    }
-    
+
+
       if (res.status === 200) {
+
         let incomingConcerts = await res.json();
 
-        // If switch is off, keep only one concert 
-      if (!isChecked) {
-        incomingConcerts = incomingConcerts.reduce((uniqueConcerts, concert) => {
-          const existingConcert = uniqueConcerts.find(c => c.artist === concert.artist);
-          if (!existingConcert) {
-            uniqueConcerts.push(concert);
+        if (incomingConcerts.length < 1) {
+          alert(`no upcoming concerts for ${incomingArtistName} found`);
+          return;
+        }
+
+        //check if artist is already featured in somebody else's concert 
+
+        //in order to check this 
+        //check if existing concert titles includes incoming artist's concert titles
+        //check if existing concert titles includes incoming artist's name 
+
+        var duplicateFound = false;
+        var existingConcertTitles = concerts.map(concert => concert.title.toLowerCase());
+        var incomingConcertTitles = incomingConcerts.map(concert => concert.title.toLowerCase());
+
+        var checkDuplicatesIndex = existingConcertTitles.findIndex((concertTitle) => {
+          return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
+        });
+
+        if (checkDuplicatesIndex !== -1) {
+          if (incomingArtistName !== concerts[checkDuplicatesIndex].artist.toLowerCase()) {
+            alert(`${incomingArtistName} is already performing as part of ${concerts[checkDuplicatesIndex].title} on ${formattedDate(concerts[checkDuplicatesIndex].date)}`);
           }
-          return uniqueConcerts;
-        }, []);
-      }
-        // Sort and update concerts based on the fetched data
-        sortArtist(incomingConcerts, userLocation);
+          duplicateFound = true;
+        }
+
+        if (!duplicateFound) { 
+          if (!isChecked) {
+            incomingConcerts = incomingConcerts.reduce((uniqueConcerts, concert) => {
+              const existingConcert = uniqueConcerts.find(c => c.artist === concert.artist);
+              if (!existingConcert) {
+                uniqueConcerts.push(concert);
+              }
+              return uniqueConcerts;
+            }, []);
+          }         
+          sortArtist(allConcerts.concat(incomingConcerts), userLocation);
+        }
+
       } else {
         console.log("Some error occured");
       }
