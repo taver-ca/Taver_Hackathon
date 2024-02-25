@@ -1,13 +1,12 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect } from '@mui/material';
+import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect,Switch} from '@mui/material';
 import moment from 'moment';
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
   { mapId: "53a5c2c14f51f10b", displayName: "Dark Theme", buttonColorCss: "#404040" },
 ];
-
 
 // Convert degrees to radians
 function degreesToRadians(degrees) {
@@ -58,8 +57,6 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   const [artistName, setArtistName] = useState("Taylor Swift");
 
-
-
   const submitArtist = async (incomingArtistName) => {
     incomingArtistName = incomingArtistName.toLowerCase();
     try {
@@ -106,7 +103,16 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           duplicateFound = true;
         }
 
-        if (!duplicateFound) {          
+        if (!duplicateFound) { 
+          if (!isChecked) {
+            incomingConcerts = incomingConcerts.reduce((uniqueConcerts, concert) => {
+              const existingConcert = uniqueConcerts.find(c => c.artist === concert.artist);
+              if (!existingConcert) {
+                uniqueConcerts.push(concert);
+              }
+              return uniqueConcerts;
+            }, []);
+          }         
           sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
 
@@ -156,14 +162,18 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
       return (distancea - distanceb);
     })
 
+    //filter part one concert
     console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
-    var newConcerts = incomingAllConcerts.filter((value, index, self) => {
+    var onenewConcerts = incomingAllConcerts.filter((value, index, self) => {
       return self.findIndex(v => v.artist === value.artist || v.title === value.title) === index;
     });
 
+    //filter part all concert
+    console.log(`filter the sorted concert by artist name`);
+    var newConcerts = incomingAllConcerts
+
     // filter the concert list by
     // if artist name is included in titles of concerts performed by other artists 
-
     if(concerts.length > 0)
     {
       newConcerts = newConcerts.filter((concert) => {
@@ -183,16 +193,29 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   
       });
     }   
-    
-
     newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
     console.log(`concat the new concerts into the optimized list`);
     setConcerts(newConcerts);
     setAllConcerts(newConcerts);
   }
+ 
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleSwitchChange = () => {
+    setIsChecked((prev) => !prev);
+  };
+
   return (
-    <Stack direction={'column'} spacing={2}>
-      <form onSubmit={handleSubmit}>
+    <Stack direction={'column'} spacing={2}>  
+       Display all the concert of given artist:
+      <Switch
+        checked={isChecked}
+        onChange={handleSwitchChange}
+        inputProps={{ 'aria-label': 'Toggle Switch' }}
+      />
+
+        <Stack direction={'column'} spacing={2}>
+          <form onSubmit={handleSubmit}>
         <Stack direction={'column'} spacing={2}>
           <TextField
             sx={{
@@ -209,12 +232,13 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           <Button
             type="submit"
             variant="contained"
-            color="primary">
+            color="primary"         
+          >
             Submit
           </Button>
         </Stack>
-
-      </form>
+    </form>
+</Stack>
 
       <FormControl fullWidth>
         <InputLabel
@@ -239,7 +263,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         </NativeSelect>
       </FormControl>
     </Stack>
-  );
+  );  
 });
 
 export default BaseInput;

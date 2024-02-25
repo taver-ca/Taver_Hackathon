@@ -3,7 +3,7 @@ import "./App.css";
 import BaseInput from "./BaseInput.js";
 import { useState, useRef } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Grid, Box, Button } from '@mui/material';
+import { Grid, Box, Button, TextField } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js"
@@ -19,6 +19,8 @@ function App() {
   //all concerts is used to reoptimize the whole route... based on incoming concert
   const [allConcerts, setAllConcerts] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
+  const [posterName, setPosterName] = useState('poster');
+
   const [startDate, setStartDate] = useState(cachedStartDate === null ? new Date() : new Date(cachedStartDate));
   const [endDate, setEndDate] = useState(cachedEndDate === null ? new Date() : new Date(cachedEndDate));
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
@@ -29,8 +31,14 @@ function App() {
     console.log(artistName);
     childRef.current.handleRequestFromParent(artistName);
   };
+  
 
-  const handleDownloadImage = async () => {
+  const handleDownloadImage = async function () {
+    //==
+   
+
+
+    //==
     const element = document.getElementById('sharepage');
     html2canvas(element, {
       logging: true, 
@@ -41,8 +49,9 @@ function App() {
         return node.nodeName === "IFRAME";
       },
       scrollY: (window.scrollY * -1)
+
     }).then(canvas => {
-      canvas2image.saveAsPNG(canvas, 'poster', canvas.width, canvas.height);    
+      canvas2image.saveAsPNG(canvas, posterName, canvas.width, canvas.height);    
     });
   }
 
@@ -71,8 +80,10 @@ function App() {
           <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
         </Grid>
         <Grid item xs={10} md={5} direction={'row'}>
-          <div id="sharepage"><SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /></div>
+          <div id="sharepage"><SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} 
+          setPosterName={setPosterName}/></div>
           <Button id="sharebutton" color="primary" onClick={handleDownloadImage} variant="contained">Share As Image</Button>
+          <TextField type="text" value={posterName} onChange={(e) => setPosterName(e.target.value)} />
         </Grid>
       </Grid>
     </div>
