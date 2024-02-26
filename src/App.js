@@ -31,27 +31,27 @@ function App() {
     console.log(artistName);
     childRef.current.handleRequestFromParent(artistName);
   };
-  
+
 
   const handleDownloadImage = async function () {
     //==
-   
+
 
 
     //==
     const element = document.getElementById('sharepage');
     html2canvas(element, {
-      logging: true, 
+      logging: true,
       proxy: `${process.env.REACT_APP_BACKEND}/ImageProxy`,
       backgroundColor: '#282c34',
-      
+
       ignoreElements: (node) => {
         return node.nodeName === "IFRAME";
       },
       scrollY: (window.scrollY * -1)
 
     }).then(canvas => {
-      canvas2image.saveAsPNG(canvas, posterName, canvas.width, canvas.height);    
+      canvas2image.saveAsPNG(canvas, posterName, canvas.width, canvas.height);
     });
   }
 
@@ -80,10 +80,14 @@ function App() {
           <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
         </Grid>
         <Grid item xs={10} md={5} direction={'row'}>
-          <div id="sharepage"><SharePage concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} 
-          setPosterName={setPosterName}/></div>
+          <div id="sharepage">
+            <SharePage
+              concerts={concerts}
+              userLocation={userLocation}
+              mapStyle={mapStyle}
+              setPosterName={setPosterName} />
+          </div>
           <Button id="sharebutton" color="primary" onClick={handleDownloadImage} variant="contained">Share As Image</Button>
-          <TextField type="text" value={posterName} onChange={(e) => setPosterName(e.target.value)} />
         </Grid>
       </Grid>
     </div>
