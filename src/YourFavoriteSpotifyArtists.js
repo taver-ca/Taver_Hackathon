@@ -74,7 +74,7 @@ function YourFavoriteSpotifyArtists({ onChildClick, startDate, endDate }) {
     if (access_token !== null) {
       setDisableButton(true);
       //call setFollowedArtists
-      await fetch(`${process.env.REACT_APP_BACKEND}/FindTopArtistWithShows`, {
+      await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetTopArtistsWithShows`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json;charset=utf-8'
