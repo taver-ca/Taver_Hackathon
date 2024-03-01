@@ -89,9 +89,10 @@ class ConcertList extends React.Component {
                     </ListItem>
                 );
             });
+        const hasConcerts = this.state.concerts.length > 0;
 
         return <div>
-            <p>Upcoming Concerts: </p>
+            {hasConcerts && <p>Upcoming Concerts: </p>} 
             <List
                 sx={{ width: '100%' }}>
                 {renderConcertList}
