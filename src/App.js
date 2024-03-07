@@ -3,7 +3,7 @@ import "./App.css";
 import BaseInput from "./BaseInput.js";
 import { useState, useRef } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Grid, Box, Button, TextField } from '@mui/material';
+import { Grid, Box, Button } from '@mui/material';
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js"
@@ -11,6 +11,8 @@ import AuthorizeSpotify from "./AuthorizeSpotify.js";
 import SharePage from "./SharePage.js";
 import html2canvas from 'html2canvas';
 import canvas2image from "@reglendo/canvas2image";
+import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";
+import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 
 function App() {
   let cachedStartDate = localStorage.getItem('startDate');
@@ -20,7 +22,7 @@ function App() {
   const [allConcerts, setAllConcerts] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [posterName, setPosterName] = useState('poster');
-
+  const [followedArtists, setFollowedArtists] = useState([]);
   const [startDate, setStartDate] = useState(cachedStartDate === null ? new Date() : new Date(cachedStartDate));
   const [endDate, setEndDate] = useState(cachedEndDate === null ? new Date() : new Date(cachedEndDate));
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
@@ -34,11 +36,6 @@ function App() {
 
 
   const handleDownloadImage = async function () {
-    //==
-
-
-
-    //==
     const element = document.getElementById('sharepage');
     html2canvas(element, {
       logging: true,
@@ -69,15 +66,18 @@ function App() {
           <PickDate updateStartDateInParent={setStartDate} updateEndDateInParent={setEndDate} />
           <p />
           <BaseInput setConcerts={setConcerts} setUserLocation={setUserLocation} setMapStyle={setMapStyle} setAllConcerts={setAllConcerts} startDate={startDate} endDate={endDate} concerts={concerts} allConcerts={allConcerts} userLocation={userLocation} ref={childRef} />
+          <GetSpotifyPlaylistArtistsWithShows followedArtists={followedArtists} setFollowedArtists={setFollowedArtists} startDate={startDate} endDate={endDate}/>
           <Router>
             <Routes>
               <Route path="/" element={<AuthorizeSpotify />} />
             </Routes>
             <Routes>
-              <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists onChildClick={handleChildClick} startDate={startDate} endDate={endDate} />} />
+              <Route path="/ShowSpotifyArtists" element={<YourFavoriteSpotifyArtists startDate={startDate} endDate={endDate} followedArtists={followedArtists} setFollowedArtists={setFollowedArtists} />} />
             </Routes>
           </Router>
-          <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}></ConcertList>
+          <p/>
+          <YourSpotifyArtistsWithShows artists={followedArtists} onChildClick={handleChildClick}/>
+          <ConcertList setConcerts={setConcerts} setAllConcerts={setAllConcerts} concerts={concerts}/>
         </Grid>
         <Grid item xs={10} md={5} direction={'row'}>
           <div id="sharepage">
