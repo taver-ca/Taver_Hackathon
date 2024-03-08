@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect,Switch} from '@mui/material';
+import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch } from '@mui/material';
 import moment from 'moment';
 
 const mapStyles = [
@@ -103,7 +103,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           duplicateFound = true;
         }
 
-        if (!duplicateFound) { 
+        if (!duplicateFound) {
           if (!isChecked) {
             incomingConcerts = incomingConcerts.reduce((uniqueConcerts, concert) => {
               const existingConcert = uniqueConcerts.find(c => c.artist === concert.artist);
@@ -112,7 +112,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
               }
               return uniqueConcerts;
             }, []);
-          }         
+          }
           sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
 
@@ -174,31 +174,29 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
     // filter the concert list by
     // if artist name is included in titles of concerts performed by other artists 
-    if(concerts.length > 0)
-    {
+    if (concerts.length > 0) {
       newConcerts = newConcerts.filter((concert) => {
 
         var match = true;
-        var matchindex = newConcerts.findIndex((findConcert)=>{
+        var matchindex = newConcerts.findIndex((findConcert) => {
           return findConcert.title.includes(concert.artist) && (findConcert.artist !== concert.artist);
         })
 
-        if(matchindex !== -1)
-        {
+        if (matchindex !== -1) {
           alert(`${concert.artist} is performing as part of ${newConcerts[matchindex].title} by ${newConcerts[matchindex].artist}, consolidating schedule`);
           match = false;
         }
 
         return match;
-  
+
       });
-    }   
+    }
     newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
     console.log(`concat the new concerts into the optimized list`);
     setConcerts(newConcerts);
     setAllConcerts(newConcerts);
   }
- 
+
   const [isChecked, setIsChecked] = useState(false);
 
   const handleSwitchChange = () => {
@@ -206,39 +204,39 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   };
 
   return (
-    <Stack direction={'column'} spacing={2}>  
-       Display all the concert of given artist:
+    <Stack direction={'column'} spacing={2}>
+      Display all concerts of a single artist:
       <Switch
         checked={isChecked}
         onChange={handleSwitchChange}
         inputProps={{ 'aria-label': 'Toggle Switch' }}
       />
 
-        <Stack direction={'column'} spacing={2}>
-          <form onSubmit={handleSubmit}>
-        <Stack direction={'column'} spacing={2}>
-          <TextField
-            sx={{
-              "& input": {
-                color: "white",
-              },
-              "& label": {
-                color: "white",
-              },
-            }}
-            label="Enter Artist Name:"
-            value={artistName} onChange={(e) => setArtistName(e.target.value)}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"         
-          >
-            Submit
-          </Button>
-        </Stack>
-    </form>
-</Stack>
+      <Stack direction={'column'} spacing={2}>
+        <form onSubmit={handleSubmit}>
+          <Stack direction={'column'} spacing={2}>
+            <TextField
+              sx={{
+                "& input": {
+                  color: "white",
+                },
+                "& label": {
+                  color: "white",
+                },
+              }}
+              label="Enter Artist Name:"
+              value={artistName} onChange={(e) => setArtistName(e.target.value)}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Submit
+            </Button>
+          </Stack>
+        </form>
+      </Stack>
 
       <FormControl fullWidth>
         <InputLabel
@@ -250,7 +248,16 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         </InputLabel>
         <NativeSelect
           sx={{
-            color: 'white'
+            color: 'white',
+            "& input": {
+              color: "white",
+            },
+            "& label": {
+              color: "white",
+            },
+            "& svg": {
+              color: "white",
+            }
           }}
           defaultValue={mapStyles[0]}
           id="mapStyle"
@@ -263,7 +270,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         </NativeSelect>
       </FormControl>
     </Stack>
-  );  
+  );
 });
 
 export default BaseInput;
