@@ -2,6 +2,7 @@ import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
 import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List } from '@mui/material';
 import moment from 'moment';
+import DismissButton from "./DismissButton";
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -128,10 +129,11 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
     e.preventDefault();
     //request a list of artist from the backend based on artist name 
     var artists = await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetArtistsByName?artistName=${artistName}`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "content-type": "application/json;charset=utf-8",
-      }});
+      }
+    });
     setOpen(true);
 
 
@@ -208,7 +210,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   const [isChecked, setIsChecked] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const [artistList, setArtistList]=React.useState([]);
+  const [artistList, setArtistList] = React.useState([]);
   const handleClose = () => {
     setOpen(false);
   };
@@ -219,7 +221,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   return (
 
-    
+
     <Stack direction={'column'} spacing={2}>
       Display all concerts of a single artist:
       <Switch
@@ -259,13 +261,13 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            There are a few artists with similar names, pick one. 
+            There are a few artists with similar names, pick one.
           </DialogContentText>
           <List>
-              {artistList}
+            {artistList}
           </List>
           <DialogActions>
-
+            <DismissButton onClick={handleClose} />
           </DialogActions>
         </DialogContent>
       </Dialog>
