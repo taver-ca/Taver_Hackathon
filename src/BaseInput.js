@@ -1,8 +1,9 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List } from '@mui/material';
+import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, ListItem, ListItemButton, ListItemAvatar, Avatar } from '@mui/material';
 import moment from 'moment';
 import DismissButton from "./DismissButton";
+import ArtistChoiceList from "./ArtistChoiceList";
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -57,6 +58,74 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   }));
 
   const [artistName, setArtistName] = useState("Taylor Swift");
+  const [artistList, setArtistList] = useState(null);
+  const submitArtistInfo = async (incomingArtistInfo) => {
+    let incomingArtistName = incomingArtistInfo.name;
+    let incomingArtistId = incomingArtistInfo.id
+    try {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetGigsById`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+          artistId: incomingArtistId,
+          startDate: startDate,
+          endDate: endDate
+        })
+      });
+
+
+      if (res.status === 200) {
+
+        let incomingConcerts = await res.json();
+
+        if (incomingConcerts.length < 1) {
+          alert(`no upcoming concerts for ${incomingArtistId} found`);
+          return;
+        }
+
+        //check if artist is already featured in somebody else's concert 
+
+        //in order to check this 
+        //check if existing concert titles includes incoming artist's concert titles
+        //check if existing concert titles includes incoming artist's name 
+
+        var duplicateFound = false;
+        var existingConcertTitles = concerts.map(concert => concert.title.toLowerCase());
+        var incomingConcertTitles = incomingConcerts.map(concert => concert.title.toLowerCase());
+
+        var checkDuplicatesIndex = existingConcertTitles.findIndex((concertTitle) => {
+          return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
+        });
+
+        if (checkDuplicatesIndex !== -1) {
+          if (incomingArtistName !== concerts[checkDuplicatesIndex].artist.toLowerCase()) {
+            alert(`${incomingArtistName} is already performing as part of ${concerts[checkDuplicatesIndex].title} on ${formattedDate(concerts[checkDuplicatesIndex].date)}`);
+          }
+          duplicateFound = true;
+        }
+
+        if (!duplicateFound) {
+          if (!isChecked) {
+            incomingConcerts = incomingConcerts.reduce((uniqueConcerts, concert) => {
+              const existingConcert = uniqueConcerts.find(c => c.artist === concert.artist);
+              if (!existingConcert) {
+                uniqueConcerts.push(concert);
+              }
+              return uniqueConcerts;
+            }, []);
+          }
+          sortArtist(allConcerts.concat(incomingConcerts), userLocation);
+        }
+      setOpen(false);
+      } else {
+        console.log("Some error occured");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const submitArtist = async (incomingArtistName) => {
     incomingArtistName = incomingArtistName.toLowerCase();
@@ -128,14 +197,28 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   let handleSubmit = async (e) => {
     e.preventDefault();
     //request a list of artist from the backend based on artist name 
-    var artists = await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetArtistsByName?artistName=${artistName}`, {
+    await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetArtistsByName?artistName=${artistName}`, {
       method: "GET",
       headers: {
         "content-type": "application/json;charset=utf-8",
       }
+    }).then(async (res) => {
+      console.log(`response status code: ${res.status}`);
+      if (res.status === 200) {
+        let resJson = await res.json();
+        console.log(`artist count: ${resJson.length}`);
+        resJson = resJson.filter(
+          (value) => value.images.length > 0
+        );
+        console.log(`artist count: ${resJson.length}`);
+        setArtistList(resJson);
+        setOpen(true);
+      }
+      return;
+    }).catch((err) => {
+      console.log("Some error occured");
+      console.log(err);
     });
-    setOpen(true);
-
 
     //submitArtist(artistName);
   };
@@ -210,7 +293,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   const [isChecked, setIsChecked] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const [artistList, setArtistList] = React.useState([]);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -261,10 +344,11 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            There are a few artists with similar names, pick one.
+            There are a few artists with similar names, please pick one.
           </DialogContentText>
           <List>
-            {artistList}
+            {artistList &&  <ArtistChoiceList artists={artistList} onArtistClick={submitArtistInfo} />
+            }
           </List>
           <DialogActions>
             <DismissButton onClick={handleClose} />
