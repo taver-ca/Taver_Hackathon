@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch } from '@mui/material';
+import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List } from '@mui/material';
 import moment from 'moment';
 
 const mapStyles = [
@@ -126,7 +126,16 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    submitArtist(artistName);
+    //request a list of artist from the backend based on artist name 
+    var artists = await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetArtistsByName?artistName=${artistName}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json;charset=utf-8",
+      }});
+    setOpen(true);
+
+
+    //submitArtist(artistName);
   };
 
   const sortArtist = (incomingAllConcerts, userLocation) => {
@@ -198,12 +207,19 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   }
 
   const [isChecked, setIsChecked] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [artistList, setArtistList]=React.useState([]);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSwitchChange = () => {
     setIsChecked((prev) => !prev);
   };
 
   return (
+
+    
     <Stack direction={'column'} spacing={2}>
       Display all concerts of a single artist:
       <Switch
@@ -237,6 +253,22 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           </Stack>
         </form>
       </Stack>
+
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            There are a few artists with similar names, pick one. 
+          </DialogContentText>
+          <List>
+              {artistList}
+          </List>
+          <DialogActions>
+
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
 
       <FormControl fullWidth>
         <InputLabel
