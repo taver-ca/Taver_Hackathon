@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { GoogleMap, InfoWindowF, MarkerF, PolylineF } from "@react-google-maps/api";
+import { GoogleMap, InfoWindowF, MarkerF, PolylineF, MarkerClusterer } from "@react-google-maps/api";
 
 const concertToMarker = (concert) => {
   return {
@@ -126,14 +126,14 @@ function Map({ concerts, userLocation, mapStyle }) {
 
   return (
     <GoogleMap
-      style={{overflow: "visible"}}
+      style={{ overflow: "visible" }}
       key={[mapStyle]}
       onLoad={handleOnLoad}
-      onClick={() => setActiveMarker(null)}
+      // onClick={() => setActiveMarker(null)}
       options={{
         mapId: mapStyle,
         minZoom: 1,
-        maxZoom: 10,
+        maxZoom: 20,
         disableDefaultUI: true
       }}
       mapContainerStyle={(width / height) >= 1 ? { width: "100wh", height: "50vh" } : { width: "100wh", height: "75vh" }}
@@ -142,7 +142,8 @@ function Map({ concerts, userLocation, mapStyle }) {
         <MarkerF
           position={{
             lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
-            lng: Number(parseFloat(userLocation.coords.longitude).toLocaleString(4)),
+            // Changed from toLocale to toFixed for consistency
+            lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
           }}
           icon={{
             url: "https://cdn-icons-png.flaticon.com/512/6676/6676575.png",
@@ -150,28 +151,35 @@ function Map({ concerts, userLocation, mapStyle }) {
           }}
         />
       )}
-
-      {markers &&
-        markers.map(({ id, name, position, artistImageUrl, address }) => (
-          <MarkerF
-            key={id}
-            position={position}
-            icon={{ url: artistImageUrl, scaledSize: { width: 35, height: 35 } }}
-            onClick={(e) => {
-              e.stop();
-              handleActiveMarker(id);
-            }}
-          >
-            {activeMarker === id ? (
-              <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
-                <div className="info">
-                  <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} />
-                  <div><p style={{ color: 'black' }}>{name}</p><p style={{ color: 'black' }}>{address}</p></div>
-                </div>
-              </InfoWindowF>
-            ) : null}
-          </MarkerF>
-        ))}
+      <MarkerClusterer>
+        {(clusterer) => (
+          <div>
+            {markers &&
+              markers.map(({ id, name, position, artistImageUrl, address }) => (
+                <MarkerF
+                  key={id}
+                  position={position}
+                  icon={{ url: artistImageUrl, scaledSize: { width: 35, height: 35 } }}
+                  clusterer={clusterer}
+                  setZoom={10}
+                  onClick={(e) => {
+                    e.stop()
+                    handleActiveMarker(id)
+                  }}
+                >
+                  {activeMarker === id ? (
+                    <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
+                      <div className="info">
+                        <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} />
+                        <div><p style={{ color: 'black' }}>{name}</p><p style={{ color: 'black' }}>{address}</p></div>
+                      </div>
+                    </InfoWindowF>
+                  ) : null}
+                </MarkerF>
+              ))}
+          </div>
+        )}
+      </MarkerClusterer>
 
       <PolylineF path={path} options={pathOptions} />
     </GoogleMap>
