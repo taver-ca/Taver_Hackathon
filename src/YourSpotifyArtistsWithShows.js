@@ -5,10 +5,10 @@ function YourSpotifyArtistsWithShows({artists, onChildClick}) {
         onChildClick(artistName);
       };
 
-    const commaSeparatedfollowedArtists = artists.map((artistName, index) => {
+    const commaSeparatedfollowedArtists = artists.map((artist, index) => {
         return (
           <Grid item key={index}>
-            <Chip sx={{ background: "limegreen" }} label={artistName} color="success" onClick={() => handleClick(artistName)} />
+            <Chip sx={{ background: "limegreen" }} label={artist.name} color="success" onClick={() => handleClick(artist)} />
           </Grid>
         );
       });

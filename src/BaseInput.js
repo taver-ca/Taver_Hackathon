@@ -52,14 +52,15 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   }, []);
 
   useImperativeHandle(ref, () => ({
-    handleRequestFromParent: (artistName) => {
-      submitArtist(artistName);
+    handleRequestFromParent: (artist) => {
+      submitArtistInfo(artist);
     },
   }));
 
   const [artistName, setArtistName] = useState("Taylor Swift");
   const [artistList, setArtistList] = useState(null);
   const submitArtistInfo = async (incomingArtistInfo) => {
+    console.log(incomingArtistInfo);
     let incomingArtistName = incomingArtistInfo.name;
     let incomingArtistId = incomingArtistInfo.id
     try {
@@ -118,74 +119,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           }
           sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
-      setOpen(false);
-      } else {
-        console.log("Some error occured");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const submitArtist = async (incomingArtistName) => {
-    incomingArtistName = incomingArtistName.toLowerCase();
-    try {
-      let res = await fetch(`${process.env.REACT_APP_BACKEND}/FindConcertsForArtist`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify({
-          artistName: incomingArtistName,
-          startDate: startDate,
-          endDate: endDate
-        }),
-      });
-
-
-      if (res.status === 200) {
-
-        let incomingConcerts = await res.json();
-
-        if (incomingConcerts.length < 1) {
-          alert(`no upcoming concerts for ${incomingArtistName} found`);
-          return;
-        }
-
-        //check if artist is already featured in somebody else's concert 
-
-        //in order to check this 
-        //check if existing concert titles includes incoming artist's concert titles
-        //check if existing concert titles includes incoming artist's name 
-
-        var duplicateFound = false;
-        var existingConcertTitles = concerts.map(concert => concert.title.toLowerCase());
-        var incomingConcertTitles = incomingConcerts.map(concert => concert.title.toLowerCase());
-
-        var checkDuplicatesIndex = existingConcertTitles.findIndex((concertTitle) => {
-          return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
-        });
-
-        if (checkDuplicatesIndex !== -1) {
-          if (incomingArtistName !== concerts[checkDuplicatesIndex].artist.toLowerCase()) {
-            alert(`${incomingArtistName} is already performing as part of ${concerts[checkDuplicatesIndex].title} on ${formattedDate(concerts[checkDuplicatesIndex].date)}`);
-          }
-          duplicateFound = true;
-        }
-
-        if (!duplicateFound) {
-          if (!isChecked) {
-            incomingConcerts = incomingConcerts.reduce((uniqueConcerts, concert) => {
-              const existingConcert = uniqueConcerts.find(c => c.artist === concert.artist);
-              if (!existingConcert) {
-                uniqueConcerts.push(concert);
-              }
-              return uniqueConcerts;
-            }, []);
-          }
-          sortArtist(allConcerts.concat(incomingConcerts), userLocation);
-        }
-
+        setOpen(false);
       } else {
         console.log("Some error occured");
       }
@@ -347,7 +281,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
             There are a few artists with similar names, please pick one.
           </DialogContentText>
           <List>
-            {artistList &&  <ArtistChoiceList artists={artistList} onArtistClick={submitArtistInfo} />
+            {artistList && <ArtistChoiceList artists={artistList} onArtistClick={submitArtistInfo} />
             }
           </List>
           <DialogActions>
