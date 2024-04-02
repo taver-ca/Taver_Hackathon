@@ -80,7 +80,7 @@ function YourFavoriteSpotifyArtists({ startDate, endDate, followedArtists, setFo
           let resJson = await res.json();
           const existingArtists = followedArtists;
           const updatedArtists = [...existingArtists, ...resJson].filter(
-            (value, index, self) => self.findIndex(otherItem=>otherItem.Id === value.Id) === index
+            (value, index, self) => self.findIndex(otherItem=>otherItem.id === value.id) === index
           );
           setFollowedArtists(updatedArtists);
         }
