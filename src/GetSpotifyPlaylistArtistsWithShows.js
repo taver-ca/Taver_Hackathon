@@ -28,7 +28,7 @@ function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists
                 let resJson = await res.json();
                 const existingArtists = followedArtists;
                 const updatedArtists = [...existingArtists, ...resJson].filter(
-                    (value, index, self) => self.indexOf(value) === index
+                    (value, index, self) => self.findIndex(otherItem=>otherItem.Id === value.Id) === index
                 );
                 setFollowedArtists(updatedArtists);
             }
