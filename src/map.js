@@ -116,6 +116,7 @@ function Map({ concerts, userLocation, mapStyle }) {
         });
       }
       mapRef.current.fitBounds(mapBoundsRef.current, 10);
+      mapRef.current.setZoom(3);
       //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
     }
   }, [markers]);
