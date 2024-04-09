@@ -115,8 +115,18 @@ function Map({ concerts, userLocation, mapStyle }) {
           lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
         });
       }
-      mapRef.current.fitBounds(mapBoundsRef.current, 10);
-      mapRef.current.setZoom(3);
+
+      if (activeMarker === null) {
+        mapRef.current.fitBounds(mapBoundsRef.current, 10);
+        mapRef.current.setZoom(3);
+      }
+      else {
+        var index = markers.findIndex(marker => marker.id === activeMarker);
+        var centerMarker = markers[index];
+        mapRef.current.setCenter(centerMarker.position);
+        mapRef.current.setZoom(10);
+      }
+
       //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
     }
   }, [markers]);
