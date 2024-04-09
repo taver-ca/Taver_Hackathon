@@ -82,7 +82,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         let incomingConcerts = await res.json();
 
         if (incomingConcerts.length < 1) {
-          alert(`no upcoming concerts for ${incomingArtistId} found`);
+          alert(`no upcoming concerts for ${incomingArtistName} found`);
           return;
         }
 
