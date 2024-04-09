@@ -161,7 +161,6 @@ function Map({ concerts, userLocation, mapStyle }) {
                   position={position}
                   icon={{ url: artistImageUrl, scaledSize: { width: 35, height: 35 } }}
                   clusterer={clusterer}
-                  setZoom={10}
                   onClick={(e) => {
                     e.stop()
                     handleActiveMarker(id)
