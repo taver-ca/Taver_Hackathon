@@ -4,6 +4,7 @@ import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch
 import moment from 'moment';
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
+import { FetchArtist } from "./FetchArtist";
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -36,7 +37,7 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
   return earthRadiusKm * c;
 }
 
-const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, setAllConcerts, endDate, concerts, allConcerts, userLocation }, ref) => {
+const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, setAllConcerts, endDate, concerts, allConcerts, userLocation, updateArtistNameInParent, artistListFromParent, openDialogFromParent, closeDialog, newArtistList }, ref) => {
 
   useEffect(() => {
     function showPosition(position) {
@@ -58,7 +59,6 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   }));
 
   const [artistName, setArtistName] = useState("Taylor Swift");
-  const [artistList, setArtistList] = useState(null);
   const submitArtistInfo = async (incomingArtistInfo) => {
     console.log(incomingArtistInfo);
     let incomingArtistName = incomingArtistInfo.name;
@@ -120,6 +120,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
         setOpen(false);
+        closeDialog();
       } else {
         console.log("Some error occured");
       }
@@ -130,30 +131,11 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    //request a list of artist from the backend based on artist name 
-    await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetArtistsByName?artistName=${artistName}`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json;charset=utf-8",
-      }
-    }).then(async (res) => {
-      console.log(`response status code: ${res.status}`);
-      if (res.status === 200) {
-        let resJson = await res.json();
-        console.log(`artist count: ${resJson.length}`);
-        resJson = resJson.filter(
-          (value) => value.images.length > 0
-        );
-        console.log(`artist count: ${resJson.length}`);
-        setArtistList(resJson);
-        setOpen(true);
-      }
-      return;
-    }).catch((err) => {
-      console.log("Some error occured");
-      console.log(err);
+    FetchArtist(artistName).then((resJson) => {
+      // setArtistList(resJson);
+      newArtistList(resJson);
+      setOpen(true);
     });
-
     //submitArtist(artistName);
   };
 
@@ -230,6 +212,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
 
   const handleClose = () => {
     setOpen(false);
+    closeDialog();
   };
 
   const handleSwitchChange = () => {
@@ -260,7 +243,10 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
                 },
               }}
               label="Enter Artist Name:"
-              value={artistName} onChange={(e) => setArtistName(e.target.value)}
+              value={artistName} onChange={(e) =>{
+                 setArtistName(e.target.value);
+                 updateArtistNameInParent(e.target.value);
+                }}
             />
             <Button
               type="submit"
@@ -274,14 +260,14 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
       </Stack>
 
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open || openDialogFromParent} onClose={handleClose}>
         <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             There are a few artists with similar names, please pick one.
           </DialogContentText>
           <List>
-            {artistList && <ArtistChoiceList artists={artistList} onArtistClick={submitArtistInfo} />
+            {artistListFromParent && <ArtistChoiceList artists={artistListFromParent} onArtistClick={submitArtistInfo} />
             }
           </List>
           <DialogActions>
