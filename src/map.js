@@ -14,7 +14,7 @@ const concertToMarker = (concert) => {
   };
 };
 
-let pathOptions = {};
+
 
 function useWindowSize() {
   const [size, setSize] = useState([0, 0]);
@@ -34,6 +34,7 @@ function Map({ concerts, userLocation, mapStyle }) {
   const mapRef = useRef(null);
   const mapBoundsRef = useRef(null);
   const freshBoundsRef = useRef(null);
+  const polylineRef = useRef(null);
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
       return;
@@ -55,7 +56,7 @@ function Map({ concerts, userLocation, mapStyle }) {
     map.setCenter(bounds.getCenter());
     console.log("Placed Markers" + markers);
 
-    pathOptions = {
+    let pathOptions = {
       strokeColor: "#FF0000",
       strokeOpacity: 0.8,
       strokeWeight: 2,
@@ -83,9 +84,10 @@ function Map({ concerts, userLocation, mapStyle }) {
     freshBoundsRef.current = new google.maps.LatLngBounds(); // eslint-disable-line
     mapBoundsRef.current = bounds;
     mapRef.current = map;
+    polylineRef.current = new google.maps.Polyline(pathOptions); // eslint-disable-line
   };
 
-  const path =
+  var path =
     userLocation !== null
       ? [
         {
@@ -105,7 +107,7 @@ function Map({ concerts, userLocation, mapStyle }) {
 
 
   useEffect(() => {
-    if (mapRef.current !== null && mapBoundsRef.current !== null && freshBoundsRef.current !== null) {
+    if (mapRef.current !== null && mapBoundsRef.current !== null && freshBoundsRef.current !== null && polylineRef.current !== null) {
       mapBoundsRef.current = freshBoundsRef.current;
       markers.forEach(({ position }) => mapBoundsRef.current.extend(position));
 
@@ -127,6 +129,8 @@ function Map({ concerts, userLocation, mapStyle }) {
         mapRef.current.setZoom(10);
       }
 
+      polylineRef.current.setPath(path);
+      polylineRef.current.setMap(mapRef.current);
       //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
     }
   }, [markers]);
@@ -162,7 +166,21 @@ function Map({ concerts, userLocation, mapStyle }) {
           }}
         />
       )}
-      <MarkerClusterer>
+      <MarkerClusterer
+        onClusteringEnd={(clusterer) => {
+          var totalClusters = clusterer.getTotalClusters()
+          var concertCount = concerts.length;
+          console.log(`clustering size:${totalClusters}}`);
+          console.log(`total concerts:${concertCount}`);
+
+          if (totalClusters > 1) {
+            polylineRef.current.setMap(null);
+          }
+          else{
+            polylineRef.current.setMap(mapRef.current);
+          }
+        }}
+      >
         {(clusterer) => (
           <div>
             {markers &&
@@ -190,8 +208,6 @@ function Map({ concerts, userLocation, mapStyle }) {
           </div>
         )}
       </MarkerClusterer>
-
-      <PolylineF path={path} options={pathOptions} />
     </GoogleMap>
 
   );
