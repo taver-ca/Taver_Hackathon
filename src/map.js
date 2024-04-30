@@ -169,7 +169,7 @@ function Map({ concerts, userLocation, mapStyle }) {
       <MarkerClusterer
         ignoreHidden={false}
         onClusteringEnd={(clusterer) => {
-
+          var pathCopy = [...path];
           // build the clusteringPolyline
           // get markerclusters with more than one marker inside them
           var clustersGreaterThanOne = clusterer.clusters.filter((cluster) => cluster.markers.length > 1);
@@ -177,78 +177,27 @@ function Map({ concerts, userLocation, mapStyle }) {
           console.log("cluster with more than 1 marker: ");
           clustersGreaterThanOne.forEach(cluster => console.log(cluster));
 
-          // get their center
-          var centerOfGreaterThanOneClusters = clustersGreaterThanOne.map((cluster) => {
-            return cluster.getCenter();
-          });
-          // get lat lng of markers within those centers 
-          var listOfMarkersOfGreaterThanOneClusterMarkers = clustersGreaterThanOne.map((cluster) => { return cluster.markers });
-          // trust theses two list above are the same length
+          // replace all points in each cluster in path with the center point
+          clustersGreaterThanOne.forEach((cluster) => {
+            let centerPoint = cluster.getCenter();
+            let cleanedUpCenterPoint = { lat: centerPoint.lat(), lng: centerPoint.lng() };
 
-          // find the index from path the first element that matches with your first element in each cluster coordinates
-          var clusterCenterIndex = [];
-          var clusterCenter = [];
-          listOfMarkersOfGreaterThanOneClusterMarkers.forEach((markers) => {
-            var markerPosition = markers[0].getPosition();
-            var cleanedUpLatLng = { lat: markerPosition.lat(), lng: markerPosition.lng() };
-
-            path.forEach((point, index) => {
-
-              if (cleanedUpLatLng.lat === point.lat && cleanedUpLatLng.lng === point.lng) {
-                clusterCenterIndex.push(index);
-              }
+            let clusterPoints = cluster.markers.map((marker) => {
+              let markerPosition = marker.getPosition();
+              return { lat: markerPosition.lat(), lng: markerPosition.lng() };
             });
-          });
 
-          clusterCenterIndex.forEach(number => console.log(number));
 
-          //replace the point at the index of path you just collected with the value 
-          clusterCenterIndex.forEach((number, index) => {
-            var centerPoint = { lat: centerOfGreaterThanOneClusters[index].lat(), lng: centerOfGreaterThanOneClusters[index].lng() };
-            clusterCenter.push(centerPoint);
-            path[number] = centerPoint;
-          });
-
-          //remove all other points from path that exists in listOfMarkersOfGreaterThanOneClusterMarkers
-          var allClusterMarkers = listOfMarkersOfGreaterThanOneClusterMarkers.flat().map((marker) => {
-            var markerPosition = marker.getPosition();
-            return { lat: markerPosition.lat(), lng: markerPosition.lng() }
-          });
-          
-          //remove center point from allClusterMarkers
-          var filteredAllclusterMarkers = allClusterMarkers.filter((marker)=>{
-            let remove = true;
-            clusterCenter.forEach((center)=>{             
-              if(marker.lat === center.lat && marker.lng === center.lng )
-              {
-                remove = false;
-              }              
-            })
-            return remove;
-          });
-
-          var filteredPath = path.filter((point) => {
-            let found = true;
-            filteredAllclusterMarkers.forEach(marker => {
-              if (point.lat === marker.lat && point.lng === marker.lng) {
-                found = false;
-              }
-            });
-            return found;
-          });
-
-          var clusterPath =
-            userLocation !== null
-              ? [
-                {
-                  lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
-                  lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
+            pathCopy.forEach((point, index) => {
+              clusterPoints.forEach((clusterPoint)=>{
+                if (clusterPoint.lat === point.lat && clusterPoint.lng === point.lng) {
+                  pathCopy[index] = cleanedUpCenterPoint;
                 }
-              ]
-              : [];
+              });
+            });
+          });
 
-          clusterPath = clusterPath.concat(filteredPath);
-          polylineRef.current.setPath(clusterPath);
+          polylineRef.current.setPath(pathCopy);
         }}
       >
         {(clusterer) => (
