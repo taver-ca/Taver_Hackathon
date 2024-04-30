@@ -171,11 +171,71 @@ function Map({ concerts, userLocation, mapStyle }) {
         onClusteringEnd={(clusterer) => {
 
           // build the clusteringPolyline
-          // get cluster center points
-          var markerClusters = clusterer.clusters;
-          var markerClusterCenters = markerClusters.map((cluster) => {
+          // get markerclusters with more than one marker inside them
+          var clustersGreaterThanOne = clusterer.clusters.filter((cluster) => cluster.markers.length > 1);
+          console.log(`total number of clusters: ${clusterer.clusters.length}`);
+          console.log("cluster with more than 1 marker: ");
+          clustersGreaterThanOne.forEach(cluster => console.log(cluster));
+
+          // get their center
+          var centerOfGreaterThanOneClusters = clustersGreaterThanOne.map((cluster) => {
             return cluster.getCenter();
-          });        
+          });
+          // get lat lng of markers within those centers 
+          var listOfMarkersOfGreaterThanOneClusterMarkers = clustersGreaterThanOne.map((cluster) => { return cluster.markers });
+          // trust theses two list above are the same length
+
+          // find the index from path the first element that matches with your first element in each cluster coordinates
+          var clusterCenterIndex = [];
+          var clusterCenter = [];
+          listOfMarkersOfGreaterThanOneClusterMarkers.forEach((markers) => {
+            var markerPosition = markers[0].getPosition();
+            var cleanedUpLatLng = { lat: markerPosition.lat(), lng: markerPosition.lng() };
+
+            path.forEach((point, index) => {
+
+              if (cleanedUpLatLng.lat === point.lat && cleanedUpLatLng.lng === point.lng) {
+                clusterCenterIndex.push(index);
+              }
+            });
+          });
+
+          clusterCenterIndex.forEach(number => console.log(number));
+
+          //replace the point at the index of path you just collected with the value 
+          clusterCenterIndex.forEach((number, index) => {
+            var centerPoint = { lat: centerOfGreaterThanOneClusters[index].lat(), lng: centerOfGreaterThanOneClusters[index].lng() };
+            clusterCenter.push(centerPoint);
+            path[number] = centerPoint;
+          });
+
+          //remove all other points from path that exists in listOfMarkersOfGreaterThanOneClusterMarkers
+          var allClusterMarkers = listOfMarkersOfGreaterThanOneClusterMarkers.flat().map((marker) => {
+            var markerPosition = marker.getPosition();
+            return { lat: markerPosition.lat(), lng: markerPosition.lng() }
+          });
+          
+          //remove center point from allClusterMarkers
+          var filteredAllclusterMarkers = allClusterMarkers.filter((marker)=>{
+            let remove = true;
+            clusterCenter.forEach((center)=>{             
+              if(marker.lat === center.lat && marker.lng === center.lng )
+              {
+                remove = false;
+              }              
+            })
+            return remove;
+          });
+
+          var filteredPath = path.filter((point) => {
+            let found = true;
+            filteredAllclusterMarkers.forEach(marker => {
+              if (point.lat === marker.lat && point.lng === marker.lng) {
+                found = false;
+              }
+            });
+            return found;
+          });
 
           var clusterPath =
             userLocation !== null
@@ -187,7 +247,7 @@ function Map({ concerts, userLocation, mapStyle }) {
               ]
               : [];
 
-          clusterPath = clusterPath.concat(markerClusterCenters);
+          clusterPath = clusterPath.concat(filteredPath);
           polylineRef.current.setPath(clusterPath);
         }}
       >
