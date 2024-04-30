@@ -175,15 +175,7 @@ function Map({ concerts, userLocation, mapStyle }) {
           var markerClusters = clusterer.clusters;
           var markerClusterCenters = markerClusters.map((cluster) => {
             return cluster.getCenter();
-          })
-
-          
-          var cleanedUpLatLng = markerClusterCenters.map(latlng => {
-            return {
-              lat: latlng.lat(),
-              lng: latlng.lng(),
-            };
-          });
+          });        
 
           var clusterPath =
             userLocation !== null
@@ -195,7 +187,7 @@ function Map({ concerts, userLocation, mapStyle }) {
               ]
               : [];
 
-          clusterPath = clusterPath.concat(cleanedUpLatLng);
+          clusterPath = clusterPath.concat(markerClusterCenters);
           polylineRef.current.setPath(clusterPath);
         }}
       >
