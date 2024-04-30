@@ -105,7 +105,6 @@ function Map({ concerts, userLocation, mapStyle }) {
       }));
 
 
-
   useEffect(() => {
     if (mapRef.current !== null && mapBoundsRef.current !== null && freshBoundsRef.current !== null && polylineRef.current !== null) {
       mapBoundsRef.current = freshBoundsRef.current;
@@ -166,19 +165,38 @@ function Map({ concerts, userLocation, mapStyle }) {
           }}
         />
       )}
-      <MarkerClusterer
-        onClusteringEnd={(clusterer) => {
-          var totalClusters = clusterer.getTotalClusters()
-          var concertCount = concerts.length;
-          console.log(`clustering size:${totalClusters}}`);
-          console.log(`total concerts:${concertCount}`);
 
-          if (totalClusters > 1) {
-            polylineRef.current.setMap(null);
-          }
-          else{
-            polylineRef.current.setMap(mapRef.current);
-          }
+      <MarkerClusterer
+        ignoreHidden={false}
+        onClusteringEnd={(clusterer) => {
+
+          // build the clusteringPolyline
+          // get cluster center points
+          var markerClusters = clusterer.clusters;
+          var markerClusterCenters = markerClusters.map((cluster) => {
+            return cluster.getCenter();
+          })
+
+          
+          var cleanedUpLatLng = markerClusterCenters.map(latlng => {
+            return {
+              lat: latlng.lat(),
+              lng: latlng.lng(),
+            };
+          });
+
+          var clusterPath =
+            userLocation !== null
+              ? [
+                {
+                  lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
+                  lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
+                }
+              ]
+              : [];
+
+          clusterPath = clusterPath.concat(cleanedUpLatLng);
+          polylineRef.current.setPath(clusterPath);
         }}
       >
         {(clusterer) => (
