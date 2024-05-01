@@ -52,7 +52,7 @@ function SwipeableTextMobileStepper({groupedNames, handleArtistClick}) {
   const artistChips = (letter) =>  groupedNames[letter].map((artist) => 
     (<Stack key={artist.name+'artist'}direction={'column'} spacing={1} style={{minHeight: '45px'}}>
       <ClickAwayListener onClickAway={()=>{setToltipOpen(0); setDisableAutoScroll(false)} }>
-        <Chip key={artist.name} sx={{ background: "#1976d2" }} label={artist.name} color="success" onClick={() => artistsClicked(artist)} />
+        <Chip key={artist.name} sx={{ background: "limegreen" }} label={artist.name} color="success" onClick={() => artistsClicked(artist)} />
       </ClickAwayListener>
     </Stack>)
   )
@@ -104,6 +104,11 @@ function SwipeableTextMobileStepper({groupedNames, handleArtistClick}) {
         nextButton={
           <Button
             size="small"
+            sx={{
+              "&.Mui-disabled": {
+                color: "#c0c0c0"
+              }
+            }}
             onClick={handleNext}
             disabled={activeStep === maxSteps - 1}
           >
@@ -116,7 +121,15 @@ function SwipeableTextMobileStepper({groupedNames, handleArtistClick}) {
           </Button>
         }
         backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+          <Button 
+          sx={{
+            "&.Mui-disabled": {
+              color: "#c0c0c0"
+            }
+          }}
+          size="small" 
+          onClick={handleBack} 
+          disabled={activeStep === 0}>
             {theme.direction === 'rtl' ? (
               <KeyboardArrowRight />
             ) : (
