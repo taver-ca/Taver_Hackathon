@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
-const CHUNK_SIZE_CHIPS = 4
+const CHUNK_SIZE_CHIPS = 5
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -74,8 +74,8 @@ function SwipeableTextMobileStepper({groupedNames, handleArtistClick}) {
   });
 
   return (
-    <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
-      <AutoPlaySwipeableViews
+    <Box sx={{flexGrow: 1 }}>
+      <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={activeStep}
         onChangeIndex={disableAutoScroll ? null : handleStepChange}
@@ -94,7 +94,7 @@ function SwipeableTextMobileStepper({groupedNames, handleArtistClick}) {
             ) : null}
           </div>
         ))}
-      </AutoPlaySwipeableViews>
+      </SwipeableViews>
       
       <MobileStepper
         style={{ background:'transparent' }}

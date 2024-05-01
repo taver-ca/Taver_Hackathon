@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { GoogleMap, InfoWindowF, MarkerF, PolylineF, MarkerClusterer } from "@react-google-maps/api";
+import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
 
 const concertToMarker = (concert) => {
   return {
