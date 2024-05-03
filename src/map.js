@@ -189,7 +189,7 @@ function Map({ concerts, userLocation, mapStyle }) {
 
 
             pathCopy.forEach((point, index) => {
-              clusterPoints.forEach((clusterPoint)=>{
+              clusterPoints.forEach((clusterPoint) => {
                 if (clusterPoint.lat === point.lat && clusterPoint.lng === point.lng) {
                   pathCopy[index] = cleanedUpCenterPoint;
                 }

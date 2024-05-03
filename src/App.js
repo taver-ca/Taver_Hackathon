@@ -69,7 +69,7 @@ function App() {
         spacing={2}
         alignItems="flex-start"
       >
-        <Grid direction={"column"} xs={10} md={3} spacing={2}>
+        <Grid direction={"column"} xs={10} sm={10} md={10} lg={2} xl={2} spacing={2}>
           <Box>
             <img src={window.location.origin + "/Taver.png"} alt="Taver" />
           </Box>
@@ -136,7 +136,7 @@ function App() {
             concerts={concerts}
           />
         </Grid>
-        <Grid item xs={10} md={5} direction={"row"}>
+        <Grid item xs={10} sm={10} md={10} lg={7} xl={8} direction={"row"}>
           <div id="sharepage">
             <SharePage
               concerts={concerts}

@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Grid } from '@mui/material';
 import SwipeableTextMobileStepper from './ArtistsCarrousel'
-import {response} from "./object"
 
 function YourSpotifyArtistsWithShows({ artists, onChildClick}) {
     const [groupedNames, setGroupedNames] = useState({});
-    artists = response
     useEffect(() => {
       if (!artists) return
       artists.sort((a, b) => a.name.localeCompare(b.name));
