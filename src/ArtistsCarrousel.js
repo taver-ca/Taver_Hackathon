@@ -5,7 +5,6 @@ import MobileStepper from '@mui/material/MobileStepper';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import SwipeableViews from 'react-swipeable-views';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -72,26 +71,6 @@ function SwipeableTextMobileStepper({groupedNames, handleArtistClick}) {
 
   return (
     <Box sx={{flexGrow: 1 }}>
-      <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={activeStep}
-        onChangeIndex={disableAutoScroll ? null : handleStepChange}
-        enableMouseEvents
-      >
-        {artistChipsByChunks.map((step, index) => (
-          <div key={index}>
-            {Math.abs(activeStep - index) <= 2 ? (
-              <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-          >
-                {step}
-          </Box>
-            ) : null}
-          </div>
-        ))}
-      </SwipeableViews>
       
       <MobileStepper
         style={{ background:'transparent' }}
