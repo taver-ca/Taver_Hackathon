@@ -1,32 +1,41 @@
-import { Grid, Chip, Box } from '@mui/material';
+import React, {useState, useEffect} from 'react';
+import { Grid } from '@mui/material';
+import SwipeableTextMobileStepper from './ArtistsCarrousel'
 
-function YourSpotifyArtistsWithShows({artists, onChildClick}) {
+function YourSpotifyArtistsWithShows({ artists, onChildClick}) {
+    const [groupedNames, setGroupedNames] = useState({});
+    useEffect(() => {
+      if (!artists) return
+      artists.sort((a, b) => a.name.localeCompare(b.name));
+      const grouped = artists.reduce((acc, artist) => {
+        const firstLetter = artist.name[0];
+      
+        acc[firstLetter] = acc[firstLetter] || [];
+        acc[firstLetter].push(artist);
+      
+        return acc;
+      }, {});
+      console.log(grouped);
+      setGroupedNames(grouped);
+    }, [artists]);
+
     const handleClick = (artistName) => {
-        onChildClick(artistName);
+        onChildClick(artistName); 
       };
-
-    const commaSeparatedfollowedArtists = artists.map((artist, index) => {
-        return (
-          <Grid item key={index}>
-            <Chip sx={{ background: "limegreen" }} label={artist.name} color="success" onClick={() => handleClick(artist)} />
-          </Grid>
-        );
-      });
 
     return (
         <Grid>
-            <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-            >
-                <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
-                    {commaSeparatedfollowedArtists}
-                </Grid>
-            </Box>
+          <p>Artists from your playlist</p>
+          {!!artists && <SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />}
         </Grid>
     );
 }
 
 
 export default YourSpotifyArtistsWithShows
+
+
+
+
+
+

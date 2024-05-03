@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { GoogleMap, InfoWindowF, MarkerF, PolylineF, MarkerClusterer } from "@react-google-maps/api";
+import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
 
 const concertToMarker = (concert) => {
   return {
@@ -189,7 +189,7 @@ function Map({ concerts, userLocation, mapStyle }) {
 
 
             pathCopy.forEach((point, index) => {
-              clusterPoints.forEach((clusterPoint)=>{
+              clusterPoints.forEach((clusterPoint) => {
                 if (clusterPoint.lat === point.lat && clusterPoint.lng === point.lng) {
                   pathCopy[index] = cleanedUpCenterPoint;
                 }
