@@ -8,7 +8,8 @@ function YourSpotifyArtistsWithShows({ artists, onChildClick}) {
       if (!artists) return
       artists.sort((a, b) => a.name.localeCompare(b.name));
       const grouped = artists.reduce((acc, artist) => {
-        const firstLetter = artist.name[0];
+        const artistNameRaw = artist.name.toUpperCase();
+        const firstLetter = artistNameRaw[0];
       
         acc[firstLetter] = acc[firstLetter] || [];
         acc[firstLetter].push(artist);
