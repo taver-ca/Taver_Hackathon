@@ -55,7 +55,7 @@ function SwipeableTextMobileStepper({ groupedNames, handleArtistClick }) {
             placement="right-start"
             open={toltipOpen === letter}
           >
-            <Chip key={letter + "chip"} sx={{ background: "limegreen" }} label={letter} color="success" onClick={() => handleLetterClick(letter)} />
+            <Chip key={letter + "chip"} sx={{ background: "limegreen", minWidth: "32px" }} label={letter} color="success" onClick={() => handleLetterClick(letter)} />
           </Tooltip>
         )}
       </Stack>
@@ -63,7 +63,7 @@ function SwipeableTextMobileStepper({ groupedNames, handleArtistClick }) {
   });
 
   return (
-    <Stack spacing={2} direction={'row'} useFlexGap flexWrap="wrap"  sx={{ padding:"10px", justifyContent:"center"}}>
+    <Stack spacing={2} direction={'row'} useFlexGap flexWrap="wrap" sx={{ padding: "10px", justifyContent: "center" }}>
       {artistChipsByChunks}
     </Stack>
   );
