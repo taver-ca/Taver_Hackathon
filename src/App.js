@@ -66,10 +66,10 @@ function App() {
       <Grid
         className="App-header"
         container
-        spacing={2}
+        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 10, xl: 3 }}
         alignItems="flex-start"
       >
-        <Grid direction={"column"} xs={10} sm={10} md={10} lg={2} xl={2} spacing={2}>
+        <Grid direction={"column"} xs={10} sm={10} md={10} lg={2} xl={2}>
           <Box>
             <img src={window.location.origin + "/Taver.png"} alt="Taver" />
           </Box>

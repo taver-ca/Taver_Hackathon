@@ -16,7 +16,7 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName }) => {
 
 
     return (
-        <Stack disablePadding>
+        <Stack disablePadding spacing={3}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
             <TextField
                 variant="standard"
