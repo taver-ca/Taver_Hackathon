@@ -24,7 +24,7 @@ class ConcertList extends React.Component {
             concerts: this.props.concerts
         }
     }
-    
+
     componentDidUpdate(prevProps) {
         if (prevProps.concerts !== this.props.concerts) {
             this.setState({
@@ -55,8 +55,8 @@ class ConcertList extends React.Component {
                                 primary={`${concert.title}`}
                                 secondary={
                                     <React.Fragment>
-                                        <Stack sx={{ width: '100%' }} direction="row" spacing={2} justifyContent={'space-between'} display={'flex'} >
-                                            <Stack direction={{xs:"column", sm:"row", md:"row"}} item spacing={1}>
+                                        <Stack direction="row"justifyContent={'space-between'} display={'flex'} >
+                                            <Stack direction={{ xs: "column", sm: "column", md: "row", lg:"column", xl:"column" }} item spacing={2}>
                                                 <Chip color="primary" label={`${concert.location.name}`} />
                                                 <Chip color="primary" label={`${formattedDate(concert.date)}`} />
                                             </Stack>
@@ -92,9 +92,9 @@ class ConcertList extends React.Component {
         const hasConcerts = this.state.concerts.length > 0;
 
         return <div>
-            {hasConcerts && <p>Upcoming Concerts: </p>} 
+            {hasConcerts && <p>Upcoming Concerts: </p>}
             <List
-                sx={{ width: '100%' }}>
+                sx={{ width: { xs: "100%", sm: "100%", md: "100%", lg: "175%", xl: "150%" } }}>
                 {renderConcertList}
             </List>
         </div>;
