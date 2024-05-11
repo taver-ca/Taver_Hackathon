@@ -109,9 +109,6 @@ function App() {
           />
           <Router>
             <Routes>
-              <Route path="/" element={<AuthorizeSpotify />} />
-            </Routes>
-            <Routes>
               <Route
                 path="/ShowSpotifyArtists"
                 element={
