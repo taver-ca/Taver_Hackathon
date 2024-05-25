@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, CircularProgress } from '@mui/material';
+import { Grid, Chip, Box, CircularProgress } from '@mui/material';
 import SwipeableTextMobileStepper from './ArtistsCarrousel'
 
 function YourSpotifyArtistsWithShows({ artists, onChildClick, isRequestTriggered }) {
@@ -20,8 +20,8 @@ function YourSpotifyArtistsWithShows({ artists, onChildClick, isRequestTriggered
     }, {});
     setGroupedNames(grouped);
   }, [artists]);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     setIsLoading(isRequestTriggered);
   }, [isRequestTriggered])
 
@@ -30,10 +30,27 @@ function YourSpotifyArtistsWithShows({ artists, onChildClick, isRequestTriggered
     onChildClick(artistName);
   };
 
+  const commaSeparatedfollowedArtists = artists.map((artist, index) => {
+    return (
+      <Grid item key={index}>
+        <Chip sx={{ background: "limegreen" }} label={artist.name} color="success" onClick={() => handleClick(artist)} />
+      </Grid>
+    );
+  });
+
   return (
     <Grid>
       <p>Artists from your playlist</p>
-      {!!artists && <SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />}
+
+      {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (<Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
+          {commaSeparatedfollowedArtists}
+        </Grid>
+      </Box>)}
       {isLoading && <CircularProgress />}
     </Grid>
   );
