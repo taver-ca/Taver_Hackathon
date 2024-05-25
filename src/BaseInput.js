@@ -37,7 +37,7 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
   return earthRadiusKm * c;
 }
 
-const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, setAllConcerts, endDate, concerts, allConcerts, userLocation, updateArtistNameInParent, artistListFromParent, openDialogFromParent, closeDialog, newArtistList }, ref) => {
+const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, setAllConcerts, endDate, concerts, allConcerts, userLocation, updateArtistNameInParent, artistListFromParent, openDialogFromParent, closeDialog, newArtistList, followedArtists, setFollowedArtists }, ref) => {
 
   useEffect(() => {
     function showPosition(position) {
@@ -59,7 +59,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   }));
 
   const [artistName, setArtistName] = useState("Taylor Swift");
-  const submitArtistInfo = async (incomingArtistInfo) => {
+  const submitArtistInfo = async (incomingArtistInfo) => {    
     console.log(incomingArtistInfo);
     let incomingArtistName = incomingArtistInfo.name;
     let incomingArtistId = incomingArtistInfo.id
@@ -85,6 +85,8 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           alert(`no upcoming concerts for ${incomingArtistName} found`);
           return;
         }
+
+
 
         //check if artist is already featured in somebody else's concert 
 
@@ -119,8 +121,17 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           }
           sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
+
+        
         setOpen(false);
         closeDialog();
+
+        const existingArtists = followedArtists;
+        var updatedArtists = existingArtists.push(incomingArtistInfo);
+        var checkForDuplicateArtists = updatedArtists.filter(
+          (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
+        );
+        setFollowedArtists(checkForDuplicateArtists);
       } else {
         console.log("Some error occured");
       }
@@ -206,7 +217,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         });
       }
     }
-    
+
     newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
     console.log(`concat the new concerts into the optimized list`);
     setConcerts(newConcerts);

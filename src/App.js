@@ -94,6 +94,8 @@ function App() {
             updateArtistNameInParent={(value) => setArtistName(value)}
             newArtistList={setArtistList}
             artistListFromParent={artistList}
+            followedArtists = {followedArtists}
+            setFollowedArtists = {setFollowedArtists}
             clearArtistListFromParent={() => setArtistList([])}
             openDialogFromParent={openDialog}
             closeDialog={() => {
