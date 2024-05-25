@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, Stack, TextField, Button } from '@mui/material';
 
-function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists, startDate, endDate}) {
+function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists, startDate, endDate, setIsRequestTriggered}) {
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     let handleSubmit = async (e) => {
         e.preventDefault();
@@ -11,7 +11,7 @@ function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists
         const endIndex = url.indexOf("?"); // Find the index of the question mark
 
         const extractedPlaylistId = url.substring(startIndex, endIndex);
-
+        setIsRequestTriggered(true);
         await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetSpotifyPlaylistArtistsWithShows`, {
             method: 'POST',
             headers: {
@@ -37,6 +37,7 @@ function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists
             console.log("Some error occured");
             console.log(err);
         });
+        setIsRequestTriggered(false);
     };
 
     return (<Grid>

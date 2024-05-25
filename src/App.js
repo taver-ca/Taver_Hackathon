@@ -7,7 +7,6 @@ import { Grid, Box, Button } from "@mui/material";
 import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
-import AuthorizeSpotify from "./AuthorizeSpotify.js";
 import SharePage from "./SharePage.js";
 import html2canvas from "html2canvas";
 import canvas2image from "@reglendo/canvas2image";
@@ -18,6 +17,7 @@ function App() {
   let cachedStartDate = localStorage.getItem("startDate");
   let cachedEndDate = localStorage.getItem("endDate");
   const [concerts, setConcerts] = useState([]);
+  const [isRequestTriggered, setIsRequestTriggered] = useState(false);
   //all concerts is used to reoptimize the whole route... based on incoming concert
   const [allConcerts, setAllConcerts] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
@@ -106,6 +106,7 @@ function App() {
             setFollowedArtists={setFollowedArtists}
             startDate={startDate}
             endDate={endDate}
+            setIsRequestTriggered={setIsRequestTriggered}
           />
           <Router>
             <Routes>
@@ -126,6 +127,7 @@ function App() {
           <YourSpotifyArtistsWithShows
             artists={followedArtists}
             onChildClick={handleChildClick}
+            isRequestTriggered={isRequestTriggered}
           />
           <ConcertList
             setConcerts={setConcerts}
