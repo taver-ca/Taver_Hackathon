@@ -51,6 +51,7 @@ function YourSpotifyArtistsWithShows({ artists, onChildClick, isRequestTriggered
           {commaSeparatedfollowedArtists}
         </Grid>
       </Box>)}
+      <p></p>
       {isLoading && <CircularProgress />}
     </Grid>
   );
