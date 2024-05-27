@@ -1,10 +1,8 @@
 /*import logo from './logo.svg';*/
 import "./App.css";
 import BaseInput from "./BaseInput.js";
-import { useState, useRef, useCallback, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 import { Grid, Box, Button } from "@mui/material";
-import YourFavoriteSpotifyArtists from "./YourFavoriteSpotifyArtists.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
 import SharePage from "./SharePage.js";
@@ -110,22 +108,6 @@ function App() {
             endDate={endDate}
             setIsRequestTriggered={setIsRequestTriggered}
           />
-          <Router>
-            <Routes>
-              <Route
-                path="/ShowSpotifyArtists"
-                element={
-                  <YourFavoriteSpotifyArtists
-                    startDate={startDate}
-                    endDate={endDate}
-                    followedArtists={followedArtists}
-                    setFollowedArtists={setFollowedArtists}
-                  />
-                }
-              />
-            </Routes>
-          </Router>
-          <p />
           <YourSpotifyArtistsWithShows
             artists={followedArtists}
             onChildClick={handleChildClick}
