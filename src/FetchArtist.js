@@ -1,6 +1,6 @@
 export const FetchArtist = async (artistName) => {
   const response = await fetch(
-    `${process.env.REACT_APP_BACKEND}/FindArtistWithShows/GetArtistsByName?artistName=${artistName}`,
+    `${process.env.REACT_APP_BACKEND}/FindArtistWithGigs/GetArtistsByName?artistName=${artistName}`,
     {
       method: "GET",
       headers: {
