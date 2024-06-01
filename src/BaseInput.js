@@ -59,7 +59,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   }));
 
   const [artistName, setArtistName] = useState("Taylor Swift");
-  const submitArtistInfo = async (incomingArtistInfo) => {    
+  const submitArtistInfo = async (incomingArtistInfo) => {
     console.log(incomingArtistInfo);
     let incomingArtistName = incomingArtistInfo.name;
     let incomingArtistId = incomingArtistInfo.id
@@ -122,16 +122,19 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           sortArtist(allConcerts.concat(incomingConcerts), userLocation);
         }
 
-        
         setOpen(false);
         closeDialog();
 
-        const existingArtists = followedArtists;
-        var updatedArtists = existingArtists.push(incomingArtistInfo);
-        var checkForDuplicateArtists = updatedArtists.filter(
-          (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
-        );
-        setFollowedArtists(checkForDuplicateArtists);
+        //check for duplicates
+        const hasElementWithValue = followedArtists.some(artist => artist.id === incomingArtistInfo.id);
+        var updatedArtists = followedArtists;
+
+        if (!hasElementWithValue) {
+          updatedArtists.push(incomingArtistInfo);
+        }
+        
+        setFollowedArtists(updatedArtists);
+
       } else {
         console.log("Some error occured");
       }
