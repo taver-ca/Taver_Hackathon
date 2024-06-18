@@ -11,6 +11,34 @@ const mapStyles = [
   { mapId: "53a5c2c14f51f10b", displayName: "Dark Theme", buttonColorCss: "#404040" },
 ];
 
+
+
+function isChronological(list) {
+  // Check if the times in the list are in ascending order
+  for (let i = 1; i < list.length; i++) {
+      if (list[i][0].date < list[i - 1][0].date) {
+          return false;
+      }
+  }
+  return true;
+}
+
+
+function allPossibleCases(arr) {
+  if (arr.length == 1) {
+    return arr[0];
+  } else {
+    var result = [];
+    var allCasesOfRest = allPossibleCases(arr.slice(1)); // recur with the rest of array
+    for (var i = 0; i < allCasesOfRest.length; i++) {
+      for (var j = 0; j < arr[0].length; j++) {
+        result.push(arr[0][j] + allCasesOfRest[i]);
+      }
+    }
+    return result;
+  }
+}
+
 // Convert degrees to radians
 function degreesToRadians(degrees) {
   return degrees * Math.PI / 180;
@@ -86,41 +114,66 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           return;
         }
 
+        //add this artist's shows to the total number of tracked shows
+        var updatedConcertsList = allConcerts.concat(incomingConcerts);
+        //remove any duplicate shows by show id
+        updatedConcertsList = updatedConcertsList.filter((value, index, self) =>
+          index === self.findIndex((t) => (
+            t.id === value.id
+          ))
+        );
 
+        //group the concerts by artistId
+        var groupedByArtistConcertList = updatedConcertsList.reduce((r, a) => {
+          r[a.artistId] = r[a.artistId] || [];
+          r[a.artistId].push(a);
+          return r;
+      }, Object.create(null));
 
-        //check if artist is already featured in somebody else's concert 
+        // figure out all the possible combination of the shows 
+        // thanks stackoverflow, I'm not writing up this shit.
+        // https://stackoverflow.com/questions/4331092/finding-all-combinations-cartesian-product-of-javascript-array-values
+        var allCombinationOfConcerts = allPossibleCases(groupedByArtistConcertList);
 
-        //in order to check this 
-        //check if existing concert titles includes incoming artist's concert titles
-        //check if existing concert titles includes incoming artist's name 
+        //now filter out the ones that don't make chronological sense
+        allCombinationOfConcerts = allCombinationOfConcerts.filter(isChronological);
+          
 
-        var duplicateFound = false;
-        var existingConcertTitles = concerts.map(concert => concert.title.toLowerCase());
-        var incomingConcertTitles = incomingConcerts.map(concert => concert.title.toLowerCase());
-
-        var checkDuplicatesIndex = existingConcertTitles.findIndex((concertTitle) => {
-          return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
-        });
-
-        if (checkDuplicatesIndex !== -1) {
-          if (incomingArtistName !== concerts[checkDuplicatesIndex].artist.toLowerCase()) {
-            alert(`${incomingArtistName} is already performing as part of ${concerts[checkDuplicatesIndex].title} on ${formattedDate(concerts[checkDuplicatesIndex].date)}`);
+        //now sort the remaining by max distance traveled
+        
+        //allCombinationOfConcerts = allCombinationOfConcerts.sort((a, b) => {
+          /*
+          console.log(`sort the entire concert list based on date and distance to home location of each concert...`);
+          var originPoint;
+    
+          if (concerts.length > 0) {
+            originPoint = {
+              latitude: concerts[concerts.length - 1].location.latitude,
+              longitude: concerts[concerts.length - 1].location.longitude,
+            };
           }
-          duplicateFound = true;
-        }
-
-        if (!duplicateFound) {
-          if (!isChecked) {
-            incomingConcerts = incomingConcerts.reduce((uniqueConcerts, concert) => {
-              const existingConcert = uniqueConcerts.find(c => c.artist === concert.artist);
-              if (!existingConcert) {
-                uniqueConcerts.push(concert);
-              }
-              return uniqueConcerts;
-            }, []);
+          else {
+            originPoint = {
+              latitude: userLocation.coords.latitude,
+              longitude: userLocation.coords.longitude,
+            };
           }
-          sortArtist(allConcerts.concat(incomingConcerts), userLocation);
-        }
+          // Calculate the distance between the points
+          var distancea = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, a.location.latitude, a.location.longitude);
+          var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
+          return (distancea - distanceb);
+        })*/
+    
+
+
+
+
+
+
+        setAllConcerts(updatedConcertsList);
+
+
+
 
         setOpen(false);
         closeDialog();
@@ -132,7 +185,7 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         if (!hasElementWithValue) {
           updatedArtists.push(incomingArtistInfo);
         }
-        
+
         setFollowedArtists(updatedArtists);
 
       } else {
@@ -163,28 +216,6 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
       return (new Date(a.date) - new Date(b.date));
     });
 
-    //sort by distance to last point
-    incomingAllConcerts = incomingAllConcerts.sort((a, b) => {
-      console.log(`sort the entire concert list based on date and distance to home location of each concert...`);
-      var originPoint;
-
-      if (concerts.length > 0) {
-        originPoint = {
-          latitude: concerts[concerts.length - 1].location.latitude,
-          longitude: concerts[concerts.length - 1].location.longitude,
-        };
-      }
-      else {
-        originPoint = {
-          latitude: userLocation.coords.latitude,
-          longitude: userLocation.coords.longitude,
-        };
-      }
-      // Calculate the distance between the points
-      var distancea = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, a.location.latitude, a.location.longitude);
-      var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
-      return (distancea - distanceb);
-    })
 
     if (!isChecked) {
       //filter part one concert
@@ -240,7 +271,6 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
   };
 
   return (
-
 
     <Stack direction={'column'} spacing={2}>
       Display all concerts of a single artist:

@@ -14,6 +14,7 @@ import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 function App() {
   let cachedStartDate = localStorage.getItem("startDate");
   let cachedEndDate = localStorage.getItem("endDate");
+  //concerts is used to display the current optimized route
   const [concerts, setConcerts] = useState([]);
   const [isRequestTriggered, setIsRequestTriggered] = useState(false);
   //all concerts is used to reoptimize the whole route... based on incoming concert
