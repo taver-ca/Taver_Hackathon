@@ -164,6 +164,8 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           ))
         );
 
+        setAllConcerts(updatedConcertsList);
+
         //group the concerts by artistId
         var groupedByArtistConcertList = updatedConcertsList.reduce((r, a) => {
           r[a.artistId] = r[a.artistId] || [];
@@ -192,8 +194,8 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
         //pick the route with the shortest distance
         // this need to be a list
         console.log(`allCombinationOfConcerts[0]: ${JSON.stringify(allCombinationOfConcerts[0])}`);
-        setAllConcerts(allCombinationOfConcerts[0]);
 
+        setConcerts(allCombinationOfConcerts[0]);
         setOpen(false);
         closeDialog();
 
