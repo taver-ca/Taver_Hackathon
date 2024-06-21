@@ -13,30 +13,71 @@ const mapStyles = [
 
 
 
+function getTotalDistance(concerts, userLocation) {
+
+  if (concerts.length <= 0) {
+    return 0;
+  }
+
+  let totalDistance = 0;
+
+  //consider distance between userlocation and the first location of the concert
+  var originPoint = {
+    latitude: userLocation.coords.latitude,
+    longitude: userLocation.coords.longitude,
+  };
+  //console.log(`concert: ${JSON.stringify(concerts[0])}`);
+
+  var firstPoint = { latitude: concerts[0].location.latitude, longitude: concerts[0].location.longitude };
+
+
+  totalDistance += distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, firstPoint.latitude, firstPoint.longitude);
+
+  for (let i = 2; i < concerts.length; i++) {
+    const prevPoint = { latitude: concerts[i - 1].location.latitude, longitude: concerts[i - 1].location.longitude };
+    const currPoint = { latitude: concerts[i].location.latitude, longitude: concerts[i].location.longitude };
+
+    totalDistance += distanceInKmBetweenEarthCoordinates(
+      prevPoint.latitude, prevPoint.longitude,
+      currPoint.latitude, currPoint.longitude
+    );
+  }
+  return totalDistance;
+}
+
 function isChronological(list) {
   // Check if the times in the list are in ascending order
   for (let i = 1; i < list.length; i++) {
-      if (list[i][0].date < list[i - 1][0].date) {
-          return false;
-      }
+    if (list[i].date < list[i - 1].date) {
+      return false;
+    }
   }
   return true;
 }
 
 
-function allPossibleCases(arr) {
-  if (arr.length == 1) {
-    return arr[0];
-  } else {
-    var result = [];
-    var allCasesOfRest = allPossibleCases(arr.slice(1)); // recur with the rest of array
-    for (var i = 0; i < allCasesOfRest.length; i++) {
-      for (var j = 0; j < arr[0].length; j++) {
-        result.push(arr[0][j] + allCasesOfRest[i]);
+function generateCombinations(dictionary) {
+  const keys = Object.keys(dictionary);
+  const result = [];
+
+  function backtrack(combination, index) {
+      if (index === keys.length) {
+          result.push([...combination]);
+          return;
       }
-    }
-    return result;
+
+      const key = keys[index];
+      const values = dictionary[key];
+
+      for (const value of values) {
+          combination.push(value);
+          backtrack(combination, index + 1);
+          combination.pop();
+      }
   }
+
+  backtrack([], 0);
+  return result;
 }
 
 // Convert degrees to radians
@@ -128,52 +169,30 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           r[a.artistId] = r[a.artistId] || [];
           r[a.artistId].push(a);
           return r;
-      }, Object.create(null));
+        }, Object.create(null));
+
+        //this should be a dictionary
+        //console.log(`groupedbyartistconcertlist: ${JSON.stringify(groupedByArtistConcertList)}`);
 
         // figure out all the possible combination of the shows 
         // thanks stackoverflow, I'm not writing up this shit.
         // https://stackoverflow.com/questions/4331092/finding-all-combinations-cartesian-product-of-javascript-array-values
-        var allCombinationOfConcerts = allPossibleCases(groupedByArtistConcertList);
 
+
+        // this needs to be a list of list
+        var allCombinationOfConcerts = generateCombinations(groupedByArtistConcertList);
         //now filter out the ones that don't make chronological sense
         allCombinationOfConcerts = allCombinationOfConcerts.filter(isChronological);
-          
 
         //now sort the remaining by max distance traveled
-        
-        //allCombinationOfConcerts = allCombinationOfConcerts.sort((a, b) => {
-          /*
-          console.log(`sort the entire concert list based on date and distance to home location of each concert...`);
-          var originPoint;
-    
-          if (concerts.length > 0) {
-            originPoint = {
-              latitude: concerts[concerts.length - 1].location.latitude,
-              longitude: concerts[concerts.length - 1].location.longitude,
-            };
-          }
-          else {
-            originPoint = {
-              latitude: userLocation.coords.latitude,
-              longitude: userLocation.coords.longitude,
-            };
-          }
-          // Calculate the distance between the points
-          var distancea = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, a.location.latitude, a.location.longitude);
-          var distanceb = distanceInKmBetweenEarthCoordinates(originPoint.latitude, originPoint.longitude, b.location.latitude, b.location.longitude);
-          return (distancea - distanceb);
-        })*/
-    
+        allCombinationOfConcerts = allCombinationOfConcerts.sort((a, b) => {
+          return getTotalDistance(a, userLocation) - getTotalDistance(b, userLocation);
+        });
 
-
-
-
-
-
-        setAllConcerts(updatedConcertsList);
-
-
-
+        //pick the route with the shortest distance
+        // this need to be a list
+        console.log(`allCombinationOfConcerts[0]: ${JSON.stringify(allCombinationOfConcerts[0])}`);
+        setAllConcerts(allCombinationOfConcerts[0]);
 
         setOpen(false);
         closeDialog();
