@@ -155,16 +155,13 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           return;
         }
 
+        console.log(`all concerts length: ${allConcerts.length}`);
+
         //add this artist's shows to the total number of tracked shows
         var updatedConcertsList = allConcerts.concat(incomingConcerts);
-        //remove any duplicate shows by show id
-        updatedConcertsList = updatedConcertsList.filter((value, index, self) =>
-          index === self.findIndex((t) => (
-            t.id === value.id
-          ))
-        );
 
         setAllConcerts(updatedConcertsList);
+        console.log(`all concerts length after adding new artist: ${allConcerts.length}`);
 
         //group the concerts by artistId
         var groupedByArtistConcertList = updatedConcertsList.reduce((r, a) => {
