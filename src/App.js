@@ -15,6 +15,7 @@ function App() {
   let cachedStartDate = localStorage.getItem("startDate");
   let cachedEndDate = localStorage.getItem("endDate");
   const [concerts, setConcerts] = useState([]);
+  const [artistWishlist, setArtistWishlist] = useState([]);
   const [isRequestTriggered, setIsRequestTriggered] = useState(false);
   //all concerts is used to reoptimize the whole route... based on incoming concert
   const [allConcerts, setAllConcerts] = useState([]);
@@ -22,7 +23,7 @@ function App() {
   const [posterName, setPosterName] = useState("poster");
   const [followedArtists, setFollowedArtists] = useState([]);
   const [artistName, setArtistName] = useState("Taylor Swift");
-  const [artistList, setArtistList] = useState(null);
+  const [artistList, setArtistList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [startDate, setStartDate] = useState(
     cachedStartDate === null ? new Date() : new Date(cachedStartDate)
@@ -94,7 +95,9 @@ function App() {
             artistListFromParent={artistList}
             followedArtists = {followedArtists}
             setFollowedArtists = {setFollowedArtists}
-            clearArtistListFromParent={() => setArtistList([])}
+            artistWishlist = {artistWishlist}
+            setArtistWishlist = {setArtistWishlist}
+
             openDialogFromParent={openDialog}
             closeDialog={() => {
               setOpenDialog(false);

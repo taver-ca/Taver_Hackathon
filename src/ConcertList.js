@@ -21,7 +21,8 @@ class ConcertList extends React.Component {
         super(props);
         this.state = {
             //pass concerts from maps into here
-            concerts: this.props.concerts
+            concerts: this.props.concerts,
+            artistWishList: this.props.artistWishList
         }
     }
 
