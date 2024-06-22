@@ -191,8 +191,7 @@ const BaseInput = forwardRef(({ setConcerts,
         else {
           generateOptimizedConcertRoute(concatenatedConcert, userLocation, artistWishlist);
         }
-
-        setConcerts(allCombinationOfConcerts[0]);
+        
         setOpen(false);
         closeDialog();
 
