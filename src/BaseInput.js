@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, ListItem, ListItemButton, ListItemAvatar, Avatar } from '@mui/material';
+import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List } from '@mui/material';
 import moment from 'moment';
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
@@ -11,8 +11,11 @@ const mapStyles = [
   { mapId: "53a5c2c14f51f10b", displayName: "Dark Theme", buttonColorCss: "#404040" },
 ];
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> fixing_optimization
 function getTotalDistance(concerts, userLocation) {
 
   if (concerts.length <= 0) {
@@ -61,19 +64,19 @@ function generateCombinations(dictionary) {
   const result = [];
 
   function backtrack(combination, index) {
-      if (index === keys.length) {
-          result.push([...combination]);
-          return;
-      }
+    if (index === keys.length) {
+      result.push([...combination]);
+      return;
+    }
 
-      const key = keys[index];
-      const values = dictionary[key];
+    const key = keys[index];
+    const values = dictionary[key];
 
-      for (const value of values) {
-          combination.push(value);
-          backtrack(combination, index + 1);
-          combination.pop();
-      }
+    for (const value of values) {
+      combination.push(value);
+      backtrack(combination, index + 1);
+      combination.pop();
+    }
   }
 
   backtrack([], 0);
@@ -106,7 +109,25 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
   return earthRadiusKm * c;
 }
 
-const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, startDate, setAllConcerts, endDate, concerts, allConcerts, userLocation, updateArtistNameInParent, artistListFromParent, openDialogFromParent, closeDialog, newArtistList, followedArtists, setFollowedArtists }, ref) => {
+const BaseInput = forwardRef(({ setConcerts,
+  setUserLocation,
+  setMapStyle,
+  startDate,
+  setAllConcerts,
+  endDate,
+  concerts,
+  allConcerts,
+  userLocation,
+  updateArtistNameInParent,
+  artistListFromParent,
+  openDialogFromParent,
+  closeDialog,
+  newArtistList,
+  followedArtists,
+  setFollowedArtists,
+  artistWishlist,
+  setArtistWishlist
+}, ref) => {
 
   useEffect(() => {
     function showPosition(position) {
@@ -154,48 +175,33 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
           alert(`no upcoming concerts for ${incomingArtistName} found`);
           return;
         }
+        var updatedArtistWishlist = artistWishlist;
+        console.log(`updatedArtistWishlist: ${updatedArtistWishlist}`);
+        console.log(`updatedArtistWishlist type: ${Object.prototype.toString.call(updatedArtistWishlist)}`);
+        updatedArtistWishlist.push({ WishlistArtistName: incomingArtistName, WishlistArtistId: incomingArtistId });
+        setArtistWishlist(updatedArtistWishlist);
 
-        console.log(`all concerts length: ${allConcerts.length}`);
+        //add the new concerts
+        //this list size might be concerning.....
+        var concatenatedConcert = allConcerts.concat(incomingConcerts);
+        setAllConcerts(concatenatedConcert);
 
-        //add this artist's shows to the total number of tracked shows
-        var updatedConcertsList = allConcerts.concat(incomingConcerts);
-
-        setAllConcerts(updatedConcertsList);
-        console.log(`all concerts length after adding new artist: ${allConcerts.length}`);
-
-        //group the concerts by artistId
-        var groupedByArtistConcertList = updatedConcertsList.reduce((r, a) => {
-          r[a.artistId] = r[a.artistId] || [];
-          r[a.artistId].push(a);
-          return r;
-        }, Object.create(null));
-
-        //this should be a dictionary
-        //console.log(`groupedbyartistconcertlist: ${JSON.stringify(groupedByArtistConcertList)}`);
-
-        // figure out all the possible combination of the shows 
-        // thanks stackoverflow, I'm not writing up this shit.
-        // https://stackoverflow.com/questions/4331092/finding-all-combinations-cartesian-product-of-javascript-array-values
-
-
-        // this needs to be a list of list
-        var allCombinationOfConcerts = generateCombinations(groupedByArtistConcertList);
-        //now filter out the ones that don't make chronological sense
-        allCombinationOfConcerts = allCombinationOfConcerts.filter(isChronological);
-
-        //now sort the remaining by max distance traveled
-        allCombinationOfConcerts = allCombinationOfConcerts.sort((a, b) => {
-          return getTotalDistance(a, userLocation) - getTotalDistance(b, userLocation);
-        });
-
-        //pick the route with the shortest distance
-        // this need to be a list
-        console.log(`allCombinationOfConcerts[0]: ${JSON.stringify(allCombinationOfConcerts[0])}`);
+        var emptyConcert = [];
+        //clear the displayed concert, we will have to re-generate everything from scratch to maintain consistency (and by consistency I mean the order you pick artist should have no effect on how the route should be planned out)
+        setConcerts(emptyConcert);
+        //now.. are we rendering a route for multiple artist or just simply showing route of one single artist
+        if (isChecked) {
+          setConcerts(incomingConcerts);
+        }
+        else {
+          generateOptimizedConcertRoute(concatenatedConcert, userLocation, artistWishlist);
+        }
 
         setConcerts(allCombinationOfConcerts[0]);
         setOpen(false);
         closeDialog();
 
+        //add the artist we just typed into the followed artist section, so next we don't have to type it next time
         //check for duplicates
         const hasElementWithValue = followedArtists.some(artist => artist.id === incomingArtistInfo.id);
         var updatedArtists = followedArtists;
@@ -224,56 +230,77 @@ const BaseInput = forwardRef(({ setConcerts, setUserLocation, setMapStyle, start
     //submitArtist(artistName);
   };
 
-  const sortArtist = (incomingAllConcerts, userLocation) => {
-    console.log(`total Number Of Concerts Memorized after submitArtist: ${incomingAllConcerts.length}`);
-    console.log(`sort all concerts`);
+  const generateOptimizedConcertRoute = (allConcerts, userLocation, artistWishlist) => {
+    //generate an optimized route based on existing concerts saved and the artist wishlist, with consideration to user current location
+    console.log(`generate optimized concert route for the current selected artist`);
+    console.log(JSON.stringify(artistWishlist));
+    //filter out concerts that are not performed by the artists from the artist wish list
+    //allow concert with duplicate id at this stage, inform user of the dupcliate at the end
+    var initialFilteredConcerts = allConcerts.filter((concert) => {
+      return artistWishlist.some(artistWishlistItem => artistWishlistItem.WishlistArtistId === concert.artistId)
+    });
+    //group the concerts by artistId
+    var groupedByArtistConcertList = initialFilteredConcerts.reduce((r, a) => {
+      r[a.artistId] = r[a.artistId] || [];
+      r[a.artistId].push(a);
+      return r;
+    }, Object.create(null));
 
+    //this should be a dictionary
+    //console.log(`groupedbyartistconcertlist: ${JSON.stringify(groupedByArtistConcertList)}`);
 
-    //sort by date
-    incomingAllConcerts = incomingAllConcerts.sort((a, b) => {
-      return (new Date(a.date) - new Date(b.date));
+    // figure out all the possible combination of the shows 
+    // thanks stackoverflow, I'm not writing up this shit.
+    // https://stackoverflow.com/questions/4331092/finding-all-combinations-cartesian-product-of-javascript-array-values
+    // this needs to be a list of list
+    var allCombinationOfConcerts = generateCombinations(groupedByArtistConcertList);
+    //now filter out the ones that don't make chronological sense
+    allCombinationOfConcerts = allCombinationOfConcerts.filter(isChronological);
+
+    //now sort the remaining by max distance traveled
+    allCombinationOfConcerts = allCombinationOfConcerts.sort((a, b) => {
+      return getTotalDistance(a, userLocation) - getTotalDistance(b, userLocation);
+    });
+
+    //pick the route with the shortest distance
+    // this need to be a list
+    console.log(`allCombinationOfConcerts[0]: ${JSON.stringify(allCombinationOfConcerts[0])}`);
+
+    var optimizedConcerts = allCombinationOfConcerts[0];
+
+    /*// Create a lookup table based on the 'id' key
+    const lookup = optimizedConcerts.reduce((acc, obj) => {
+      acc[obj.id] = (acc[obj.id] || []).concat(obj);
+      return acc;
+    }, {});
+
+    // Filter out objects that appear only once
+    const duplicateObjects = Object.values(lookup).filter(arr => arr.length > 1);
+    // Create a dictionary with duplicate IDs as keys and arrays of objects as values
+    const duplicatedConcertDictionary = {};
+    duplicateObjects.forEach(arr => {
+      const id = arr[0].id;
+      duplicatedConcertDictionary[id] = arr;
     });
 
 
-    if (!isChecked) {
-      //filter part one concert
-      console.log(`filter the sorted concert by artist name, so we're only left with one concert per artist`);
-      incomingAllConcerts = incomingAllConcerts.filter((value, index, self) => {
-        return self.findIndex(v => v.artist === value.artist || v.title === value.title) === index;
-      });
-    }
 
 
-    //filter part all concert
-    console.log(`filter the sorted concert by artist name`);
-    var newConcerts = incomingAllConcerts
+    // Create a set to store unique IDs
+    const uniqueIds = new Set();
 
-    // filter the concert list by
-    // if artist name is included in titles of concerts performed by other artists 
-    if (!isChecked) {
-      if (concerts.length > 0) {
-        newConcerts = newConcerts.filter((concert) => {
-
-          var match = true;
-          var matchindex = newConcerts.findIndex((findConcert) => {
-            return findConcert.title.includes(concert.artist) && (findConcert.artist !== concert.artist);
-          })
-
-          if (matchindex !== -1) {
-            alert(`${concert.artist} is performing as part of ${newConcerts[matchindex].title} by ${newConcerts[matchindex].artist}, consolidating schedule`);
-            match = false;
-          }
-
-          return match;
-
-        });
+    // Filter out duplicate objects and add their IDs to the set
+    const uniqueOptimizedConcerts = optimizedConcerts.filter(obj => {
+      if (!uniqueIds.has(obj.id)) {
+        uniqueIds.add(obj.id);
+        return true;
       }
-    }
+      return false;
+    });*/
 
-    newConcerts = newConcerts.sort((a, b) => { return (new Date(a.date) - new Date(b.date)) });
-    console.log(`concat the new concerts into the optimized list`);
-    setConcerts(newConcerts);
-    setAllConcerts(newConcerts);
+
+    setConcerts(optimizedConcerts);
+
   }
 
   const [isChecked, setIsChecked] = useState(false);
