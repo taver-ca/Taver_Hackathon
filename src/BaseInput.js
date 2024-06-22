@@ -11,11 +11,6 @@ const mapStyles = [
   { mapId: "53a5c2c14f51f10b", displayName: "Dark Theme", buttonColorCss: "#404040" },
 ];
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> fixing_optimization
 function getTotalDistance(concerts, userLocation) {
 
   if (concerts.length <= 0) {
