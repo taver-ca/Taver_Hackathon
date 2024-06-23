@@ -120,6 +120,8 @@ function App() {
           <ConcertList
             setConcerts={setConcerts}
             setAllConcerts={setAllConcerts}
+            artistWishlist={artistWishlist}
+            setArtistWishlist={setAllConcerts}
             concerts={concerts}
           />
         </Grid>

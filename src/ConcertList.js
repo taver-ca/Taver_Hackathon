@@ -22,7 +22,6 @@ class ConcertList extends React.Component {
         this.state = {
             //pass concerts from maps into here
             concerts: this.props.concerts,
-            artistWishList: this.props.artistWishList
         }
     }
 
@@ -77,6 +76,11 @@ class ConcertList extends React.Component {
                                                     //set the new concert list 
                                                     this.props.setConcerts(filteredConcerts);
                                                     this.props.setAllConcerts((prev) => prev.filter((concertInQuestion) => concertInQuestion.artist !== concert.artist));
+                                                    var updatedArtistWishlist = this.props.artistWishlist.filter((artistWishlistItem)=>{
+                                                        return artistWishlistItem.WishlistArtistId != concert.artistId
+                                                    })
+                                                    //remove selected artist from wish list
+                                                    this.props.setArtistWishlist(updatedArtistWishlist);
                                                 }
                                             } aria-label="delete">
                                                 <DeleteIcon sx={{ color: "red" }} />
