@@ -54,13 +54,15 @@ function isChronological(list) {
 }
 
 
-function generateCombinations(dictionary) {
+function generateCombinations(dictionary, conditionFn) {
   const keys = Object.keys(dictionary);
   const result = [];
 
   function backtrack(combination, index) {
     if (index === keys.length) {
-      result.push([...combination]);
+      if (conditionFn(combination)) {
+        result.push([...combination]);
+      }
       return;
     }
 
@@ -77,6 +79,7 @@ function generateCombinations(dictionary) {
   backtrack([], 0);
   return result;
 }
+
 
 // Convert degrees to radians
 function degreesToRadians(degrees) {
@@ -253,14 +256,12 @@ const BaseInput = forwardRef(({ setConcerts,
     // thanks stackoverflow, I'm not writing up this shit.
     // https://stackoverflow.com/questions/4331092/finding-all-combinations-cartesian-product-of-javascript-array-values
     // this needs to be a list of list
-    var allCombinationOfConcerts = generateCombinations(groupedByArtistConcertList);
-    //now filter out the ones that don't make chronological sense
-    allCombinationOfConcerts = allCombinationOfConcerts.filter(isChronological);
+    var allCombinationOfConcerts = generateCombinations(groupedByArtistConcertList, isChronological);
 
     if (allCombinationOfConcerts.length < 1) {
       alert(`Unable to schedule a plan for the artist concerts you want to go, their schedules conflict with each other`);
       //remove the last attempted artist that was causing problem and run the optimization again
-      generateOptimizedConcertRoute(allConcerts,userLocation, artistWishlist.pop());
+      generateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist.pop());
     }
 
     //now sort the remaining by max distance traveled
