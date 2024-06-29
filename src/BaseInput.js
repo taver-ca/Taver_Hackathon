@@ -257,6 +257,12 @@ const BaseInput = forwardRef(({ setConcerts,
     //now filter out the ones that don't make chronological sense
     allCombinationOfConcerts = allCombinationOfConcerts.filter(isChronological);
 
+    if (allCombinationOfConcerts.length < 1) {
+      alert(`Unable to schedule a plan for the artist concerts you want to go, their schedules conflict with each other`);
+      //remove the last attempted artist that was causing problem and run the optimization again
+      generateOptimizedConcertRoute(allConcerts,userLocation, artistWishlist.pop());
+    }
+
     //now sort the remaining by max distance traveled
     allCombinationOfConcerts = allCombinationOfConcerts.sort((a, b) => {
       return getTotalDistance(a, userLocation) - getTotalDistance(b, userLocation);
