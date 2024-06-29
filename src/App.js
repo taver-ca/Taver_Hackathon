@@ -122,7 +122,7 @@ function App() {
             setConcerts={setConcerts}
             setAllConcerts={setAllConcerts}
             artistWishlist={artistWishlist}
-            setArtistWishlist={setAllConcerts}
+            setArtistWishlist={setArtistWishlist}
             concerts={concerts}
             triggerReEvaluation={triggerReEvaluation}
           />
