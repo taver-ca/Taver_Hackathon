@@ -173,8 +173,8 @@ function Map({ concerts, userLocation, mapStyle }) {
           // build the clusteringPolyline
           // get markerclusters with more than one marker inside them
           var clustersGreaterThanOne = clusterer.clusters.filter((cluster) => cluster.markers.length > 1);
-          console.log(`total number of clusters: ${clusterer.clusters.length}`);
-          console.log("cluster with more than 1 marker: ");
+          //console.log(`total number of clusters: ${clusterer.clusters.length}`);
+          //console.log("cluster with more than 1 marker: ");
           clustersGreaterThanOne.forEach(cluster => console.log(cluster));
 
           // replace all points in each cluster in path with the center point

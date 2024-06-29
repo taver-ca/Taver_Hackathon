@@ -76,11 +76,16 @@ class ConcertList extends React.Component {
                                                     //set the new concert list 
                                                     this.props.setConcerts(filteredConcerts);
                                                     this.props.setAllConcerts((prev) => prev.filter((concertInQuestion) => concertInQuestion.artist !== concert.artist));
+                                                    console.log(`before removing artist: ${JSON.stringify(this.props.artistWishlist)}`);
                                                     var updatedArtistWishlist = this.props.artistWishlist.filter((artistWishlistItem)=>{
                                                         return artistWishlistItem.WishlistArtistId != concert.artistId
                                                     })
                                                     //remove selected artist from wish list
-                                                    this.props.setArtistWishlist(updatedArtistWishlist);
+                                                    this.props.setArtistWishlist(updatedArtistWishlist, () => {
+                                                        // Do something here.
+                                                        console.log(`trigger re-evaluation: ${JSON.stringify(updatedArtistWishlist)}`);
+                                                        this.props.triggerReEvaluation();
+                                                      });
                                                 }
                                             } aria-label="delete">
                                                 <DeleteIcon sx={{ color: "red" }} />

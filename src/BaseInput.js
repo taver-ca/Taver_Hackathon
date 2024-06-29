@@ -127,7 +127,7 @@ const BaseInput = forwardRef(({ setConcerts,
   useEffect(() => {
     function showPosition(position) {
       setUserLocation(position);
-      console.log("home position: " + position.coords.latitude + "," + position.coords.longitude);
+      //console.log("home position: " + position.coords.latitude + "," + position.coords.longitude);
     }
 
     if (navigator.geolocation) {
@@ -140,6 +140,10 @@ const BaseInput = forwardRef(({ setConcerts,
   useImperativeHandle(ref, () => ({
     handleRequestFromParent: (artist) => {
       submitArtistInfo(artist);
+    },
+    handleReEvaluation: () => {
+      console.log(`trigger re-evaluation: ${JSON.stringify(artistWishlist)}`);
+      generateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist);
     },
   }));
 
@@ -171,9 +175,11 @@ const BaseInput = forwardRef(({ setConcerts,
           return;
         }
         var updatedArtistWishlist = artistWishlist;
-        console.log(`updatedArtistWishlist: ${updatedArtistWishlist}`);
-        console.log(`updatedArtistWishlist type: ${Object.prototype.toString.call(updatedArtistWishlist)}`);
-        updatedArtistWishlist.push({ WishlistArtistName: incomingArtistName, WishlistArtistId: incomingArtistId });
+        if (!updatedArtistWishlist.some(artistWishlistItem => artistWishlistItem.WishlistArtistId === incomingArtistId)) {
+          updatedArtistWishlist.push({ WishlistArtistName: incomingArtistName, WishlistArtistId: incomingArtistId });
+        }
+
+        console.log(`updatedArtistWishlist: ${JSON.stringify(updatedArtistWishlist)}`);
         setArtistWishlist(updatedArtistWishlist);
 
         //add the new concerts
@@ -191,7 +197,7 @@ const BaseInput = forwardRef(({ setConcerts,
         else {
           generateOptimizedConcertRoute(concatenatedConcert, userLocation, artistWishlist);
         }
-        
+
         setOpen(false);
         closeDialog();
 
@@ -226,8 +232,8 @@ const BaseInput = forwardRef(({ setConcerts,
 
   const generateOptimizedConcertRoute = (allConcerts, userLocation, artistWishlist) => {
     //generate an optimized route based on existing concerts saved and the artist wishlist, with consideration to user current location
-    console.log(`generate optimized concert route for the current selected artist`);
-    console.log(JSON.stringify(artistWishlist));
+    //console.log(`generate optimized concert route for the current selected artist`);
+    //console.log(JSON.stringify(artistWishlist));
     //filter out concerts that are not performed by the artists from the artist wish list
     //allow concert with duplicate id at this stage, inform user of the dupcliate at the end
     var initialFilteredConcerts = allConcerts.filter((concert) => {
@@ -261,37 +267,6 @@ const BaseInput = forwardRef(({ setConcerts,
     console.log(`allCombinationOfConcerts[0]: ${JSON.stringify(allCombinationOfConcerts[0])}`);
 
     var optimizedConcerts = allCombinationOfConcerts[0];
-
-    /*// Create a lookup table based on the 'id' key
-    const lookup = optimizedConcerts.reduce((acc, obj) => {
-      acc[obj.id] = (acc[obj.id] || []).concat(obj);
-      return acc;
-    }, {});
-
-    // Filter out objects that appear only once
-    const duplicateObjects = Object.values(lookup).filter(arr => arr.length > 1);
-    // Create a dictionary with duplicate IDs as keys and arrays of objects as values
-    const duplicatedConcertDictionary = {};
-    duplicateObjects.forEach(arr => {
-      const id = arr[0].id;
-      duplicatedConcertDictionary[id] = arr;
-    });
-
-
-
-
-    // Create a set to store unique IDs
-    const uniqueIds = new Set();
-
-    // Filter out duplicate objects and add their IDs to the set
-    const uniqueOptimizedConcerts = optimizedConcerts.filter(obj => {
-      if (!uniqueIds.has(obj.id)) {
-        uniqueIds.add(obj.id);
-        return true;
-      }
-      return false;
-    });*/
-
 
     setConcerts(optimizedConcerts);
 

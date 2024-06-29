@@ -35,9 +35,11 @@ function App() {
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
   const childRef = useRef();
 
+  const triggerReEvaluation=()=>{
+    console.log("trigger re-evaluation");
+    childRef.current.handleReEvaluation();
+  }
   const handleChildClick = (artistName) => {
-    //send artistName to input component
-    console.log(artistName);
     childRef.current.handleRequestFromParent(artistName);
   };
 
@@ -98,7 +100,6 @@ function App() {
             setFollowedArtists = {setFollowedArtists}
             artistWishlist = {artistWishlist}
             setArtistWishlist = {setArtistWishlist}
-
             openDialogFromParent={openDialog}
             closeDialog={() => {
               setOpenDialog(false);
@@ -123,6 +124,7 @@ function App() {
             artistWishlist={artistWishlist}
             setArtistWishlist={setAllConcerts}
             concerts={concerts}
+            triggerReEvaluation={triggerReEvaluation}
           />
         </Grid>
         <Grid item xs={10} sm={10} md={10} lg={7} xl={8} direction={"row"}>
