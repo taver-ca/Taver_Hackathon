@@ -35,9 +35,9 @@ function App() {
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
   const childRef = useRef();
 
-  const triggerReEvaluation=()=>{
+  const triggerReEvaluation=(updatedArtistWishlist)=>{
     console.log("trigger re-evaluation");
-    childRef.current.handleReEvaluation();
+    childRef.current.handleReEvaluation(updatedArtistWishlist);
   }
   const handleChildClick = (artistName) => {
     childRef.current.handleRequestFromParent(artistName);

@@ -55,8 +55,8 @@ class ConcertList extends React.Component {
                                 primary={`${concert.title}`}
                                 secondary={
                                     <React.Fragment>
-                                        <Stack direction="row"justifyContent={'space-between'} display={'flex'} >
-                                            <Stack direction={{ xs: "column", sm: "column", md: "row", lg:"column", xl:"column" }} item spacing={1}>
+                                        <Stack direction="row" justifyContent={'space-between'} display={'flex'} >
+                                            <Stack direction={{ xs: "column", sm: "column", md: "row", lg: "column", xl: "column" }} item spacing={1}>
                                                 <Chip color="primary" label={`${concert.location.name}`} />
                                                 <Chip color="primary" label={`${formattedDate(concert.date)}`} />
                                             </Stack>
@@ -77,15 +77,13 @@ class ConcertList extends React.Component {
                                                     this.props.setConcerts(filteredConcerts);
                                                     this.props.setAllConcerts((prev) => prev.filter((concertInQuestion) => concertInQuestion.artist !== concert.artist));
                                                     console.log(`before removing artist: ${JSON.stringify(this.props.artistWishlist)}`);
-                                                    var updatedArtistWishlist = this.props.artistWishlist.filter((artistWishlistItem)=>{
+                                                    var updatedArtistWishlist = this.props.artistWishlist.filter((artistWishlistItem) => {
                                                         return artistWishlistItem.WishlistArtistId != concert.artistId
                                                     })
                                                     //remove selected artist from wish list
-                                                    this.props.setArtistWishlist(updatedArtistWishlist, () => {
-                                                        // Do something here.
-                                                        console.log(`trigger re-evaluation: ${JSON.stringify(updatedArtistWishlist)}`);
-                                                        this.props.triggerReEvaluation();
-                                                      });
+                                                    this.props.setArtistWishlist(updatedArtistWishlist);
+                                                    console.log(`trigger re-evaluation: ${JSON.stringify(updatedArtistWishlist)}`);
+                                                    this.props.triggerReEvaluation(updatedArtistWishlist);
                                                 }
                                             } aria-label="delete">
                                                 <DeleteIcon sx={{ color: "red" }} />

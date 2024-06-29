@@ -141,9 +141,9 @@ const BaseInput = forwardRef(({ setConcerts,
     handleRequestFromParent: (artist) => {
       submitArtistInfo(artist);
     },
-    handleReEvaluation: () => {
-      console.log(`trigger re-evaluation: ${JSON.stringify(artistWishlist)}`);
-      generateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist);
+    handleReEvaluation: (updatedArtistWishlist) => {
+      console.log(`trigger re-evaluation: ${JSON.stringify(updatedArtistWishlist)}`);
+      generateOptimizedConcertRoute(allConcerts, userLocation, updatedArtistWishlist);
     },
   }));
 
