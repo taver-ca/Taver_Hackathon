@@ -5,6 +5,7 @@ import moment from 'moment';
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
 import { FetchArtist } from "./FetchArtist";
+import { json } from "react-router-dom";
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -43,24 +44,18 @@ function getTotalDistance(concerts, userLocation) {
   return totalDistance;
 }
 
-function isChronological(list) {
-  // Check if the times in the list are in ascending order
-  for (let i = 1; i < list.length; i++) {
-    if (list[i].date < list[i - 1].date) {
-      return false;
-    }
-  }
-  return true;
-}
 
 
-function generateCombinations(dictionary, conditionFn) {
+function generateCombinations(dictionary) {
   const keys = Object.keys(dictionary);
   const result = [];
 
   function backtrack(combination, index) {
     if (index === keys.length) {
-      if (conditionFn(combination)) {
+      const dates = combination.map(concert=>concert.date); 
+      const sortedDates = [...dates].sort();
+      if(JSON.stringify(dates)===(JSON.stringify(sortedDates)))
+      {
         result.push([...combination]);
       }
       return;
@@ -84,11 +79,6 @@ function generateCombinations(dictionary, conditionFn) {
 // Convert degrees to radians
 function degreesToRadians(degrees) {
   return degrees * Math.PI / 180;
-}
-
-function formattedDate(incomingDate) {
-  var date = new Date(incomingDate);
-  return moment(date).format('YYYY/MM/DD');
 }
 
 // Calculate the distance in kilometers between two coordinates
@@ -256,12 +246,12 @@ const BaseInput = forwardRef(({ setConcerts,
     // thanks stackoverflow, I'm not writing up this shit.
     // https://stackoverflow.com/questions/4331092/finding-all-combinations-cartesian-product-of-javascript-array-values
     // this needs to be a list of list
-    var allCombinationOfConcerts = generateCombinations(groupedByArtistConcertList, isChronological);
+    var allCombinationOfConcerts = generateCombinations(groupedByArtistConcertList);
 
     if (allCombinationOfConcerts.length < 1) {
-      alert(`Unable to schedule a plan for the artist concerts you want to go, their schedules conflict with each other`);
+      alert(`Unable to schedule a plan for the artists you want to see, their schedules conflict with each other, removing the last artist you added since it was causing problems`);
       //remove the last attempted artist that was causing problem and run the optimization again
-      generateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist.pop());
+      generateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist.slice(-1));
     }
 
     //now sort the remaining by max distance traveled
