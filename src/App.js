@@ -51,7 +51,7 @@ function App() {
     const element = document.getElementById("sharepage");
     html2canvas(element, {
       logging: true,
-      proxy: `${process.env.REACT_APP_BACKEND}/ImageProxy`,
+      proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
       backgroundColor: "#282c34",
 
       ignoreElements: (node) => {
