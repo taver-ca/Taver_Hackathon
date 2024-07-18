@@ -12,7 +12,7 @@ function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists
 
         const extractedPlaylistId = url.substring(startIndex, endIndex);
         setIsRequestTriggered(true);
-        await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithGigs/GetSpotifyPlaylistArtistsWithGigs`, {
+        await fetch(`${process.env.REACT_APP_BACKEND}/GetSpotifyPlaylistArtistsWithGigs`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json;charset=utf-8'

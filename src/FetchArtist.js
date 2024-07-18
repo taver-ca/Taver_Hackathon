@@ -1,6 +1,6 @@
 export const FetchArtist = async (artistName) => {
   const response = await fetch(
-    `${process.env.REACT_APP_BACKEND}/FindArtistWithGigs/GetArtistsByName?artistName=${artistName}`,
+    `${process.env.REACT_APP_BACKEND}/GetArtistsByName/${artistName}`,
     {
       method: "GET",
       headers: {
@@ -13,7 +13,7 @@ export const FetchArtist = async (artistName) => {
     let resJson = await response.json();
     console.log(`artist count: ${resJson.length}`);
     resJson = resJson.filter((value) => value.images.length > 0);
-    console.log(`artist count: ${resJson.length}`);
+    console.log(`artist count after removing artists with no profile picture: ${resJson.length}`);
     return resJson;
   }
   return;

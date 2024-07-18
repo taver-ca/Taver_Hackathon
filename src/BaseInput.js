@@ -146,7 +146,7 @@ const BaseInput = forwardRef(({ setConcerts,
     let incomingArtistName = incomingArtistInfo.name;
     let incomingArtistId = incomingArtistInfo.id
     try {
-      let res = await fetch(`${process.env.REACT_APP_BACKEND}/FindArtistWithGigs/GetGigsById`, {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND}/GetGigsByArtistId`, {
         method: "POST",
         headers: {
           "content-type": "application/json;charset=utf-8",
