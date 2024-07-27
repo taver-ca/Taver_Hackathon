@@ -135,7 +135,8 @@ class ConcertList extends React.Component {
 
     const onClearAllPress = () => {
       if (window.confirm("Are you sure you want to clear all your events?")) {
-        this.props.setConcerts([]);
+        this.props.setConcerts([])
+        this.props.setArtistWishlist([])
       } else {
         return;
       }
