@@ -142,7 +142,11 @@ const BaseInput = forwardRef(({ setConcerts,
 
   const [artistName, setArtistName] = useState("Taylor Swift");
   const submitArtistInfo = async (incomingArtistInfo) => {
-    console.log(incomingArtistInfo);
+
+    if(artistWishlist.length>=5){
+      alert(`You can have only 5 artists at a time.`)
+      return
+    }
     let incomingArtistName = incomingArtistInfo.name;
     let incomingArtistId = incomingArtistInfo.id
     try {
