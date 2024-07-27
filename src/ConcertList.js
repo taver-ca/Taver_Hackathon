@@ -105,7 +105,7 @@ class ConcertList extends React.Component {
                           this.props.artistWishlist.filter(
                             (artistWishlistItem) => {
                               return (
-                                artistWishlistItem.WishlistArtistId !=
+                                artistWishlistItem.WishlistArtistId !==
                                 concert.artistId
                               );
                             }
