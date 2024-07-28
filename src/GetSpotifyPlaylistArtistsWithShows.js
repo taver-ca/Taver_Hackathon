@@ -7,13 +7,10 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
 
     let handleSubmit = async (e) => {
         e.preventDefault();
-
-
         const url = spotifyPlayList;
-        const urlValidate = new RegExp("^https://open\\.spotify\\.com/playlist/[a-zA-Z0-9]{22}$");
+        const urlValidate = new RegExp("^https://open\\.spotify\\.com/playlist/[a-zA-Z0-9]{22}(\\?si=.*)?$");
         if (urlValidate.test(spotifyPlayList)) {
-
-            return spotifyPlayList;
+            setErrorMessage("");
         }
         else {
             setErrorMessage("Please enter a valid Spotify playlist URL.");
@@ -67,11 +64,10 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
                     }}
                     label="Spotify Playlist URL:"
                     value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
-
-                    error={Boolean(errorMessage)}
-
+                    helperText={errorMessage}
+                    error={errorMessage}
                 />
-                {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+                
                 <Button
                     type="submit"
                     variant="contained"
