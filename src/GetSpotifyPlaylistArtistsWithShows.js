@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
-import { Grid, Stack, TextField, Button } from '@mui/material';
+import { Grid, Stack, TextField, Button, Typography } from '@mui/material';
 
-function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists, startDate, endDate, setIsRequestTriggered}) {
+function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtists, startDate, endDate, setIsRequestTriggered }) {
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
+    const [errorMessage, setErrorMessage] = useState("");
+
     let handleSubmit = async (e) => {
         e.preventDefault();
-
         const url = spotifyPlayList;
+        const urlValidate = new RegExp("^https://open\\.spotify\\.com/playlist/[a-zA-Z0-9]{22}(\\?si=.*)?$");
+        if (urlValidate.test(spotifyPlayList)) {
+            setErrorMessage("");
+        }
+        else {
+            setErrorMessage("Please enter a valid Spotify playlist URL.");
+        }
+
         const startIndex = url.lastIndexOf("/") + 1; // Find the index of the last slash and add 1
         const endIndex = url.indexOf("?"); // Find the index of the question mark
 
@@ -29,7 +38,7 @@ function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists
                 let resJson = await res.json();
                 const existingArtists = followedArtists;
                 const updatedArtists = [...existingArtists, ...resJson].filter(
-                    (value, index, self) => self.findIndex(otherItem=>otherItem.id === value.id) === index
+                    (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
                 );
                 setFollowedArtists(updatedArtists);
             }
@@ -56,7 +65,10 @@ function GetSpotifyPlaylistArtistsWithShows({followedArtists, setFollowedArtists
                     }}
                     label="Spotify Playlist URL:"
                     value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
+                    helperText={errorMessage}
+                    error={errorMessage}
                 />
+                
                 <Button
                     disabled = {(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
                     type="submit"
