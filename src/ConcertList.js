@@ -143,7 +143,11 @@ class ConcertList extends React.Component {
     };
     return (
       <div>
-        {hasConcerts && <p>Upcoming Concerts: </p>}
+        {hasConcerts && (
+          <p>
+            Upcoming Concerts <br />({this.state.concerts.length} / 5):
+          </p>
+        )}
         {hasConcerts && (
           <Button onClick={onClearAllPress} variant="outlined" color="warning">
             Clear All
