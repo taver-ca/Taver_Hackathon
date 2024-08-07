@@ -35,7 +35,7 @@ function App() {
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
   const childRef = useRef();
 
-  const triggerReEvaluation = (updatedArtistWishlist) => {
+  const triggerReEvaluation=(updatedArtistWishlist)=>{
     console.log("trigger re-evaluation");
     childRef.current.handleReEvaluation(updatedArtistWishlist);
   }
@@ -62,28 +62,6 @@ function App() {
       canvas2image.saveAsPNG(canvas, posterName, canvas.width, canvas.height);
     });
   };
-
-  const handleShareLink = async function () {
-    //gather concert data, and artist data
-    var jsonString = JSON.stringify(concerts);
-    // Step 3: Encode the string to binary
-    const encoder = new TextEncoder();
-    const binaryString = encoder.encode(jsonString);
-
-    const base64EncodedStr = btoa(binaryString);
-    await copyToClipboard(`https://taver.ca/gigs/${base64EncodedStr}`);
-  }
-
-
-  async function copyToClipboard(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      console.log('Text copied to clipboard successfully!');
-    } 
-    catch (error) {
-      console.error('Error copying text to clipboard:', error);
-    }
-  }
 
   return (
     <div className="App">
@@ -118,10 +96,10 @@ function App() {
             updateArtistNameInParent={(value) => setArtistName(value)}
             newArtistList={setArtistList}
             artistListFromParent={artistList}
-            followedArtists={followedArtists}
-            setFollowedArtists={setFollowedArtists}
-            artistWishlist={artistWishlist}
-            setArtistWishlist={setArtistWishlist}
+            followedArtists = {followedArtists}
+            setFollowedArtists = {setFollowedArtists}
+            artistWishlist = {artistWishlist}
+            setArtistWishlist = {setArtistWishlist}
             openDialogFromParent={openDialog}
             closeDialog={() => {
               setOpenDialog(false);
@@ -165,13 +143,6 @@ function App() {
             variant="contained"
           >
             Share As Image
-          </Button>
-          <Button
-            id="sharelinkbutton"
-            color="primary"
-            onClick={handleShareLink}
-            variant="contained">
-            Share As Link
           </Button>
         </Grid>
       </Grid>
