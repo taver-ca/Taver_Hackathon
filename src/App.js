@@ -35,7 +35,7 @@ function App() {
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
   const childRef = useRef();
 
-  const triggerReEvaluation=(updatedArtistWishlist)=>{
+  const triggerReEvaluation = (updatedArtistWishlist) => {
     console.log("trigger re-evaluation");
     childRef.current.handleReEvaluation(updatedArtistWishlist);
   }
@@ -61,6 +61,37 @@ function App() {
     }).then((canvas) => {
       canvas2image.saveAsPNG(canvas, posterName, canvas.width, canvas.height);
     });
+  };
+
+  const handleShareAsLink = async function () {
+    //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date
+    try {
+      let res = await fetch(`${process.env.REACT_APP_BACKEND}/SaveTrips`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+          ownerUsername: "",
+          startingPoint: userLocation,
+          gigs: concerts,
+          tripName: posterName,
+          startDate: startDate,
+          mapStyleId: mapStyle,
+          endDate: endDate
+        })
+      });
+
+
+      if (res.status === 200) {
+        let incomingConcerts = await res.json();
+      } else {
+        console.log("Some error occured");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    //make a request to taverondemand.azurewebsites.net/api/SaveTrips
   };
 
   return (
@@ -96,10 +127,10 @@ function App() {
             updateArtistNameInParent={(value) => setArtistName(value)}
             newArtistList={setArtistList}
             artistListFromParent={artistList}
-            followedArtists = {followedArtists}
-            setFollowedArtists = {setFollowedArtists}
-            artistWishlist = {artistWishlist}
-            setArtistWishlist = {setArtistWishlist}
+            followedArtists={followedArtists}
+            setFollowedArtists={setFollowedArtists}
+            artistWishlist={artistWishlist}
+            setArtistWishlist={setArtistWishlist}
             openDialogFromParent={openDialog}
             closeDialog={() => {
               setOpenDialog(false);
@@ -136,14 +167,26 @@ function App() {
               setPosterName={setPosterName}
             />
           </div>
-          <Button
-            id="sharebutton"
-            color="primary"
-            onClick={handleDownloadImage}
-            variant="contained"
-          >
-            Share As Image
-          </Button>
+          <Grid spacing={2} direction={"row"}>
+            <Grid item>
+              <Button
+                id="sharelinkbutton"
+                color="primary"
+                disabled={concerts.length === 0}
+                onClick={handleShareAsLink}
+                variant="contained">Share As Link</Button>
+            </Grid>
+            <Grid item>
+              <Button
+                id="sharebutton"
+                color="primary"
+                onClick={handleDownloadImage}
+                variant="contained"
+              >
+                Share As Image
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </div>
