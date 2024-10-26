@@ -8,8 +8,8 @@ const concertToMarker = (concert) => {
     artistImageUrl: concert.image.url,
     address: concert.location.address,
     position: {
-      lat: concert.location.gpsCoordinate.latitude,
-      lng: concert.location.gpsCoordinate.longitude,
+      lat: concert.location.gpsCoordinate.coords.latitude,
+      lng: concert.location.gpsCoordinate.coords.longitude,
     },
   };
 };
@@ -95,13 +95,13 @@ function Map({ concerts, userLocation, mapStyle }) {
           lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
         },
         ...concerts.map((concert) => ({
-          lat: concert.location.gpsCoordinate.latitude,
-          lng: concert.location.gpsCoordinate.longitude,
+          lat: concert.location.gpsCoordinate.coords.latitude,
+          lng: concert.location.gpsCoordinate.coords.longitude,
         })),
       ]
       : concerts.map((concert) => ({
-        lat: concert.location.gpsCoordinate.latitude,
-        lng: concert.location.gpsCoordinate.longitude,
+        lat: concert.location.gpsCoordinate.coords.latitude,
+        lng: concert.location.gpsCoordinate.coords.longitude,
       }));
 
 
