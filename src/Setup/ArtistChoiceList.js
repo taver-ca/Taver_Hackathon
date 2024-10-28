@@ -3,6 +3,8 @@ import { List, ListItem, ListItemButton, ListItemAvatar, ListItemText, Avatar } 
 
 const ArtistChoiceList = ({ artists, onArtistClick }) => {
   const text = { color: 'red' }
+
+
   return (
     <List>
       {artists.map((artist, index) => (
@@ -11,11 +13,10 @@ const ArtistChoiceList = ({ artists, onArtistClick }) => {
             <ListItemAvatar>
               <Avatar
                 alt={`${artist.name}`}
-                src={`${artist.images[1].url}`}
+                src={artist.images && artist.images.length > 1 ? artist.images[1].url : ''}
               />
             </ListItemAvatar>
             <ListItemText
-
               primary={`${artist.name}`}
               secondary={`${artist.gigCount} Gig(s)`}
               secondaryTypographyProps={{ style: text }}
