@@ -250,9 +250,9 @@ const BaseInput = forwardRef(({ setConcerts,
     var allCombinationOfConcerts = generateCombinations(groupedByArtistConcertList);
 
     if (allCombinationOfConcerts.length < 1) {
-      alert(`Unable to schedule a plan for the artists you want to see, their schedules conflict with each other, removing the last artist you added since it was causing problems`);
+      alert(`Unable to schedule a plan for the artists you want to see, their schedules conflict with each other`);
       //remove the last attempted artist that was causing problem and run the optimization again
-      generateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist.slice(-1));
+      generateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist.slice(0, -1));
     }
 
     //now sort the remaining by max distance traveled
@@ -264,9 +264,13 @@ const BaseInput = forwardRef(({ setConcerts,
     // this need to be a list
     console.log(`allCombinationOfConcerts[0]: ${JSON.stringify(allCombinationOfConcerts[0])}`);
 
-    var optimizedConcerts = allCombinationOfConcerts[0];
+    if(allCombinationOfConcerts.length > 1)
+    {
+      var optimizedConcerts = allCombinationOfConcerts[0];
 
-    setConcerts(optimizedConcerts);
+      setConcerts(optimizedConcerts);
+    }
+
 
   }
 
