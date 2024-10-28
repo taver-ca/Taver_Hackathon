@@ -1,0 +1,100 @@
+import React from 'react';
+import { Grid, Button } from "@mui/material";
+// Import other components
+import SharePage from "./SharePage.js";
+import html2canvas from "html2canvas";
+import canvas2image from "@reglendo/canvas2image";
+
+const Odyssey = ({
+    concerts,
+    userLocation,
+    mapStyle,
+    setPosterName,
+    posterName,
+    startDate,
+    endDate
+}) => {
+    const handleShareAsLink = async function () {
+        //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date
+        try {
+            let res = await fetch(`${process.env.REACT_APP_BACKEND}/SaveTrips`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify({
+                    ownerUsername: "",
+                    startingPoint: userLocation,
+                    gigs: concerts,
+                    tripName: posterName,
+                    startDate: startDate,
+                    mapStyleId: mapStyle,
+                    endDate: endDate
+                })
+            });
+
+
+            if (res.status === 200) {
+                let incomingConcerts = await res.json();
+            } else {
+                console.log("Some error occured");
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        //make a request to taverondemand.azurewebsites.net/api/SaveTrips
+    };
+    const handleDownloadImage = async function () {
+        const element = document.getElementById("sharepage");
+        html2canvas(element, {
+            logging: true,
+            proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
+            backgroundColor: "#282c34",
+
+            ignoreElements: (node) => {
+                return node.nodeName === "IFRAME";
+            },
+            scrollY: window.scrollY * -1,
+        }).then((canvas) => {
+            canvas2image.saveAsPNG(canvas, posterName, canvas.width, canvas.height);
+        });
+    };
+
+    return (
+        <Grid item xs={10} sm={10} md={10} lg={7} xl={8} direction={"row"}>
+            <div id="sharepage">
+                <SharePage
+                    concerts={concerts}
+                    userLocation={userLocation}
+                    mapStyle={mapStyle}
+                    setPosterName={setPosterName}
+                />
+            </div>
+            <Grid spacing={2} direction={"row"}>
+                <Grid item>
+                    <Button
+                        id="sharelinkbutton"
+                        color="primary"
+                        disabled={concerts.length === 0}
+                        onClick={handleShareAsLink}
+                        variant="contained">Share As Link</Button>
+                </Grid>
+                <Grid item>
+                    <Button
+                        id="sharebutton"
+                        color="primary"
+                        onClick={handleDownloadImage}
+                        variant="contained"
+                    >
+                        Share As Image
+                    </Button>
+                </Grid>
+            </Grid>
+        </Grid>
+    );
+};
+
+export default Odyssey;
+
+
+
