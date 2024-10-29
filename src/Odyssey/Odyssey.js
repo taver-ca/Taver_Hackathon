@@ -33,9 +33,20 @@ const Odyssey = ({
                 })
             });
 
-
             if (res.status === 200) {
-                let incomingConcerts = await res.json();
+                let talesLink = await res.json();
+
+                if (document.hasFocus()) {
+                    let link = `https://taver.ca/tales/${talesLink.shareId}`;
+                    navigator.clipboard.writeText(link).then(function () {
+                        alert(`The link to your journey is ${link}, now go tell your friends all about it!`);
+                    }).catch(function (err) {
+                        console.error('Could not copy text: ', err);
+                    });
+                } else {
+                    console.error('Document is not focused');
+                }
+
             } else {
                 console.log("Some error occured");
             }
@@ -56,7 +67,8 @@ const Odyssey = ({
             },
             scrollY: window.scrollY * -1,
         }).then((canvas) => {
-            canvas2image.saveAsPNG(canvas, posterName, canvas.width, canvas.height);
+            let finalPosterName = posterName || "poster";
+            canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
         });
     };
 
@@ -77,7 +89,7 @@ const Odyssey = ({
                         color="primary"
                         disabled={concerts.length === 0}
                         onClick={handleShareAsLink}
-                        variant="contained">Share As Link</Button>
+                        variant="contained">Share As Link To Clipboard</Button>
                 </Grid>
                 <Grid item>
                     <Button

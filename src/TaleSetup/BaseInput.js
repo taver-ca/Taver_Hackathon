@@ -267,11 +267,8 @@ const BaseInput = forwardRef(({ setConcerts,
     if(allCombinationOfConcerts.length > 1)
     {
       var optimizedConcerts = allCombinationOfConcerts[0];
-
       setConcerts(optimizedConcerts);
     }
-
-
   }
 
   const [isChecked, setIsChecked] = useState(false);
