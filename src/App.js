@@ -23,6 +23,7 @@ function App() {
   const [artistName, setArtistName] = useState("Taylor Swift");
   const [artistList, setArtistList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+  const [shareId, setShareId] = useState("");
   const [startDate, setStartDate] = useState(
     cachedStartDate === null ? new Date() : new Date(cachedStartDate)
   );
@@ -42,46 +43,47 @@ function App() {
   return (
 
     <div className="App">
-    <Grid
-      className="App-header"
-      container
-      columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 10, xl: 3 }}
-      alignItems="flex-start"
-    >
-      <TaleSetup setStartDate={setStartDate}
-        setEndDate={setEndDate}
-        setArtistList={setArtistList}
-        setOpenDialog={setOpenDialog}
-        setConcerts={setConcerts}
-        setUserLocation={setUserLocation}
-        setMapStyle={setMapStyle}
-        setAllConcerts={setAllConcerts}
-        setArtistName={setArtistName}
-        setFollowedArtists={setFollowedArtists}
-        setArtistWishlist={setArtistWishlist}
-        setIsRequestTriggered={setIsRequestTriggered}
-        startDate={startDate}
-        endDate={endDate}
-        concerts={concerts}
-        artistName={artistName}
-        allConcerts={allConcerts}
-        userLocation={userLocation}
-        artistList={artistList}
-        followedArtists={followedArtists}
-        artistWishlist={artistWishlist}
-        openDialog={openDialog}
-        isRequestTriggered={isRequestTriggered} />
-      <Odyssey
-        concerts={concerts}
-        userLocation={userLocation}
-        mapStyle={mapStyle}
-        setPosterName={setPosterName}
-        posterName={posterName}
-        startDate={startDate}
-        endDate={endDate} />
-    </Grid>
-  </div>
-
+      <Grid
+        className="App-header"
+        container
+        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 10, xl: 3 }}
+        alignItems="flex-start"
+      >
+        <TaleSetup setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          setArtistList={setArtistList}
+          setOpenDialog={setOpenDialog}
+          setConcerts={setConcerts}
+          setUserLocation={setUserLocation}
+          setMapStyle={setMapStyle}
+          setAllConcerts={setAllConcerts}
+          setArtistName={setArtistName}
+          setFollowedArtists={setFollowedArtists}
+          setArtistWishlist={setArtistWishlist}
+          setIsRequestTriggered={setIsRequestTriggered}
+          startDate={startDate}
+          endDate={endDate}
+          concerts={concerts}
+          artistName={artistName}
+          allConcerts={allConcerts}
+          userLocation={userLocation}
+          artistList={artistList}
+          followedArtists={followedArtists}
+          artistWishlist={artistWishlist}
+          openDialog={openDialog}
+          isRequestTriggered={isRequestTriggered} />
+        <Odyssey
+          concerts={concerts}
+          userLocation={userLocation}
+          mapStyle={mapStyle}
+          setPosterName={setPosterName}
+          posterName={posterName}
+          startDate={startDate}
+          endDate={endDate}
+          setShareId={setShareId}
+          shareId={shareId} />
+      </Grid>
+    </div>
   );
 }
 export default App;

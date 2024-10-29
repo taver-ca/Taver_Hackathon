@@ -12,7 +12,9 @@ const Odyssey = ({
     setPosterName,
     posterName,
     startDate,
-    endDate
+    endDate,
+    shareId,
+    setShareId
 }) => {
     const handleShareAsLink = async function () {
         //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date
@@ -23,6 +25,7 @@ const Odyssey = ({
                     "content-type": "application/json;charset=utf-8",
                 },
                 body: JSON.stringify({
+                    shareId: shareId,
                     ownerUsername: "",
                     startingPoint: userLocation,
                     gigs: concerts,
@@ -37,6 +40,8 @@ const Odyssey = ({
                 let talesLink = await res.json();
 
                 if (document.hasFocus()) {
+                    //we will not create a new entry into the database once a shareId is present.
+                    setShareId(talesLink.shareId);
                     let link = `https://taver.ca/tales/${talesLink.shareId}`;
                     navigator.clipboard.writeText(link).then(function () {
                         alert(`The link to your journey is ${link}, now go tell your friends all about it!`);
