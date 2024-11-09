@@ -85,7 +85,15 @@ function App() {
               endDate={endDate}
               shareId={shareId} />
           </Grid>} />
-          <Route path="/details/:guid" element={<Voyage />} />
+          <Route path="/tales/:guid" element={
+            <Voyage 
+                        concerts={concerts}
+                        style={mapStyle}
+                        userLocation={userLocation}
+                        setStyle={setMapStyle}
+                        setConcerts={setConcerts}
+                        setUserLocation={setUserLocation}
+          />} />
         </Routes>
       </Router>
     </div>
