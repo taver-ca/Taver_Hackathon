@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import TaleSetup from "./TaleSetup/TaleSetup.js";
 import Odyssey from "./Odyssey/Odyssey.js";
-
+import Voyage from "./Voyage/Voyage.js";
 
 function App() {
   let cachedStartDate = localStorage.getItem("startDate");
@@ -43,46 +43,51 @@ function App() {
   return (
 
     <div className="App">
-      <Grid
-        className="App-header"
-        container
-        columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 10, xl: 3 }}
-        alignItems="flex-start"
-      >
-        <TaleSetup setStartDate={setStartDate}
-          setEndDate={setEndDate}
-          setArtistList={setArtistList}
-          setOpenDialog={setOpenDialog}
-          setConcerts={setConcerts}
-          setUserLocation={setUserLocation}
-          setMapStyle={setMapStyle}
-          setAllConcerts={setAllConcerts}
-          setArtistName={setArtistName}
-          setFollowedArtists={setFollowedArtists}
-          setArtistWishlist={setArtistWishlist}
-          setIsRequestTriggered={setIsRequestTriggered}
-          startDate={startDate}
-          endDate={endDate}
-          concerts={concerts}
-          artistName={artistName}
-          allConcerts={allConcerts}
-          userLocation={userLocation}
-          artistList={artistList}
-          followedArtists={followedArtists}
-          artistWishlist={artistWishlist}
-          openDialog={openDialog}
-          isRequestTriggered={isRequestTriggered} />
-        <Odyssey
-          concerts={concerts}
-          userLocation={userLocation}
-          mapStyle={mapStyle}
-          setPosterName={setPosterName}
-          posterName={posterName}
-          startDate={startDate}
-          endDate={endDate}
-          setShareId={setShareId}
-          shareId={shareId} />
-      </Grid>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Grid
+            className="App-header"
+            container
+            columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 10, xl: 3 }}
+            alignItems="flex-start"
+          >
+            <TaleSetup setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              setArtistList={setArtistList}
+              setOpenDialog={setOpenDialog}
+              setConcerts={setConcerts}
+              setUserLocation={setUserLocation}
+              setMapStyle={setMapStyle}
+              setAllConcerts={setAllConcerts}
+              setArtistName={setArtistName}
+              setFollowedArtists={setFollowedArtists}
+              setArtistWishlist={setArtistWishlist}
+              setIsRequestTriggered={setIsRequestTriggered}
+              startDate={startDate}
+              endDate={endDate}
+              concerts={concerts}
+              artistName={artistName}
+              allConcerts={allConcerts}
+              userLocation={userLocation}
+              artistList={artistList}
+              followedArtists={followedArtists}
+              artistWishlist={artistWishlist}
+              openDialog={openDialog}
+              isRequestTriggered={isRequestTriggered} />
+            <Odyssey
+              setPosterName={setPosterName}
+              setShareId={setShareId}
+              concerts={concerts}
+              userLocation={userLocation}
+              mapStyle={mapStyle}
+              posterName={posterName}
+              startDate={startDate}
+              endDate={endDate}
+              shareId={shareId} />
+          </Grid>} />
+          <Route path="/details/:guid" element={<Voyage />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
