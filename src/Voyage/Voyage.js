@@ -46,7 +46,7 @@ const Voyage = ({
                 var transformedConcerts = toLowerCaseKeys(parsedConcerts);
                 var coords = data.StartingLocation.match(/-?\d+\.\d+/g);
                 var result = { coords: { longitude: parseFloat(coords[0]), latitude: parseFloat(coords[1]) } };
-                
+
                 setPosterName(data.TripName);
                 setConcerts(transformedConcerts);
                 setUserLocation(result);
@@ -58,7 +58,15 @@ const Voyage = ({
     // ...
     if (loading) {
         //do a throbber here
-        return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', }} > <CircularProgress /> </Box>);
+        return (
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+            }} >
+                <CircularProgress />
+            </Box>);
     }
 
 
