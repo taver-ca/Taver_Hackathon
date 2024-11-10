@@ -51,7 +51,7 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
     };
 
     return (<Grid>
-        <p>Find concerts from playlist </p>
+        <Typography>Find concerts from playlist </Typography>
         <form onSubmit={handleSubmit}>
             <Stack direction={'column'} spacing={2}>
                 <TextField

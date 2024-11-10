@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Chip, Box, CircularProgress } from '@mui/material';
+import { Grid, Chip, Box, CircularProgress,Typography } from '@mui/material';
 import SwipeableTextMobileStepper from './ArtistsCarrousel'
 
 function YourSpotifyArtistsWithShows({ artists, onChildClick, isRequestTriggered }) {
@@ -40,7 +40,7 @@ function YourSpotifyArtistsWithShows({ artists, onChildClick, isRequestTriggered
 
   return (
     <Grid>
-      <p>Artists from your playlist</p>
+      <Typography>Artists from your playlist</Typography>
 
       {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (<Box
         display="flex"
@@ -51,7 +51,6 @@ function YourSpotifyArtistsWithShows({ artists, onChildClick, isRequestTriggered
           {commaSeparatedfollowedArtists}
         </Grid>
       </Box>)}
-      <p></p>
       {isLoading && <CircularProgress />}
     </Grid>
   );

@@ -6,7 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
@@ -144,9 +144,9 @@ class ConcertList extends React.Component {
     return (
       <div>
         {hasConcerts && (
-          <p>
+          <Typography>
             Upcoming Concerts <br />({this.state.concerts.length} / 5):
-          </p>
+          </Typography>
         )}
         {hasConcerts && (
           <Button onClick={onClearAllPress} variant="outlined" color="warning">
