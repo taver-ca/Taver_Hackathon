@@ -93,6 +93,8 @@ function App() {
                 concerts={concerts}
                 style={mapStyle}
                 userLocation={userLocation}
+                posterName={posterName}
+                setPosterName={setPosterName}
                 setStyle={setMapStyle}
                 setConcerts={setConcerts}
                 setUserLocation={setUserLocation}

@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@emotion/react": "^11.11.3",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.7",
-    "@mui/material": "^5.15.7",
+    "@mui/material": "^5.16.7",
     "@mui/x-date-pickers": "^6.19.3",
     "@react-google-maps/api": "^2.19.2",
     "@reglendo/canvas2image": "^1.0.5-2",
@@ -24,7 +24,7 @@
     "react-datepicker": "^4.24.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
