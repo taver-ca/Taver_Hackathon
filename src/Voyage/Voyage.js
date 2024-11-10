@@ -75,7 +75,7 @@ const Voyage = ({
     const concerts2 = concerts.slice(middleIndex);
 
     return (
-        <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' } }}>
+        <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' } }} >
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={style} /> : null}
             <Typography
                 variant="h3"

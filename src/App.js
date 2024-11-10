@@ -87,7 +87,7 @@ function App() {
           </Grid>} />
           <Route path="/tales/:guid" element={
             <Grid
-              className="App-header"
+              className="Voyage"
             >
               <Voyage
                 concerts={concerts}
@@ -98,7 +98,8 @@ function App() {
                 setStyle={setMapStyle}
                 setConcerts={setConcerts}
                 setUserLocation={setUserLocation}
-              /></Grid>} />
+              />
+            </Grid>} />
         </Routes>
       </Router>
     </div>
