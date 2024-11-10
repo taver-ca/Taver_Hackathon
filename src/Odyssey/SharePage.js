@@ -23,7 +23,7 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName }) => {
                 placeholder="Write a cool name for your trip here"
                 InputProps={{ sx: { 'input': { textAlign: 'center', color: 'white' } } }}
                 onChange={(e) => setPosterName(e.target.value)} />
-            <Stack justifyContent="space-evenly" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
+            <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
                 <SharePageList concerts={concerts1} />
                 <SharePageList concerts={concerts2} />
             </Stack>

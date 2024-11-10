@@ -74,16 +74,17 @@ const Voyage = ({
     const concerts1 = concerts.slice(0, middleIndex);
     const concerts2 = concerts.slice(middleIndex);
 
-    return (<Stack spacing={3} sx={{ width:{xs:'100%', sm:'90%', md:'80%'}}}>
-        {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={style} /> : null}
-        <Typography
-            variant="h2"
-        >{posterName}</Typography>
-        <Stack justifyContent="space-evenly" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
-            <SharePageList concerts={concerts1} />
-            <SharePageList concerts={concerts2} />
-        </Stack>
-    </Stack>);
+    return (
+        <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' } }}>
+            {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={style} /> : null}
+            <Typography
+                variant="h3"
+            >{posterName}</Typography>
+            <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
+                <SharePageList concerts={concerts1} />
+                <SharePageList concerts={concerts2} />
+            </Stack>
+        </Stack>);
 };
 
 export default Voyage;

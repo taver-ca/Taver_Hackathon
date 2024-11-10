@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
+import Box from '@mui/material/Box';
 
 const concertToMarker = (concert) => {
   return {
@@ -14,6 +15,18 @@ const concertToMarker = (concert) => {
   };
 };
 
+const containerStyle = {
+  width: '100%',
+  paddingTop: '66.67%', // 3:2 aspect ratio 
+  position: 'relative'
+};
+const mapContainerStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+};
 
 
 function useWindowSize() {
@@ -139,96 +152,97 @@ function Map({ concerts, userLocation, mapStyle }) {
   console.log(output);
 
   return (
-    <GoogleMap
-      style={{ overflow: "visible" }}
-      key={[mapStyle]}
-      onLoad={handleOnLoad}
-      // onClick={() => setActiveMarker(null)}
-      options={{
-        mapId: mapStyle,
-        minZoom: 1,
-        maxZoom: 20,
-        disableDefaultUI: true
-      }}
-      mapContainerStyle={(width / height) >= 1 ? { width: "100wh", height: "75vh" } : { width: "100wh", height: "75vh" }}
-    >
-      {userLocation && (
-        <MarkerF
-          position={{
-            lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
-            // Changed from toLocale to toFixed for consistency
-            lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
-          }}
-          icon={{
-            url: "https://cdn-icons-png.flaticon.com/512/6676/6676575.png",
-            scaledSize: { width: 35, height: 35 },
-          }}
-        />
-      )}
+    <Box sx={containerStyle}>
+      <GoogleMap
+        style={{ overflow: "visible" }}
+        key={[mapStyle]}
+        onLoad={handleOnLoad}
+        // onClick={() => setActiveMarker(null)}
+        options={{
+          mapId: mapStyle,
+          minZoom: 1,
+          maxZoom: 20,
+          disableDefaultUI: true
+        }}
+        mapContainerStyle={mapContainerStyle}
+      >
+        {userLocation && (
+          <MarkerF
+            position={{
+              lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
+              // Changed from toLocale to toFixed for consistency
+              lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
+            }}
+            icon={{
+              url: "https://cdn-icons-png.flaticon.com/512/6676/6676575.png",
+              scaledSize: { width: 35, height: 35 },
+            }}
+          />
+        )}
 
-      <MarkerClusterer
-        ignoreHidden={false}
-        onClusteringEnd={(clusterer) => {
-          var pathCopy = [...path];
-          // build the clusteringPolyline
-          // get markerclusters with more than one marker inside them
-          var clustersGreaterThanOne = clusterer.clusters.filter((cluster) => cluster.markers.length > 1);
-          //console.log(`total number of clusters: ${clusterer.clusters.length}`);
-          //console.log("cluster with more than 1 marker: ");
-          clustersGreaterThanOne.forEach(cluster => console.log(cluster));
+        <MarkerClusterer
+          ignoreHidden={false}
+          onClusteringEnd={(clusterer) => {
+            var pathCopy = [...path];
+            // build the clusteringPolyline
+            // get markerclusters with more than one marker inside them
+            var clustersGreaterThanOne = clusterer.clusters.filter((cluster) => cluster.markers.length > 1);
+            //console.log(`total number of clusters: ${clusterer.clusters.length}`);
+            //console.log("cluster with more than 1 marker: ");
+            clustersGreaterThanOne.forEach(cluster => console.log(cluster));
 
-          // replace all points in each cluster in path with the center point
-          clustersGreaterThanOne.forEach((cluster) => {
-            let centerPoint = cluster.getCenter();
-            let cleanedUpCenterPoint = { lat: centerPoint.lat(), lng: centerPoint.lng() };
+            // replace all points in each cluster in path with the center point
+            clustersGreaterThanOne.forEach((cluster) => {
+              let centerPoint = cluster.getCenter();
+              let cleanedUpCenterPoint = { lat: centerPoint.lat(), lng: centerPoint.lng() };
 
-            let clusterPoints = cluster.markers.map((marker) => {
-              let markerPosition = marker.getPosition();
-              return { lat: markerPosition.lat(), lng: markerPosition.lng() };
-            });
+              let clusterPoints = cluster.markers.map((marker) => {
+                let markerPosition = marker.getPosition();
+                return { lat: markerPosition.lat(), lng: markerPosition.lng() };
+              });
 
 
-            pathCopy.forEach((point, index) => {
-              clusterPoints.forEach((clusterPoint) => {
-                if (clusterPoint.lat === point.lat && clusterPoint.lng === point.lng) {
-                  pathCopy[index] = cleanedUpCenterPoint;
-                }
+              pathCopy.forEach((point, index) => {
+                clusterPoints.forEach((clusterPoint) => {
+                  if (clusterPoint.lat === point.lat && clusterPoint.lng === point.lng) {
+                    pathCopy[index] = cleanedUpCenterPoint;
+                  }
+                });
               });
             });
-          });
 
-          polylineRef.current.setPath(pathCopy);
-        }}
-      >
-        {(clusterer) => (
-          <div>
-            {markers &&
-              markers.map(({ id, name, position, artistImageUrl, address }) => (
-                <MarkerF
-                  key={id}
-                  position={position}
-                  icon={{ url: artistImageUrl, scaledSize: { width: 35, height: 35 } }}
-                  clusterer={clusterer}
-                  onClick={(e) => {
-                    e.stop()
-                    handleActiveMarker(id)
-                  }}
-                >
-                  {activeMarker === id ? (
-                    <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
-                      <div className="info">
-                        <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} />
-                        <div><p style={{ color: 'black' }}>{name}</p><p style={{ color: 'black' }}>{address}</p></div>
-                      </div>
-                    </InfoWindowF>
-                  ) : null}
-                </MarkerF>
-              ))}
-          </div>
-        )}
-      </MarkerClusterer>
-    </GoogleMap>
-
+            polylineRef.current.setPath(pathCopy);
+          }}
+        >
+          {(clusterer) => (
+            <div>
+              {markers &&
+                markers.map(({ id, name, position, artistImageUrl, address }) => (
+                  <MarkerF
+                    key={id}
+                    position={position}
+                    icon={{ url: artistImageUrl, scaledSize: { width: 35, height: 35 } }}
+                    clusterer={clusterer}
+                    onClick={(e) => {
+                      e.stop()
+                      handleActiveMarker(id)
+                    }}
+                  >
+                    {activeMarker === id ? (
+                      <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
+                        <div className="info">
+                          <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} />
+                          <div><p style={{ color: 'black' }}>{name}</p><p style={{ color: 'black' }}>{address}</p></div>
+                        </div>
+                      </InfoWindowF>
+                    ) : null}
+                  </MarkerF>
+                ))}
+            </div>
+          )}
+        </MarkerClusterer>
+      </GoogleMap>
+    </Box>
   );
 }
 
