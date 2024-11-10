@@ -86,14 +86,17 @@ function App() {
               shareId={shareId} />
           </Grid>} />
           <Route path="/tales/:guid" element={
-            <Voyage 
-                        concerts={concerts}
-                        style={mapStyle}
-                        userLocation={userLocation}
-                        setStyle={setMapStyle}
-                        setConcerts={setConcerts}
-                        setUserLocation={setUserLocation}
-          />} />
+            <Grid
+              className="App-header"
+            >
+              <Voyage
+                concerts={concerts}
+                style={mapStyle}
+                userLocation={userLocation}
+                setStyle={setMapStyle}
+                setConcerts={setConcerts}
+                setUserLocation={setUserLocation}
+              /></Grid>} />
         </Routes>
       </Router>
     </div>
