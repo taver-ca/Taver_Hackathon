@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List } from '@mui/material';
+import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography } from '@mui/material';
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
 import { FetchArtist } from "./FetchArtist";
@@ -50,10 +50,9 @@ function generateCombinations(dictionary) {
 
   function backtrack(combination, index) {
     if (index === keys.length) {
-      const dates = combination.map(concert=>concert.date); 
+      const dates = combination.map(concert => concert.date);
       const sortedDates = [...dates].sort();
-      if(JSON.stringify(dates)===(JSON.stringify(sortedDates)))
-      {
+      if (JSON.stringify(dates) === (JSON.stringify(sortedDates))) {
         result.push([...combination]);
       }
       return;
@@ -140,7 +139,7 @@ const BaseInput = forwardRef(({ setConcerts,
   const [artistName, setArtistName] = useState("Taylor Swift");
   const submitArtistInfo = async (incomingArtistInfo) => {
 
-    if(artistWishlist.length>=5){
+    if (artistWishlist.length >= 5) {
       alert(`You can have only 5 artists at a time.`)
       return
     }
@@ -265,8 +264,7 @@ const BaseInput = forwardRef(({ setConcerts,
     // this need to be a list
     console.log(`allCombinationOfConcerts[0]: ${JSON.stringify(allCombinationOfConcerts[0])}`);
 
-    if(allCombinationOfConcerts.length > 1)
-    {
+    if (allCombinationOfConcerts.length > 1) {
       var optimizedConcerts = allCombinationOfConcerts[0];
       setConcerts(optimizedConcerts);
     }
@@ -287,12 +285,14 @@ const BaseInput = forwardRef(({ setConcerts,
   return (
 
     <Stack direction={'column'} spacing={2}>
-      Display all concerts of a single artist:
-      <Switch
-        checked={isChecked}
-        onChange={handleSwitchChange}
-        inputProps={{ 'aria-label': 'Toggle Switch' }}
-      />
+      <Stack justifyContent="center" direction={'row'} spacing={2}>
+        <Typography>Tour map mode:</Typography>
+        <Switch
+          checked={isChecked}
+          onChange={handleSwitchChange}
+          inputProps={{ 'aria-label': 'Toggle Switch' }}
+        />
+      </Stack>
 
       <Stack direction={'column'} spacing={2}>
         <form onSubmit={handleSubmit}>

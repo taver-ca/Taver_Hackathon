@@ -48,9 +48,9 @@ function App() {
             <Grid
               className="App-header"
               container
-              spacing={3}
+              spacing={3}              
             >
-              <Grid item xs={12} md={2}>
+              <Grid item xs={11} md={2} sx={{ minHeight: { xs: '50vh', sm: '50vh', md: '100vh' }}}>
                 <TaleSetup setStartDate={setStartDate}
                   setEndDate={setEndDate}
                   setArtistList={setArtistList}
@@ -75,7 +75,7 @@ function App() {
                   openDialog={openDialog}
                   isRequestTriggered={isRequestTriggered} />
               </Grid>
-              <Grid item xs={12} md={7} sx={{ marginTop: 3}}>
+              <Grid item xs={11} md={7} sx={{ marginTop: 3}}>
                 <Odyssey
                   setPosterName={setPosterName}
                   setShareId={setShareId}

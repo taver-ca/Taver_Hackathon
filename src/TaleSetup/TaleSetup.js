@@ -4,7 +4,7 @@ import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
 import {useRef } from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Stack } from "@mui/material";
 
 
 
@@ -44,7 +44,7 @@ const TaleSetup = ({ setStartDate,
     }
 
     return (
-    <Grid>
+    <Stack sx={{container:true, flexDirection:'column'}} spacing={4}>
         <Box>
             <img src={window.location.origin + "/Taver.png"} alt="Taver" />
         </Box>
@@ -97,6 +97,6 @@ const TaleSetup = ({ setStartDate,
             concerts={concerts}
             triggerReEvaluation={triggerReEvaluation}
         />
-    </Grid>);
+    </Stack>);
 };
 export default TaleSetup;

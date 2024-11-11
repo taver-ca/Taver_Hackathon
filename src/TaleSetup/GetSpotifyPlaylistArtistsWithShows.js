@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Stack, TextField, Button, Typography } from '@mui/material';
+import { Stack, TextField, Button, Typography } from '@mui/material';
 
 function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtists, startDate, endDate, setIsRequestTriggered }) {
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
@@ -50,35 +50,36 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
         setIsRequestTriggered(false);
     };
 
-    return (<Grid>
-        <Typography>Find concerts from playlist </Typography>
-        <form onSubmit={handleSubmit}>
-            <Stack direction={'column'} spacing={2}>
-                <TextField
-                    sx={{
-                        "& input": {
-                            color: "white",
-                        },
-                        "& label": {
-                            color: "white",
-                        },
-                    }}
-                    label="Spotify Playlist URL:"
-                    value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
-                    helperText={errorMessage}
-                    error={errorMessage}
-                />
-                
-                <Button
-                    disabled = {(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
-                    type="submit"
-                    variant="contained"
-                    color="primary">
-                    Submit
-                </Button>
-            </Stack>
-        </form>
-    </Grid>);
+    return (
+        <Stack spacing={2}>
+            <Typography>Find concerts from playlist </Typography>
+            <form onSubmit={handleSubmit}>
+                <Stack direction={'column'} spacing={2}>
+                    <TextField
+                        sx={{
+                            "& input": {
+                                color: "white",
+                            },
+                            "& label": {
+                                color: "white",
+                            },
+                        }}
+                        label="Spotify Playlist URL:"
+                        value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
+                        helperText={errorMessage}
+                        error={errorMessage}
+                    />
+
+                    <Button
+                        disabled={(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
+                        type="submit"
+                        variant="contained"
+                        color="primary">
+                        Submit
+                    </Button>
+                </Stack>
+            </form>
+        </Stack>);
 }
 
 export default GetSpotifyPlaylistArtistsWithShows;
