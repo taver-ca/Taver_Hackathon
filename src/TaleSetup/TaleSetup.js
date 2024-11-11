@@ -43,7 +43,8 @@ const TaleSetup = ({ setStartDate,
         childRef.current.handleReEvaluation(updatedArtistWishlist);
     }
 
-    return (<Grid direction={"column"} xs={10} sm={10} md={10} lg={2} xl={2}>
+    return (
+    <Grid>
         <Box>
             <img src={window.location.origin + "/Taver.png"} alt="Taver" />
         </Box>
@@ -54,7 +55,6 @@ const TaleSetup = ({ setStartDate,
             newArtistList={setArtistList}
             openDialog={setOpenDialog}
         />
-        <p />
         <BaseInput
             setConcerts={setConcerts}
             setUserLocation={setUserLocation}

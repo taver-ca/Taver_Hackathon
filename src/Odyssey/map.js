@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
 import Box from '@mui/material/Box';
+import { Margin } from "@mui/icons-material";
 
 const concertToMarker = (concert) => {
   return {
@@ -18,7 +19,7 @@ const concertToMarker = (concert) => {
 const containerStyle = {
   width: '100%',
   paddingTop: '66.67%', // 3:2 aspect ratio 
-  position: 'relative'
+  position: 'relative',
 };
 const mapContainerStyle = {
   position: 'absolute',

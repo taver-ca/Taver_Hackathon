@@ -3,10 +3,10 @@ import "./App.css";
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { Grid } from "@mui/material";
+import { Grid, Box } from "@mui/material";
+import Voyage from "./Voyage/Voyage.js";
 import TaleSetup from "./TaleSetup/TaleSetup.js";
 import Odyssey from "./Odyssey/Odyssey.js";
-import Voyage from "./Voyage/Voyage.js";
 
 function App() {
   let cachedStartDate = localStorage.getItem("startDate");
@@ -41,50 +41,54 @@ function App() {
 
 
   return (
-
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Grid
-            className="App-header"
-            container
-            columnSpacing={{ xs: 1, sm: 2, md: 3, lg: 10, xl: 3 }}
-            alignItems="flex-start"
-          >
-            <TaleSetup setStartDate={setStartDate}
-              setEndDate={setEndDate}
-              setArtistList={setArtistList}
-              setOpenDialog={setOpenDialog}
-              setConcerts={setConcerts}
-              setUserLocation={setUserLocation}
-              setMapStyle={setMapStyle}
-              setAllConcerts={setAllConcerts}
-              setArtistName={setArtistName}
-              setFollowedArtists={setFollowedArtists}
-              setArtistWishlist={setArtistWishlist}
-              setIsRequestTriggered={setIsRequestTriggered}
-              startDate={startDate}
-              endDate={endDate}
-              concerts={concerts}
-              artistName={artistName}
-              allConcerts={allConcerts}
-              userLocation={userLocation}
-              artistList={artistList}
-              followedArtists={followedArtists}
-              artistWishlist={artistWishlist}
-              openDialog={openDialog}
-              isRequestTriggered={isRequestTriggered} />
-            <Odyssey
-              setPosterName={setPosterName}
-              setShareId={setShareId}
-              concerts={concerts}
-              userLocation={userLocation}
-              mapStyle={mapStyle}
-              posterName={posterName}
-              startDate={startDate}
-              endDate={endDate}
-              shareId={shareId} />
-          </Grid>} />
+          <Route path="/" element={
+            <Grid
+              className="App-header"
+              container
+              spacing={3}
+            >
+              <Grid item xs={12} md={2}>
+                <TaleSetup setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  setArtistList={setArtistList}
+                  setOpenDialog={setOpenDialog}
+                  setConcerts={setConcerts}
+                  setUserLocation={setUserLocation}
+                  setMapStyle={setMapStyle}
+                  setAllConcerts={setAllConcerts}
+                  setArtistName={setArtistName}
+                  setFollowedArtists={setFollowedArtists}
+                  setArtistWishlist={setArtistWishlist}
+                  setIsRequestTriggered={setIsRequestTriggered}
+                  startDate={startDate}
+                  endDate={endDate}
+                  concerts={concerts}
+                  artistName={artistName}
+                  allConcerts={allConcerts}
+                  userLocation={userLocation}
+                  artistList={artistList}
+                  followedArtists={followedArtists}
+                  artistWishlist={artistWishlist}
+                  openDialog={openDialog}
+                  isRequestTriggered={isRequestTriggered} />
+              </Grid>
+              <Grid item xs={12} md={7} sx={{ marginTop: 3}}>
+                <Odyssey
+                  setPosterName={setPosterName}
+                  setShareId={setShareId}
+                  concerts={concerts}
+                  userLocation={userLocation}
+                  mapStyle={mapStyle}
+                  posterName={posterName}
+                  startDate={startDate}
+                  endDate={endDate}
+                  shareId={shareId} />
+              </Grid>
+            </Grid>
+          } />
           <Route path="/tales/:guid" element={
             <Grid
               className="Voyage"
@@ -102,7 +106,7 @@ function App() {
             </Grid>} />
         </Routes>
       </Router>
-    </div>
+    </div >
   );
 }
 export default App;

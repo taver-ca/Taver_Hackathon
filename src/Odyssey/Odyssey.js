@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button, Stack, Container } from "@mui/material";
+import { Grid, Button, Stack, Box } from "@mui/material";
 // Import other components
 import SharePage from "./SharePage.js";
 import html2canvas from "html2canvas";
@@ -78,7 +78,7 @@ const Odyssey = ({
     };
 
     return (
-        <Grid item xs={10} sm={10} md={10} lg={7} xl={8} direction={"row"}>
+        <Grid sx={{ container: true }} >
             <div id="sharepage">
                 <SharePage
                     concerts={concerts}
