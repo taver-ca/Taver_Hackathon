@@ -141,7 +141,7 @@ function Map({ concerts, userLocation, mapStyle }) {
 
       if (activeMarker === null) {
         mapRef.current.fitBounds(mapBoundsRef.current, 10);
-        mapRef.current.setZoom(mapRef.current.getZoom() - 0.2);
+        mapRef.current.setZoom(mapRef.current.getZoom() - 0.5);
       }
       else {
         var index = markers.findIndex(marker => marker.id === activeMarker);
