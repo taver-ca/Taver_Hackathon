@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, Stack, Container } from "@mui/material";
 // Import other components
 import SharePage from "./SharePage.js";
 import html2canvas from "html2canvas";
@@ -87,26 +87,34 @@ const Odyssey = ({
                     setPosterName={setPosterName}
                 />
             </div>
-            <Grid spacing={2} direction={"row"}>
-                <Grid item>
-                    <Button
-                        id="sharelinkbutton"
-                        color="primary"
-                        disabled={concerts.length === 0}
-                        onClick={handleShareAsLink}
-                        variant="contained">Share As Link To Clipboard</Button>
-                </Grid>
-                <Grid item>
-                    <Button
-                        id="sharebutton"
-                        color="primary"
-                        onClick={handleDownloadImage}
-                        variant="contained"
-                    >
-                        Share As Image
-                    </Button>
-                </Grid>
-            </Grid>
+
+            <Stack
+                container
+                sx={{
+                    justifyContent: { xs: 'flex-start', sm: 'center' },
+                    flexDirection: { xs: 'column', sm: 'row' }, // Change direction based on screen size
+                    gap: 2
+                }}
+            >
+                <Button
+                    id="sharelinkbutton"
+                    color="primary"
+                    disabled={concerts.length === 0}
+                    onClick={handleShareAsLink}
+                    variant="contained">
+                    Share As Link
+                </Button>
+
+                <Button
+                    id="sharebutton"
+                    color="primary"
+                    disabled={concerts.length === 0}
+                    onClick={handleDownloadImage}
+                    variant="contained"
+                >
+                    Share As Image
+                </Button>
+            </Stack>
         </Grid>
     );
 };

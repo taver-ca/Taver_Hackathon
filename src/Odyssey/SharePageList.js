@@ -10,9 +10,10 @@ function formattedDate(incomingDate) {
 
 const SharePageList = ({ concerts }) => {
     return (
-        <List dense>
+        <List >
             {concerts.map((concert, index) => (
                 <ListItem
+                
                     key={index}
                     disablePadding>
                     <ListItemButton>

@@ -7,7 +7,7 @@ const concertToMarker = (concert) => {
     id: concert.title + concert.date,
     name: concert.title,
     artistImageUrl: concert.image.url,
-    address: concert.location.address,
+    address: concert.location.name,
     position: {
       lat: concert.location.gpsCoordinate.coords.latitude,
       lng: concert.location.gpsCoordinate.coords.longitude,
