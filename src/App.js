@@ -50,7 +50,7 @@ function App() {
               container
               spacing={3}              
             >
-              <Grid item xs={11} md={2} sx={{ minHeight: { xs: '50vh', sm: '50vh', md: '100vh' }}}>
+              <Grid item xs={11} sm={11} md={4} lg={3} xl={3} sx={{ minHeight: { xs: '50vh', sm: '50vh', md: '100vh' }}}>
                 <TaleSetup setStartDate={setStartDate}
                   setEndDate={setEndDate}
                   setArtistList={setArtistList}
@@ -75,7 +75,7 @@ function App() {
                   openDialog={openDialog}
                   isRequestTriggered={isRequestTriggered} />
               </Grid>
-              <Grid item xs={11} md={7} sx={{ marginTop: 3}}>
+              <Grid item xs={11} sm={11} md={7} lg={7} xl={7} sx={{ marginTop: 3}}>
                 <Odyssey
                   setPosterName={setPosterName}
                   setShareId={setShareId}
