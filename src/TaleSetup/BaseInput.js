@@ -252,6 +252,7 @@ const BaseInput = forwardRef(({ setConcerts,
     if (allCombinationOfConcerts.length < 1) {
       alert(`Unable to schedule a plan for the artists you want to see, their schedules conflict with each other`);
       //remove the last attempted artist that was causing problem and run the optimization again
+      setArtistWishlist(artistWishlist.slice(0, -1));
       generateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist.slice(0, -1));
     }
 
