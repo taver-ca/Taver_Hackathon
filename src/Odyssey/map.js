@@ -121,7 +121,9 @@ function Map({ concerts, userLocation, mapStyle }) {
   useEffect(() => {
     if (mapRef.current !== null && mapBoundsRef.current !== null && freshBoundsRef.current !== null && polylineRef.current !== null) {
       mapBoundsRef.current = freshBoundsRef.current;
-      markers.forEach(({ position }) => mapBoundsRef.current.extend(position));
+      markers.forEach(({ position }) => {
+        mapBoundsRef.current.extend(position);
+      });
 
       if (userLocation) {
         mapBoundsRef.current.extend({
@@ -130,9 +132,16 @@ function Map({ concerts, userLocation, mapStyle }) {
         });
       }
 
+      // Ensure the map has finished adjusting to the bounds before getting the zoom level 
+      window.google.maps.event.addListenerOnce(mapRef.current, 'bounds_changed', () => {
+        const zoomLevel = mapRef.current.getZoom();
+        console.log('Zoom Level:', zoomLevel);
+        mapRef.current.setZoom(zoomLevel - 0.5);
+      });
+
       if (activeMarker === null) {
         mapRef.current.fitBounds(mapBoundsRef.current, 10);
-        mapRef.current.setZoom(3);
+        mapRef.current.setZoom(mapRef.current.getZoom() - 0.2);
       }
       else {
         var index = markers.findIndex(marker => marker.id === activeMarker);
@@ -144,8 +153,10 @@ function Map({ concerts, userLocation, mapStyle }) {
       polylineRef.current.setPath(path);
       polylineRef.current.setMap(mapRef.current);
       //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
+      
     }
   }, [markers]);
+
   const [width, height] = useWindowSize();
   const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location, address: concert.location.address }));
 
@@ -158,6 +169,7 @@ function Map({ concerts, userLocation, mapStyle }) {
         key={[mapStyle]}
         onLoad={handleOnLoad}
         // onClick={() => setActiveMarker(null)}
+        onBoundsChanged={{}}
         options={{
           mapId: mapStyle,
           minZoom: 1,
