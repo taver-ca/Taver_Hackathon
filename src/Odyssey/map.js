@@ -1,7 +1,49 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
 import Box from '@mui/material/Box';
-import { Margin } from "@mui/icons-material";
+
+function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef, userLocation, markers, mapStyleId, activeMarker, path) {
+
+  console.log(`map styleId: ${mapStyleId}`);
+  mapBoundsRef.current = freshBoundsRef.current;
+  markers.forEach(({ position }) => {
+    mapBoundsRef.current.extend(position);
+  });
+
+  if (userLocation) {
+    mapBoundsRef.current.extend({
+      lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
+      lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
+    });
+  }
+
+  // Ensure the map has finished adjusting to the bounds before getting the zoom level 
+  window.google.maps.event.addListenerOnce(mapRef.current, 'bounds_changed', () => {
+    const zoomLevel = mapRef.current.getZoom();
+    console.log('Zoom Level:', zoomLevel);
+    mapRef.current.setZoom(zoomLevel - 0.5);
+  });
+
+  if (activeMarker === null) {
+    mapRef.current.fitBounds(mapBoundsRef.current, 10);
+    mapRef.current.setZoom(mapRef.current.getZoom() - 0.5);
+  }
+  else {
+    var index = markers.findIndex(marker => marker.id === activeMarker);
+    var centerMarker = markers[index];
+    mapRef.current.setCenter(centerMarker.position);
+    mapRef.current.setZoom(10);
+  }
+
+  console.log("updating path");
+  polylineRef.current.setPath(path);
+  polylineRef.current.setMap(mapRef.current);
+  //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
+
+}
+
+
+
 
 const concertToMarker = (concert) => {
   return {
@@ -57,7 +99,7 @@ function Map({ concerts, userLocation, mapStyle }) {
   };
 
   const markers = concerts.map(concertToMarker);
-
+  const mapStyleId = mapStyle;
   const handleOnLoad = (map) => {
     const bounds = new google.maps.LatLngBounds(); // eslint-disable-line
     if (userLocation) {
@@ -68,7 +110,9 @@ function Map({ concerts, userLocation, mapStyle }) {
     }
     map.fitBounds(bounds);
     map.setCenter(bounds.getCenter());
-    console.log("Placed Markers" + markers);
+    console.log(`# of Placed Markers: ${markers.length}`);
+    markers.forEach(marker => { console.log(`position: ${marker.position.lat}, ${marker.position.lng}`) });
+
 
     let pathOptions = {
       strokeColor: "#FF0000",
@@ -99,6 +143,7 @@ function Map({ concerts, userLocation, mapStyle }) {
     mapBoundsRef.current = bounds;
     mapRef.current = map;
     polylineRef.current = new google.maps.Polyline(pathOptions); // eslint-disable-line
+    UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef, userLocation, markers, mapStyleId, activeMarker, path);
   };
 
   var path =
@@ -120,43 +165,11 @@ function Map({ concerts, userLocation, mapStyle }) {
 
 
   useEffect(() => {
+    console.log("condition check");
     if (mapRef.current !== null && mapBoundsRef.current !== null && freshBoundsRef.current !== null && polylineRef.current !== null) {
-      mapBoundsRef.current = freshBoundsRef.current;
-      markers.forEach(({ position }) => {
-        mapBoundsRef.current.extend(position);
-      });
-
-      if (userLocation) {
-        mapBoundsRef.current.extend({
-          lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
-          lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
-        });
-      }
-
-      // Ensure the map has finished adjusting to the bounds before getting the zoom level 
-      window.google.maps.event.addListenerOnce(mapRef.current, 'bounds_changed', () => {
-        const zoomLevel = mapRef.current.getZoom();
-        console.log('Zoom Level:', zoomLevel);
-        mapRef.current.setZoom(zoomLevel - 0.5);
-      });
-
-      if (activeMarker === null) {
-        mapRef.current.fitBounds(mapBoundsRef.current, 10);
-        mapRef.current.setZoom(mapRef.current.getZoom() - 0.5);
-      }
-      else {
-        var index = markers.findIndex(marker => marker.id === activeMarker);
-        var centerMarker = markers[index];
-        mapRef.current.setCenter(centerMarker.position);
-        mapRef.current.setZoom(10);
-      }
-
-      polylineRef.current.setPath(path);
-      polylineRef.current.setMap(mapRef.current);
-      //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
-      
+      UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef, userLocation, markers, mapStyleId, activeMarker, path);
     }
-  }, [markers]);
+  }, [markers, mapStyleId]);
 
   const [width, height] = useWindowSize();
   const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location, address: concert.location.address }));
@@ -169,8 +182,6 @@ function Map({ concerts, userLocation, mapStyle }) {
         style={{ overflow: "visible" }}
         key={[mapStyle]}
         onLoad={handleOnLoad}
-        // onClick={() => setActiveMarker(null)}
-        onBoundsChanged={{}}
         options={{
           mapId: mapStyle,
           minZoom: 1,

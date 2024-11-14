@@ -3,7 +3,7 @@ import "./App.css";
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import Voyage from "./Voyage/Voyage.js";
 import TaleSetup from "./TaleSetup/TaleSetup.js";
 import Odyssey from "./Odyssey/Odyssey.js";
