@@ -5,6 +5,35 @@ import SharePage from "./SharePage.js";
 import html2canvas from "html2canvas";
 import canvas2image from "@reglendo/canvas2image";
 
+
+function capitalizeFirstChar(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function transformSpecificChildKeys(obj, targetKey) {
+    if (Array.isArray(obj)) {
+        return obj.map(item => transformSpecificChildKeys(item, targetKey));
+    } else if (obj !== null && typeof obj === 'object') {
+        return Object.keys(obj).reduce((acc, key) => {
+            if (key === targetKey && obj[key] !== null && typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+                acc[key] = Object.keys(obj[key]).reduce((childAcc, childKey) => {
+                    const uppercaseChildKey = capitalizeFirstChar(childKey);
+                    childAcc[uppercaseChildKey] = obj[key][childKey];
+                    return childAcc;
+                }, {});
+            } else {
+                acc[key] = obj[key];
+            }
+            return acc;
+        }, {});
+    } else {
+        return obj;
+    }
+}
+
+
+
+
 const Odyssey = ({
     concerts,
     userLocation,
@@ -19,6 +48,11 @@ const Odyssey = ({
     const handleShareAsLink = async function () {
         //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date
         try {
+
+            //I have encountered problems parsing image property in the gig list
+            //converting all child property name to start with upper case letter in the image property in the gig list
+            //not a great solution but this will work for now.
+            var processedConcerts = transformSpecificChildKeys(concerts, 'image')
             let res = await fetch(`${process.env.REACT_APP_BACKEND}/SaveTrips`, {
                 method: "POST",
                 headers: {
@@ -28,7 +62,7 @@ const Odyssey = ({
                     shareId: shareId,
                     ownerUsername: "",
                     startingPoint: userLocation,
-                    gigs: concerts,
+                    gigs: processedConcerts,
                     tripName: posterName,
                     startDate: startDate,
                     mapStyleId: mapStyle,
