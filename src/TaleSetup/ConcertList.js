@@ -145,7 +145,7 @@ class ConcertList extends React.Component {
       <div>
         {hasConcerts && (
           <Typography>
-            Upcoming Concerts <br />({this.state.concerts.length} / 5):
+            Upcoming Concerts ({this.state.concerts.length}) :
           </Typography>
         )}
         {hasConcerts && (

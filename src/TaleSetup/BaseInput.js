@@ -48,13 +48,9 @@ function generateCombinations(dictionary) {
   const keys = Object.keys(dictionary);
   const result = [];
 
-  function backtrack(combination, index) {
+  function backtrack(combination, index, lastDate, lastLocation, lastTitle) {
     if (index === keys.length) {
-      const dates = combination.map(concert => concert.date);
-      const sortedDates = [...dates].sort();
-      if (JSON.stringify(dates) === (JSON.stringify(sortedDates))) {
-        result.push([...combination]);
-      }
+      result.push([...combination]);
       return;
     }
 
@@ -62,13 +58,16 @@ function generateCombinations(dictionary) {
     const values = dictionary[key];
 
     for (const value of values) {
-      combination.push(value);
-      backtrack(combination, index + 1);
-      combination.pop();
+      const concertDate = new Date(value.date);
+      if (concertDate >= lastDate && (concertDate !== lastDate || (value.location.name === lastLocation.name && value.location.address === lastLocation.address && value.title === lastTitle))) {
+        combination.push(value);
+        backtrack(combination, index + 1, concertDate, value.location, value.title);
+        combination.pop();
+      }
     }
   }
 
-  backtrack([], 0);
+  backtrack([], 0, new Date(0), { name: null, address: null }, null);
   return result;
 }
 
@@ -139,10 +138,10 @@ const BaseInput = forwardRef(({ setConcerts,
   const [artistName, setArtistName] = useState("Taylor Swift");
   const submitArtistInfo = async (incomingArtistInfo) => {
 
-    if (artistWishlist.length >= 5) {
+    /*if (artistWishlist.length >= 5) {
       alert(`You can have only 5 artists at a time.`)
       return
-    }
+    }*/
     let incomingArtistName = incomingArtistInfo.name;
     let incomingArtistId = incomingArtistInfo.id
     try {
