@@ -98,7 +98,12 @@ function Map({ concerts, userLocation, mapStyle }) {
     setActiveMarker(marker);
   };
 
-  const markers = concerts.map(concertToMarker);
+  const rawMarkers = concerts.map(concertToMarker);
+
+  let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => ( t.name === item.name && t.address === item.address )));
+
+
+
   const mapStyleId = mapStyle;
   const handleOnLoad = (map) => {
     const bounds = new google.maps.LatLngBounds(); // eslint-disable-line
