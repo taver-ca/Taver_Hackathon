@@ -31,7 +31,16 @@ function transformSpecificChildKeys(obj, targetKey) {
     }
 }
 
+function GenerateAI(concerts)
+{
+    //send a request to openAI
+    //attach the conerts, but strip the GPS data, that is not very useful for suggesting trip titles
+    // New list with only 'title', 'artist', and location fields 
+    const newList = concerts.map(({ title, artist, location }) => ({ title, artist, venue: location.name, city: location.address }));
+    // now make a request and send it to open AI
+    
 
+}
 
 
 const Odyssey = ({
