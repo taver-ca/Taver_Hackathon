@@ -1,10 +1,12 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, Box, Button } from "@mui/material";
 import Map from "../Odyssey/map";
 import SharePageList from "../Odyssey/SharePageList"
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import { useLoadScript } from "@react-google-maps/api"
-import CircularProgress from '@mui/material/CircularProgress'; import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import html2canvas from "html2canvas";
+import canvas2image from "@reglendo/canvas2image";
 function toLowerCaseKeys(obj) { if (Array.isArray(obj)) { return obj.map(toLowerCaseKeys); } else if (obj !== null && obj.constructor === Object) { return Object.keys(obj).reduce((acc, key) => { const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); acc[lowerCaseKey] = toLowerCaseKeys(obj[key]); return acc; }, {}); } return obj; }
 
 
@@ -26,6 +28,22 @@ const Voyage = ({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
     });
 
+    const handleDownloadImage = async function () {
+        const element = document.getElementById("sharepage");
+        html2canvas(element, {
+            logging: true,
+            proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
+            backgroundColor: "#282c34",
+
+            ignoreElements: (node) => {
+                return node.nodeName === "IFRAME";
+            },
+            scrollY: window.scrollY * -1,
+        }).then((canvas) => {
+            let finalPosterName = posterName || "poster";
+            canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
+        });
+    };
 
     //get that row data from database
     //if unable to retrieve data redirect user to the main page, let them know first though
@@ -50,7 +68,7 @@ const Voyage = ({
                 setPosterName(data.TripName);
                 setConcerts(transformedConcerts);
                 setUserLocation(result);
-                setStyle(data.mapStyleId);
+                setStyle(data.MapStyleId);
                 setLoading(false);
             });
     }, []);
@@ -75,16 +93,37 @@ const Voyage = ({
     const concerts2 = concerts.slice(middleIndex);
 
     return (
-        <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' } }} >
-            {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={style} /> : null}
-            <Typography
-                variant="h3"
-            >{posterName}</Typography>
-            <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
-                <SharePageList concerts={concerts1} />
-                <SharePageList concerts={concerts2} />
+        <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' } }}>
+            <Stack disablePadding spacing={3} id="sharepage">
+                    {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={style} /> : null}
+                    <Typography
+                        variant="h3"
+                    >{posterName}</Typography>
+                    <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
+                        <SharePageList concerts={concerts1} />
+                        <SharePageList concerts={concerts2} />
+                    </Stack>
+                </Stack>
+            <Stack
+                container
+                sx={{
+                    justifyContent: { xs: 'flex-start', sm: 'center' },
+                    flexDirection: { xs: 'column', sm: 'row' }, // Change direction based on screen size
+                    gap: 2
+                }}
+            >
+                <Button
+                    id="sharebutton"
+                    color="primary"
+                    disabled={concerts.length === 0}
+                    onClick={handleDownloadImage}
+                    variant="contained"
+                >
+                    Share As Image
+                </Button>
             </Stack>
-        </Stack>);
+        </Stack>
+    );
 };
 
 export default Voyage;

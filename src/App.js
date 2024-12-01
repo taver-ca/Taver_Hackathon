@@ -37,9 +37,6 @@ function App() {
     if (artistName) console.log("Artist Name: ", artistName);
   }, [artistName]);
 
-
-
-
   return (
     <div className="App">
       <Router>

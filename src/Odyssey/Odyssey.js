@@ -94,22 +94,6 @@ const Odyssey = ({
         }
         //make a request to taverondemand.azurewebsites.net/api/SaveTrips
     };
-    const handleDownloadImage = async function () {
-        const element = document.getElementById("sharepage");
-        html2canvas(element, {
-            logging: true,
-            proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
-            backgroundColor: "#282c34",
-
-            ignoreElements: (node) => {
-                return node.nodeName === "IFRAME";
-            },
-            scrollY: window.scrollY * -1,
-        }).then((canvas) => {
-            let finalPosterName = posterName || "poster";
-            canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
-        });
-    };
 
     return (
         <Grid sx={{ container: true }} >
@@ -137,16 +121,6 @@ const Odyssey = ({
                     onClick={handleShareAsLink}
                     variant="contained">
                     Share As Link
-                </Button>
-
-                <Button
-                    id="sharebutton"
-                    color="primary"
-                    disabled={concerts.length === 0}
-                    onClick={handleDownloadImage}
-                    variant="contained"
-                >
-                    Share As Image
                 </Button>
             </Stack>
         </Grid>
