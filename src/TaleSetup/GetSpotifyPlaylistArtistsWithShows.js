@@ -67,7 +67,7 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
                             "& label": {
                                 color: "white",
                             },
-                            width:{xs:'100%'}
+                            width: { xs: '100%' }
                         }}
                         label="Spotify Playlist URL:"
                         value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}

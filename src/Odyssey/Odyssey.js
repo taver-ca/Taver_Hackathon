@@ -2,8 +2,6 @@ import React from 'react';
 import { Grid, Button, Stack, Box } from "@mui/material";
 // Import other components
 import SharePage from "./SharePage.js";
-import html2canvas from "html2canvas";
-import canvas2image from "@reglendo/canvas2image";
 
 
 function capitalizeFirstChar(str) {
