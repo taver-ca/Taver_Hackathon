@@ -52,9 +52,13 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
 
     return (
         <Stack spacing={2}>
-            <Typography>Find concerts from playlist </Typography>
+            <Typography>Find concerts from playlist</Typography>
             <form onSubmit={handleSubmit}>
-                <Stack direction={'column'} spacing={2}>
+                <Stack
+                    direction={'column'}
+                    spacing={2}
+                    container
+                    alignItems="center">
                     <TextField
                         sx={{
                             "& input": {
@@ -63,6 +67,7 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
                             "& label": {
                                 color: "white",
                             },
+                            width:{xs:'100%'}
                         }}
                         label="Spotify Playlist URL:"
                         value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
@@ -71,6 +76,8 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
                     />
 
                     <Button
+
+
                         disabled={(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
                         type="submit"
                         variant="contained"

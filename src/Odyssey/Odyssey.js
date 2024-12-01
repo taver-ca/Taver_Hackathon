@@ -96,7 +96,7 @@ const Odyssey = ({
     };
 
     return (
-        <Grid sx={{ container: true }} >
+        <Grid sx={{ container: true, mb: 10  }}  >
             <div id="sharepage">
                 <SharePage
                     concerts={concerts}
@@ -108,11 +108,9 @@ const Odyssey = ({
 
             <Stack
                 container
-                sx={{
-                    justifyContent: { xs: 'flex-start', sm: 'center' },
-                    flexDirection: { xs: 'column', sm: 'row' }, // Change direction based on screen size
-                    gap: 2
-                }}
+                spacing={0}
+                direction="column"
+                alignItems="center"
             >
                 <Button
                     id="sharelinkbutton"
