@@ -100,9 +100,8 @@ function Map({ concerts, userLocation, mapStyle }) {
 
   const rawMarkers = concerts.map(concertToMarker);
 
+  //filter out duplicate shows 
   let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => ( t.name === item.name && t.address === item.address )));
-
-
 
   const mapStyleId = mapStyle;
   const handleOnLoad = (map) => {
@@ -211,6 +210,7 @@ function Map({ concerts, userLocation, mapStyle }) {
 
         <MarkerClusterer
           ignoreHidden={false}
+          gridSize={20}
           onClusteringEnd={(clusterer) => {
             var pathCopy = [...path];
             // build the clusteringPolyline
