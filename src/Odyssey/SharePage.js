@@ -4,7 +4,8 @@ import Map from "./map";
 import { useLoadScript } from "@react-google-maps/api"
 import SharePageList from './SharePageList';
 
-const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, AIGenerate }) => {
+
+const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, GenerateAI }) => {
     // Your component logic goes here
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
@@ -26,7 +27,7 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, AIGenerate
                     onChange={(e) => setPosterName(e.target.value)} />
                 <Button
                     color="primary"
-                    onClick={AIGenerate}
+                    onClick={GenerateAI(concerts)}
                     variant="contained">
                     Generate
                 </Button>

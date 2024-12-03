@@ -1,8 +1,8 @@
 import React from 'react';
-import { Grid, Button, Stack, Box } from "@mui/material";
+import { Grid, Button, Stack } from "@mui/material";
 // Import other components
 import SharePage from "./SharePage.js";
-
+import { FetchName } from './FetchName.js';
 
 function capitalizeFirstChar(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -29,15 +29,13 @@ function transformSpecificChildKeys(obj, targetKey) {
     }
 }
 
-function GenerateAI(concerts)
-{
+function GenerateAI(concerts) {
     //send a request to openAI
     //attach the conerts, but strip the GPS data, that is not very useful for suggesting trip titles
     // New list with only 'title', 'artist', and location fields 
-    const newList = concerts.map(({ title, artist, location }) => ({ title, artist, venue: location.name, city: location.address }));
+    const newList = concerts.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
     // now make a request and send it to open AI
-    
-
+    return FetchName(newList);
 }
 
 
@@ -103,13 +101,14 @@ const Odyssey = ({
     };
 
     return (
-        <Grid sx={{ container: true, mb: 10  }}  >
+        <Grid sx={{ container: true, mb: 10 }}  >
             <div id="sharepage">
                 <SharePage
                     concerts={concerts}
                     userLocation={userLocation}
                     mapStyle={mapStyle}
                     setPosterName={setPosterName}
+                    GenerateAI={GenerateAI}
                 />
             </div>
 

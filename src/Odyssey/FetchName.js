@@ -2,8 +2,9 @@ const { AzureOpenAI } = require("openai");
 // You will need to set these environment variables or edit the following values
 const endpoint = process.env["AZURE_OPENAI_ENDPOINT"];
 const apiKey = process.env["AZURE_OPENAI_API_KEY"];
-const apiVersion = "2024-05-01-preview";
-const deployment = "gpt-4o"; //This must match your deployment name.
+const instructions = process.env["AI_INSTRUCTIONS"];
+const apiVersion = "2024-08-01-preview";
+const deployment = "gpt-4o-mini"; //This must match your deployment name.
 
 export const FetchName = async (concerts) => {
     const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment });
@@ -12,7 +13,7 @@ export const FetchName = async (concerts) => {
     const result = await client.chat.completions.create({
         response_format:{ "type": "json_object" },
         messages: [
-            { role: "system", content: "" },
+            { role: "system", content: instructions },
             { role: "user", content: inputstring },
         ],
         model: "",
@@ -22,27 +23,9 @@ export const FetchName = async (concerts) => {
     ;
 
     for (const choice of result.choices) {
-        console.log(choice.message);
+        console.log(choice.title);
     }
 
+    return result;
 
-
-    const response = await fetch(
-        `${REACT_APP_AI_URL}/GetArtistsByName/${artistName}`,
-        {
-            method: "GET",
-            headers: {
-                "content-type": "application/json;charset=utf-8",
-            },
-        }
-    );
-    console.log(`response status code: ${response.status}`);
-    if (response.status === 200) {
-        let resJson = await response.json();
-        console.log(`artist count: ${resJson.length}`);
-        resJson = resJson.filter((value) => value.images.length > 0);
-        console.log(`artist count after removing artists with no profile picture: ${resJson.length}`);
-        return resJson;
-    }
-    return;
 };
