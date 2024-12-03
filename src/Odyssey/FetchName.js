@@ -1,7 +1,7 @@
 const { AzureOpenAI } = require("openai");
 // You will need to set these environment variables or edit the following values
-const endpoint = process.env["AZURE_OPENAI_ENDPOINT"] || "<endpoint>";
-const apiKey = process.env["AZURE_OPENAI_API_KEY"] || "<api key>";
+const endpoint = process.env["AZURE_OPENAI_ENDPOINT"];
+const apiKey = process.env["AZURE_OPENAI_API_KEY"];
 const apiVersion = "2024-05-01-preview";
 const deployment = "gpt-4o"; //This must match your deployment name.
 
@@ -12,7 +12,7 @@ export const FetchName = async (concerts) => {
     const result = await client.chat.completions.create({
         response_format:{ "type": "json_object" },
         messages: [
-            { role: "system", content: "You are a helpful assistant." },
+            { role: "system", content: "" },
             { role: "user", content: inputstring },
         ],
         model: "",
