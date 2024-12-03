@@ -2,8 +2,6 @@ import React from 'react';
 import { Grid, Button, Stack, Box } from "@mui/material";
 // Import other components
 import SharePage from "./SharePage.js";
-import html2canvas from "html2canvas";
-import canvas2image from "@reglendo/canvas2image";
 
 
 function capitalizeFirstChar(str) {
@@ -105,7 +103,7 @@ const Odyssey = ({
     };
 
     return (
-        <Grid sx={{ container: true }} >
+        <Grid sx={{ container: true, mb: 10  }}  >
             <div id="sharepage">
                 <SharePage
                     concerts={concerts}
@@ -117,11 +115,9 @@ const Odyssey = ({
 
             <Stack
                 container
-                sx={{
-                    justifyContent: { xs: 'flex-start', sm: 'center' },
-                    flexDirection: { xs: 'column', sm: 'row' }, // Change direction based on screen size
-                    gap: 2
-                }}
+                spacing={0}
+                direction="column"
+                alignItems="center"
             >
                 <Button
                     id="sharelinkbutton"

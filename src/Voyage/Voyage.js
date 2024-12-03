@@ -93,24 +93,22 @@ const Voyage = ({
     const concerts2 = concerts.slice(middleIndex);
 
     return (
-        <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' } }}>
+        <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' }, mb: 10 }}>
             <Stack disablePadding spacing={3} id="sharepage">
-                    {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={style} /> : null}
-                    <Typography
-                        variant="h3"
-                    >{posterName}</Typography>
-                    <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
-                        <SharePageList concerts={concerts1} />
-                        <SharePageList concerts={concerts2} />
-                    </Stack>
+                {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={style} /> : null}
+                <Typography
+                    variant="h3"
+                >{posterName}</Typography>
+                <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
+                    <SharePageList concerts={concerts1} />
+                    <SharePageList concerts={concerts2} />
                 </Stack>
+            </Stack>
             <Stack
                 container
-                sx={{
-                    justifyContent: { xs: 'flex-start', sm: 'center' },
-                    flexDirection: { xs: 'column', sm: 'row' }, // Change direction based on screen size
-                    gap: 2
-                }}
+                spacing={0}
+                direction="column"
+                alignItems="center"
             >
                 <Button
                     id="sharebutton"

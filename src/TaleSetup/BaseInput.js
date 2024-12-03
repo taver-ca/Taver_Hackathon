@@ -293,9 +293,14 @@ const BaseInput = forwardRef(({ setConcerts,
         />
       </Stack>
 
-      <Stack direction={'column'} spacing={2}>
+      <Stack
+        direction={'column'}
+        spacing={2}>
         <form onSubmit={handleSubmit}>
-          <Stack direction={'column'} spacing={2}>
+          <Stack direction={'column'}
+            spacing={2}
+            container
+            alignItems="center">
             <TextField
               sx={{
                 "& input": {
@@ -304,6 +309,7 @@ const BaseInput = forwardRef(({ setConcerts,
                 "& label": {
                   color: "white",
                 },
+                width:{xs:'100%'}
               }}
               label="Enter Artist Name:"
               value={artistName} onChange={(e) => {

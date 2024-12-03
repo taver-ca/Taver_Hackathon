@@ -13,7 +13,6 @@ const SharePageList = ({ concerts }) => {
         <List >
             {concerts.map((concert, index) => (
                 <ListItem
-                
                     key={index}
                     disablePadding>
                     <ListItemButton>
