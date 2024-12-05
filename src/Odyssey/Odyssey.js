@@ -29,13 +29,14 @@ function transformSpecificChildKeys(obj, targetKey) {
     }
 }
 
-function GenerateAI(concerts) {
+function GenerateAI(concerts, setPosterName) {
     //send a request to openAI
     //attach the conerts, but strip the GPS data, that is not very useful for suggesting trip titles
     // New list with only 'title', 'artist', and location fields 
     const newList = concerts.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
     // now make a request and send it to open AI
-    return FetchName(newList);
+    var suggestions = FetchName(newList);
+    setPosterName(suggestions[0]);
 }
 
 
@@ -48,7 +49,9 @@ const Odyssey = ({
     startDate,
     endDate,
     shareId,
-    setShareId
+    setShareId,
+    posterNameSuggestions,
+    setPosterNameSuggestions
 }) => {
     const handleShareAsLink = async function () {
         //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date

@@ -1,8 +1,8 @@
 const { AzureOpenAI } = require("openai");
 // You will need to set these environment variables or edit the following values
-const endpoint = process.env["AZURE_OPENAI_ENDPOINT"];
-const apiKey = process.env["AZURE_OPENAI_API_KEY"];
-const instructions = process.env["AI_INSTRUCTIONS"];
+const endpoint = process.env.REACT_APP_AZURE_OPENAI_ENDPOINT;
+const apiKey = process.env.REACT_APP_AZURE_OPENAI_API_KEY;
+const instructions =  process.env.REACT_APP_AI_INSTRUCTIONS; 
 const apiVersion = "2024-08-01-preview";
 const deployment = "gpt-4o-mini"; //This must match your deployment name.
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, TextField } from '@mui/material';
+import { Stack, TextField, Button } from '@mui/material';
 import Map from "./map";
 import { useLoadScript } from "@react-google-maps/api"
 import SharePageList from './SharePageList';
@@ -27,7 +27,7 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, GenerateAI
                     onChange={(e) => setPosterName(e.target.value)} />
                 <Button
                     color="primary"
-                    onClick={GenerateAI(concerts)}
+                    onClick={GenerateAI(concerts, setPosterName)}
                     variant="contained">
                     Generate
                 </Button>
