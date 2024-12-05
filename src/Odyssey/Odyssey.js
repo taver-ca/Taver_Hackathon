@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button, Stack, Box } from "@mui/material";
+import { Grid, Button, Stack } from "@mui/material";
 // Import other components
 import SharePage from "./SharePage.js";
 
@@ -31,7 +31,6 @@ function transformSpecificChildKeys(obj, targetKey) {
 
 
 
-
 const Odyssey = ({
     concerts,
     userLocation,
@@ -41,6 +40,8 @@ const Odyssey = ({
     startDate,
     endDate,
     shareId,
+    posterNameSuggestions,
+    setPosterNameSuggestions,
     setShareId
 }) => {
     const handleShareAsLink = async function () {
@@ -94,13 +95,16 @@ const Odyssey = ({
     };
 
     return (
-        <Grid sx={{ container: true, mb: 10  }}  >
+        <Grid sx={{ container: true, mb: 10 }}  >
             <div id="sharepage">
                 <SharePage
                     concerts={concerts}
                     userLocation={userLocation}
                     mapStyle={mapStyle}
                     setPosterName={setPosterName}
+                    posterName={posterName}
+                    posterNameSuggestions={posterNameSuggestions}
+                    setPosterNameSuggestions={setPosterNameSuggestions}
                 />
             </div>
 
