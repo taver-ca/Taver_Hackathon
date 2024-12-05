@@ -19,18 +19,19 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, GenerateAI
     return (
         <Stack disablePadding spacing={3}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
-            <Stack direction={'column'}>
+            <Stack spacing={5} direction={'row'} sx={{ width: '100%'}}>
                 <TextField
                     variant="standard"
                     placeholder="Write a cool name for your trip here"
                     InputProps={{ sx: { 'input': { textAlign: 'center', color: 'white' } } }}
                     onChange={(e) => setPosterName(e.target.value)} />
-                <Button
-                    color="primary"
-                    onClick={GenerateAI(concerts, setPosterName)}
-                    variant="contained">
-                    Generate
-                </Button>
+                 <Button
+                        color="primary"
+                        onClick={GenerateAI(concerts, setPosterName)}
+                        disabled={concerts.length === 0}
+                        variant="contained">
+                        Generate
+                    </Button>
             </Stack>
             <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
                 <SharePageList concerts={concerts1} />
