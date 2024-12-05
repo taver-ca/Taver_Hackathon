@@ -5,7 +5,7 @@ import { useLoadScript } from "@react-google-maps/api"
 import SharePageList from './SharePageList';
 import { FetchName } from './FetchName.js';
 
-const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, posterName }) => {
+const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, posterName, posterNameSuggestions, setPosterNameSuggestions }) => {
 
 
     // Your component logic goes here
@@ -18,14 +18,24 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, posterName
     const concerts2 = concerts.slice(middleIndex);
 
     const GenerateTripTitle = async function () {
-        //send a request to openAI
-        //attach the conerts, but strip the GPS data, that is not very useful for suggesting trip titles
-        // New list with only 'title', 'artist', and location fields 
-        const newList = concerts.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
-        // now make a request and send it to open AI
-        var suggestions = await FetchName(newList);
-        console.log(`poster name is: ${suggestions[0].title}`);
-        setPosterName(suggestions[0].title);
+
+        if (posterNameSuggestions.length < 1) {
+            // send a request to openAI
+            // attach the conerts, but strip the GPS data, that is not very useful for suggesting trip titles
+            // New list with only 'title', 'artist', 'venue', 'city' and 'date' fields 
+            console.log("getting new titles");
+            const newList = concerts.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
+            // now make a request and send it to open AI
+            var suggestions = await FetchName(newList);
+            setPosterNameSuggestions(suggestions.slice(1));
+            setPosterName(suggestions[0].title);
+        }
+        else
+        {
+            setPosterName(posterNameSuggestions[0].title);
+            setPosterNameSuggestions(posterNameSuggestions=> posterNameSuggestions.slice(1));
+        }
+
     };
 
     return (

@@ -19,6 +19,7 @@ function App() {
   const [allConcerts, setAllConcerts] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [posterName, setPosterName] = useState("");
+  const [posterNameSuggestions, setPosterNameSuggestions] = useState([]);
   const [followedArtists, setFollowedArtists] = useState([]);
   const [artistName, setArtistName] = useState("Taylor Swift");
   const [artistList, setArtistList] = useState([]);
@@ -82,7 +83,10 @@ function App() {
                   posterName={posterName}
                   startDate={startDate}
                   endDate={endDate}
-                  shareId={shareId} />
+                  shareId={shareId}
+                  posterNameSuggestions = {posterNameSuggestions} 
+                  setPosterNameSuggestions = {setPosterNameSuggestions}
+                  />
               </Grid>
             </Grid>
           } />

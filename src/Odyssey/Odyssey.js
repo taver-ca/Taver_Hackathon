@@ -40,6 +40,8 @@ const Odyssey = ({
     startDate,
     endDate,
     shareId,
+    posterNameSuggestions,
+    setPosterNameSuggestions,
     setShareId
 }) => {
     const handleShareAsLink = async function () {
@@ -101,6 +103,8 @@ const Odyssey = ({
                     mapStyle={mapStyle}
                     setPosterName={setPosterName}
                     posterName={posterName}
+                    posterNameSuggestions={posterNameSuggestions}
+                    setPosterNameSuggestions={setPosterNameSuggestions}
                 />
             </div>
 
