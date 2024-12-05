@@ -1,4 +1,4 @@
-export const FetchName = async (concerts, setPosterName, setPosterNameSuggestions) => {    
+export const FetchName = async (concerts) => {    
     const response = await fetch(
         `${process.env.REACT_APP_BACKEND}/GetTripTitleSuggestion`,
         {
@@ -11,9 +11,8 @@ export const FetchName = async (concerts, setPosterName, setPosterNameSuggestion
       );
       console.log(`response status code: ${response.status}`);
       if (response.status === 200) {
-        let resJson = await response.json();        
-        setPosterName(resJson[0]);
-        setPosterNameSuggestions(resJson);
+        let resJson = await response.json();    
+        return resJson;    
       }
       return;
 };

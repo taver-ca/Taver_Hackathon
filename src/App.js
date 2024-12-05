@@ -19,7 +19,6 @@ function App() {
   const [allConcerts, setAllConcerts] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [posterName, setPosterName] = useState("");
-  const [posterNameSuggestions, setPosterNameSuggestions] = useState([]);
   const [followedArtists, setFollowedArtists] = useState([]);
   const [artistName, setArtistName] = useState("Taylor Swift");
   const [artistList, setArtistList] = useState([]);
@@ -76,8 +75,6 @@ function App() {
               <Grid item xs={11} sm={11} md={7} lg={7} xl={7} sx={{ marginTop: 3}}>
                 <Odyssey
                   setPosterName={setPosterName}
-                  posterNameSuggestions = {posterNameSuggestions}
-                  setPosterNameSuggestions = {setPosterNameSuggestions}
                   setShareId={setShareId}
                   concerts={concerts}
                   userLocation={userLocation}
