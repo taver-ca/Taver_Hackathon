@@ -41,13 +41,14 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, posterName
     return (
         <Stack disablePadding spacing={3}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
-            <Stack spacing={5} direction={'row'} sx={{ width: '100%' }}>
+            <Stack spacing={2} direction={'row'} sx={{ width: '100%' }}>
                 <TextField
                     variant="standard"
                     placeholder="Write a cool name for your trip here"
                     InputProps={{ sx: { 'input': { textAlign: 'center', color: 'white' } } }}
                     value={posterName}
-                    onChange={(e) => setPosterName(e.target.value)} />
+                    onChange={(e) => setPosterName(e.target.value)}
+                    sx={{ flex: 1}} />
                 <Button
                     color="primary"
                     onClick={GenerateTripTitle}
