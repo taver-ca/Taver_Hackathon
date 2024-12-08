@@ -9,7 +9,6 @@ export const FetchName = async (concerts) => {
             body: JSON.stringify(concerts),
         }
       );
-      console.log(`response status code: ${response.status}`);
       if (response.status === 200) {
         let resJson = await response.json();    
         return resJson;    
