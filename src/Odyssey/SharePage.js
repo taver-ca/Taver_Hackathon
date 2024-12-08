@@ -27,13 +27,17 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, posterName
             const newList = concerts.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
             // now make a request and send it to open AI
             var suggestions = await FetchName(newList);
-            setPosterNameSuggestions(suggestions.slice(1));
-            setPosterName(suggestions[0].title);
+            if (suggestions.length >= 1)
+            {
+                setPosterName(suggestions[0].title);
+            }
+            if (suggestions.length >= 2) {
+                setPosterNameSuggestions(suggestions.slice(1));
+            }            
         }
-        else
-        {
+        else {
             setPosterName(posterNameSuggestions[0].title);
-            setPosterNameSuggestions(posterNameSuggestions=> posterNameSuggestions.slice(1));
+            setPosterNameSuggestions(posterNameSuggestions => posterNameSuggestions.slice(1));
         }
 
     };
@@ -48,7 +52,7 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, posterName
                     InputProps={{ sx: { 'input': { textAlign: 'center', color: 'white' } } }}
                     value={posterName}
                     onChange={(e) => setPosterName(e.target.value)}
-                    sx={{ flex: 1}} />
+                    sx={{ flex: 1 }} />
                 <Button
                     color="primary"
                     onClick={GenerateTripTitle}
