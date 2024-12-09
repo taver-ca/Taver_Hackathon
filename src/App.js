@@ -21,7 +21,7 @@ function App() {
   const [posterName, setPosterName] = useState("");
   const [posterNameSuggestions, setPosterNameSuggestions] = useState([]);
   const [followedArtists, setFollowedArtists] = useState([]);
-  const [artistName, setArtistName] = useState("Taylor Swift");
+  const [artistName, setArtistName] = useState("");
   const [artistList, setArtistList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [shareId, setShareId] = useState("");
