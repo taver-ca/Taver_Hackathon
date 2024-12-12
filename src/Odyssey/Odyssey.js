@@ -1,5 +1,5 @@
-import React from 'react';
-import { Grid, Button, Stack } from "@mui/material";
+import React, { useState } from 'react';
+import { Grid, Button, Stack, CircularProgress } from "@mui/material";
 // Import other components
 import SharePage from "./SharePage.js";
 
@@ -45,6 +45,7 @@ const Odyssey = ({
     setShareId
 }) => {
     const handleShareAsLink = async function () {
+        setIsLoading(true);
         //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date
         try {
 
@@ -92,8 +93,9 @@ const Odyssey = ({
             console.log(err);
         }
         //make a request to taverondemand.azurewebsites.net/api/SaveTrips
+        setIsLoading(false);
     };
-
+    const [isLoading, setIsLoading] = useState(false);
     return (
         <Grid sx={{ container: true, mb: 10 }}  >
             <div id="sharepage">
@@ -114,14 +116,15 @@ const Odyssey = ({
                 direction="column"
                 alignItems="center"
             >
-                <Button
-                    id="sharelinkbutton"
-                    color="primary"
-                    disabled={concerts.length === 0}
-                    onClick={handleShareAsLink}
-                    variant="contained">
-                    Share As Link
-                </Button>
+                {isLoading ? <CircularProgress /> :
+                    <Button
+                        id="sharelinkbutton"
+                        color="primary"
+                        disabled={concerts.length === 0}
+                        onClick={handleShareAsLink}
+                        variant="contained">
+                        Share As Link
+                    </Button>}
             </Stack>
         </Grid>
     );
