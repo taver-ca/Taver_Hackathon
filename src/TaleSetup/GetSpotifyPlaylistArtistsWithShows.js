@@ -41,6 +41,11 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
                     (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
                 );
                 setFollowedArtists(updatedArtists);
+                
+                if(updatedArtists.length <1)
+                {
+                    alert(`Oof, nobody from this playlist is on tour...`);
+                }
             }
             return;
         }).catch((err) => {
@@ -76,8 +81,6 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
                     />
 
                     <Button
-
-
                         disabled={(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
                         type="submit"
                         variant="contained"
