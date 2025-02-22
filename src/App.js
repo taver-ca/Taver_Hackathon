@@ -96,11 +96,11 @@ function App() {
             >
               <Voyage
                 concerts={concerts}
-                style={mapStyle}
+                mapStyle={mapStyle}
                 userLocation={userLocation}
                 posterName={posterName}
                 setPosterName={setPosterName}
-                setStyle={setMapStyle}
+                setMapStyle={setMapStyle}
                 setConcerts={setConcerts}
                 setUserLocation={setUserLocation}
               />

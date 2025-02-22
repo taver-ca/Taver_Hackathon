@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef, userLocation, markers, mapStyleId, activeMarker, path) {
 
   console.log(`map styleId: ${mapStyleId}`);
-  mapBoundsRef.current = freshBoundsRef.current;
+  mapBoundsRef.current = new window.google.maps.LatLngBounds();
   markers.forEach(({ position }) => {
     mapBoundsRef.current.extend(position);
   });
@@ -25,7 +25,7 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef,
   });
 
   if (activeMarker === null) {
-    mapRef.current.fitBounds(mapBoundsRef.current, 10);
+    mapRef.current.fitBounds(mapBoundsRef.current, 5);
     mapRef.current.setZoom(mapRef.current.getZoom() - 0.5);
   }
   else {
@@ -189,7 +189,7 @@ function Map({ concerts, userLocation, mapStyle }) {
         options={{
           mapId: mapStyle,
           minZoom: 1,
-          maxZoom: 20,
+          maxZoom: 17,
           disableDefaultUI: true
         }}
         mapContainerStyle={mapContainerStyle}

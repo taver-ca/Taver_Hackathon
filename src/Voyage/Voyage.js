@@ -14,12 +14,12 @@ function toLowerCaseKeys(obj) { if (Array.isArray(obj)) { return obj.map(toLower
 const Voyage = ({
     concerts,
     userLocation,
-    style,
+    mapStyle,
     posterName,
     setPosterName,
     setConcerts,
     setUserLocation,
-    setStyle
+    setMapStyle
 
 }) => {
     const { guid } = useParams();
@@ -68,7 +68,7 @@ const Voyage = ({
                 setPosterName(data.TripName);
                 setConcerts(transformedConcerts);
                 setUserLocation(result);
-                setStyle(data.MapStyleId);
+                setMapStyle(data.MapStyleId);
                 setLoading(false);
             });
     }, []);
@@ -95,7 +95,7 @@ const Voyage = ({
     return (
         <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' }, mb: 10 }}>
             <Stack disablePadding spacing={3} id="sharepage">
-                {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={style} /> : null}
+                {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
                 <Typography
                     variant="h3"
                 >{posterName}</Typography>
