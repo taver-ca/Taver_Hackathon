@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
 import Box from '@mui/material/Box';
 
-function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef, userLocation, markers, mapStyleId, activeMarker, path) {
+function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path) {
 
   console.log(`map styleId: ${mapStyleId}`);
   mapBoundsRef.current = new window.google.maps.LatLngBounds();
@@ -38,8 +38,6 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef,
   console.log("updating path");
   polylineRef.current.setPath(path);
   polylineRef.current.setMap(mapRef.current);
-  //mapRef.current.setCenter(freshBoundsRef.current.getCenter());
-
 }
 
 
@@ -89,7 +87,6 @@ function Map({ concerts, userLocation, mapStyle }) {
   const [activeMarker, setActiveMarker] = useState(null);
   const mapRef = useRef(null);
   const mapBoundsRef = useRef(null);
-  const freshBoundsRef = useRef(null);
   const polylineRef = useRef(null);
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -143,11 +140,10 @@ function Map({ concerts, userLocation, mapStyle }) {
       ],
     };
 
-    freshBoundsRef.current = new google.maps.LatLngBounds(); // eslint-disable-line
     mapBoundsRef.current = bounds;
     mapRef.current = map;
     polylineRef.current = new google.maps.Polyline(pathOptions); // eslint-disable-line
-    UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef, userLocation, markers, mapStyleId, activeMarker, path);
+    UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path);
   };
 
   var path =
@@ -170,8 +166,8 @@ function Map({ concerts, userLocation, mapStyle }) {
 
   useEffect(() => {
     console.log("condition check");
-    if (mapRef.current !== null && mapBoundsRef.current !== null && freshBoundsRef.current !== null && polylineRef.current !== null) {
-      UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, freshBoundsRef, userLocation, markers, mapStyleId, activeMarker, path);
+    if (mapRef.current !== null && mapBoundsRef.current !== null && polylineRef.current !== null) {
+      UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path);
     }
   }, [markers, mapStyleId]);
 
