@@ -98,7 +98,7 @@ function Map({ concerts, userLocation, mapStyle }) {
   const rawMarkers = concerts.map(concertToMarker);
 
   //filter out duplicate shows 
-  let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => ( t.name === item.name && t.address === item.address )));
+  let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => (t.name === item.name && t.address === item.address)));
 
   const mapStyleId = mapStyle;
   const handleOnLoad = (map) => {
@@ -256,7 +256,7 @@ function Map({ concerts, userLocation, mapStyle }) {
                     {activeMarker === id ? (
                       <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
                         <div className="info">
-                          <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} />
+                          <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} style={{ objectFit: "cover", objectPosition: "center" }} />
                           <div><p style={{ color: 'black' }}>{name}</p><p style={{ color: 'black' }}>{address}</p></div>
                         </div>
                       </InfoWindowF>
