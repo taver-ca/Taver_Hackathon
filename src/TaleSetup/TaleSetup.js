@@ -83,6 +83,7 @@ const TaleSetup = ({ setStartDate,
                 startDate={startDate}
                 endDate={endDate}
                 setIsRequestTriggered={setIsRequestTriggered}
+                setAllConcerts={setAllConcerts}
             />
             <YourSpotifyArtistsWithShows
                 artists={followedArtists}

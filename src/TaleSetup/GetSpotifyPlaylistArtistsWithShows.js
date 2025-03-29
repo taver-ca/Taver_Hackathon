@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Stack, TextField, Button, Typography } from '@mui/material';
 
-function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtists, startDate, endDate, setIsRequestTriggered }) {
+function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtists, startDate, endDate, setIsRequestTriggered, setAllConcerts }) {
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
     const [errorMessage, setErrorMessage] = useState("");
@@ -37,10 +37,11 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
             if (res.status === 200) {
                 let resJson = await res.json();
                 const existingArtists = followedArtists;
-                const updatedArtists = [...existingArtists, ...resJson].filter(
+                const updatedArtists = [...existingArtists, ...resJson.artistList].filter(
                     (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
                 );
                 setFollowedArtists(updatedArtists);
+                setAllConcerts(resJson.artistGigList);
                 
                 if(updatedArtists.length <1)
                 {
