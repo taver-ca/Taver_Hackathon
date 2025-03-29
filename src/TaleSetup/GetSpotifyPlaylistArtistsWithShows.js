@@ -51,7 +51,6 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
                     alert(`Oof, nobody from this playlist is on tour...`);
                 }
                 setFollowedArtists(updatedArtists);
-                setAllConcerts(updatedGigs);
 
                 // suggest potential routes to user here
                 // let the clustering BEGIN!!!!!
