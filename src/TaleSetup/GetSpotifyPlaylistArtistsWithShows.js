@@ -79,8 +79,8 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
                     // Filter out duplicates by `id` and `artistId`
                     return cluster.filter(gig => {
                         if (seenArtistIds.has(gig.artistId)) return false;
-                        seenArtistIds.add(gig.artistId);
                         if (seenIds.has(gig.id)) return false;
+                        seenArtistIds.add(gig.artistId);
                         seenIds.add(gig.id);
                         return true;
                     });
