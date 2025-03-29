@@ -30,7 +30,9 @@ const TaleSetup = ({ setStartDate,
     followedArtists,
     artistWishlist,
     openDialog,
-    isRequestTriggered
+    isRequestTriggered,
+    tripSuggestions,
+    setTripSuggestions,
 }) => {
 
 
@@ -84,9 +86,12 @@ const TaleSetup = ({ setStartDate,
                 endDate={endDate}
                 setIsRequestTriggered={setIsRequestTriggered}
                 setAllConcerts={setAllConcerts}
+                allConcerts={allConcerts}
+                setTripSuggestions={setTripSuggestions}
             />
             <YourSpotifyArtistsWithShows
                 artists={followedArtists}
+                tripSuggestions={tripSuggestions}
                 onChildClick={handleChildClick}
                 isRequestTriggered={isRequestTriggered}
             />

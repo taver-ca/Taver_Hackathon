@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Stack, TextField, Button, Typography } from '@mui/material';
+import geocluster from 'geocluster';
 
-function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtists, startDate, endDate, setIsRequestTriggered, setAllConcerts }) {
+function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, startDate, endDate, setFollowedArtists, setIsRequestTriggered, setAllConcerts, setTripSuggestions }) {
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
     const [errorMessage, setErrorMessage] = useState("");
@@ -37,16 +38,65 @@ function GetSpotifyPlaylistArtistsWithShows({ followedArtists, setFollowedArtist
             if (res.status === 200) {
                 let resJson = await res.json();
                 const existingArtists = followedArtists;
-                const updatedArtists = [...existingArtists, ...resJson.artistList].filter(
+                const incomingArtists = resJson.artistList;
+                const existingGigs = allConcerts;
+                const incomingGigs = resJson.artistGigList;
+                const updatedArtists = [...existingArtists, ...incomingArtists].filter(
                     (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
                 );
-                setFollowedArtists(updatedArtists);
-                setAllConcerts(resJson.artistGigList);
-                
-                if(updatedArtists.length <1)
-                {
+                const updatedGigs = [...existingGigs, ...incomingGigs].filter(
+                    (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
+                );
+                if (updatedArtists.length < 1) {
                     alert(`Oof, nobody from this playlist is on tour...`);
                 }
+                setFollowedArtists(updatedArtists);
+                setAllConcerts(updatedGigs);
+
+                // suggest potential routes to user here
+                // let the clustering BEGIN!!!!!
+                // move the code below to it's separate function sometime later
+                // but we are at a hackathon so fuck best practices
+                // Extract lat-lon pairs and keep track of indices
+                const coordinates = updatedGigs.map((gig) => [gig.location.gpsCoordinate.coords.latitude, gig.location.gpsCoordinate.coords.longitude]);
+                // Perform clustering
+                const bias = 0.05;
+                const result = geocluster(coordinates, bias);
+
+                // Map cluster into trip suggestion
+                var clusters = result.map(cluster => (
+                    cluster.elements.map(coords => {
+                        const index = coordinates.findIndex(
+                            ([lat, lon]) => lat === coords[0] && lon === coords[1]
+                        );
+                        return existingGigs[index];
+                    })
+                ));
+                // Remove duplicates within each cluster by `id`
+                clusters = clusters.map(cluster => {
+                    const seenIds = new Set();
+                    const seenArtistIds = new Set();
+                    // Filter out duplicates by `id` and `artistId`
+                    return cluster.filter(gig => {
+                        if (seenArtistIds.has(gig.artistId)) return false;
+                        seenArtistIds.add(gig.artistId);
+                        if (seenIds.has(gig.id)) return false;
+                        seenIds.add(gig.id);
+                        return true;
+                    });
+                });
+                // Sort each cluster by date
+                clusters = clusters.map(cluster =>
+                    cluster.sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date in ascending order
+                );
+
+                // Filter clusters and sort by length
+                clusters = clusters
+                    .filter(cluster => cluster.length > 1) // Remove clusters with length of 1
+                    .sort((a, b) => b.length - a.length); // Sort clusters by length (descending)
+                clusters = clusters.slice(0, 3); // Keep only the top 3 clusters
+                console.table(clusters);
+                setTripSuggestions(clusters);
             }
             return;
         }).catch((err) => {

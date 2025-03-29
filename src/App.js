@@ -25,6 +25,7 @@ function App() {
   const [artistList, setArtistList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [shareId, setShareId] = useState("");
+  const [tripSuggestions, setTripSuggestions] = useState([]);
   const [startDate, setStartDate] = useState(
     cachedStartDate === null ? new Date() : new Date(cachedStartDate)
   );
@@ -61,6 +62,7 @@ function App() {
                   setFollowedArtists={setFollowedArtists}
                   setArtistWishlist={setArtistWishlist}
                   setIsRequestTriggered={setIsRequestTriggered}
+                  setTripSuggestions={setTripSuggestions}
                   startDate={startDate}
                   endDate={endDate}
                   concerts={concerts}
@@ -71,7 +73,8 @@ function App() {
                   followedArtists={followedArtists}
                   artistWishlist={artistWishlist}
                   openDialog={openDialog}
-                  isRequestTriggered={isRequestTriggered} />
+                  isRequestTriggered={isRequestTriggered}
+                  tripSuggestions={tripSuggestions} />
               </Grid>
               <Grid item xs={11} sm={11} md={7} lg={7} xl={7} sx={{ marginTop: 3}}>
                 <Odyssey
