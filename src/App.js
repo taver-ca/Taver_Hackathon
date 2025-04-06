@@ -11,6 +11,10 @@ import Odyssey from "./Odyssey/Odyssey.js";
 function App() {
   let cachedStartDate = localStorage.getItem("startDate");
   let cachedEndDate = localStorage.getItem("endDate");
+
+  let futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 365);
+
   //concerts is used to display the current optimized route
   const [concerts, setConcerts] = useState([]);
   const [artistWishlist, setArtistWishlist] = useState([]);
@@ -30,7 +34,7 @@ function App() {
     cachedStartDate === null ? new Date() : new Date(cachedStartDate)
   );
   const [endDate, setEndDate] = useState(
-    cachedEndDate === null ? new Date() : new Date(cachedEndDate)
+    cachedEndDate === null ? futureDate : new Date(cachedEndDate)
   );
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
 
