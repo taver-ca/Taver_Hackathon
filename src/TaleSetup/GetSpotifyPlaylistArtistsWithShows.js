@@ -126,7 +126,7 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts,
                     });
                 });
                 setTripSuggestions(clusters);
-
+                setOpen(true);
 
             }
             return;
@@ -172,7 +172,7 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts,
                 </Stack>
             </form>
             <Dialog open={open || openRouteDialogFromParent} onClose={closeRouteDialog}>
-                <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
+                <DialogTitle>{"Choices Choices Choices..."}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         We figured out some cool routes based on your Spotify playlist. Feel free to pick one. Or make your own.
