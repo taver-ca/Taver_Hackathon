@@ -1,11 +1,30 @@
 import React, { useState } from 'react';
-import { Stack, TextField, Button, Typography } from '@mui/material';
+import { Stack, TextField, Button, Typography, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List } from '@mui/material';
+import DismissButton from "./../TaleSetup/DismissButton.js";
 import geocluster from 'geocluster';
+import { FetchName } from './../Odyssey/FetchName.js';
+import RouteChoiceList from './RouteChoiceList.js';
 
-function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, startDate, endDate, setFollowedArtists, setIsRequestTriggered, setAllConcerts, setTripSuggestions }) {
+function GetSpotifyPlaylistArtistsWithShows({ allConcerts,
+    followedArtists,
+    startDate,
+    endDate,
+    setFollowedArtists,
+    setIsRequestTriggered,
+    setAllConcerts,
+    setTripSuggestions,
+    tripSuggestions,
+    openRouteDialogFromParent,
+    closeRouteDialog,
+    setRoute }) {
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
     const [errorMessage, setErrorMessage] = useState("");
+    const [open, setOpen] = React.useState(false);
+    const handleClose = () => {
+        setOpen(false);
+        closeRouteDialog();
+      };
 
     let handleSubmit = async (e) => {
         e.preventDefault();
@@ -51,6 +70,7 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
                     alert(`Oof, nobody from this playlist is on tour...`);
                 }
                 setFollowedArtists(updatedArtists);
+                setAllConcerts(updatedGigs);
 
                 // suggest potential routes to user here
                 // let the clustering BEGIN!!!!!
@@ -94,8 +114,20 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
                     .filter(cluster => cluster.length > 1) // Remove clusters with length of 1
                     .sort((a, b) => b.length - a.length); // Sort clusters by length (descending)
                 clusters = clusters.slice(0, 3); // Keep only the top 3 clusters
+
                 console.table(clusters);
+                //give each cluster a name
+                clusters.array.forEach(async cluster => {
+                    const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
+                    await FetchName(nameInput).then((suggestions) => {
+                        if (suggestions.length >= 1) {
+                            cluster.posterName = suggestions[0].title;
+                        }
+                    });
+                });
                 setTripSuggestions(clusters);
+
+
             }
             return;
         }).catch((err) => {
@@ -139,6 +171,22 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
                     </Button>
                 </Stack>
             </form>
+            <Dialog open={open || openRouteDialogFromParent} onClose={closeRouteDialog}>
+                <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        We figured out some cool routes based on your Spotify playlist. Feel free to pick one. Or make your own.
+                    </DialogContentText>
+                    <List>
+                        {
+                            tripSuggestions && <RouteChoiceList routes={tripSuggestions} onRouteClick={setRoute} />
+                        }
+                    </List>
+                    <DialogActions>
+                        <DismissButton onClick={handleClose} />
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
         </Stack>);
 }
 

@@ -12,6 +12,7 @@ const TaleSetup = ({ setStartDate,
     setEndDate,
     setArtistList,
     setOpenDialog,
+    setOpenRouteDialog,
     setConcerts,
     setUserLocation,
     setMapStyle,
@@ -30,6 +31,7 @@ const TaleSetup = ({ setStartDate,
     followedArtists,
     artistWishlist,
     openDialog,
+    openRouteDialog,
     isRequestTriggered,
     tripSuggestions,
     setTripSuggestions,
@@ -37,9 +39,12 @@ const TaleSetup = ({ setStartDate,
 
 
     const childRef = useRef();
-    const handleChildClick = (artistName) => {
-        childRef.current.handleRequestFromParent(artistName);
+    const handleArtistPick = (artistName) => {
+        childRef.current.handleArtistChoiceUpdateFromParent(artistName);
     };
+    const handleRoutePick = (route) => {        
+        childRef.current.handleRouteChoiceUpdateFromParent(route);
+    }
     const triggerReEvaluation = (updatedArtistWishlist) => {
         console.log("trigger re-evaluation");
         childRef.current.handleReEvaluation(updatedArtistWishlist);
@@ -80,19 +85,27 @@ const TaleSetup = ({ setStartDate,
                 ref={childRef}
             />
             <GetSpotifyPlaylistArtistsWithShows
-                followedArtists={followedArtists}
                 setFollowedArtists={setFollowedArtists}
-                startDate={startDate}
-                endDate={endDate}
                 setIsRequestTriggered={setIsRequestTriggered}
                 setAllConcerts={setAllConcerts}
-                allConcerts={allConcerts}
                 setTripSuggestions={setTripSuggestions}
+                setOpenRouteDialog={setOpenRouteDialog}
+                followedArtists={followedArtists}                
+                startDate={startDate}
+                endDate={endDate}
+                allConcerts={allConcerts}
+                openDialog={openDialog}
+                openRouteDialogFromParent={openRouteDialog}
+                closeRouteDialog={() => {
+                    setOpenRouteDialog(false);
+                }}
+                trippSuggestions={tripSuggestions}
+                setRoute={handleRoutePick}
             />
             <YourSpotifyArtistsWithShows
                 artists={followedArtists}
                 tripSuggestions={tripSuggestions}
-                onChildClick={handleChildClick}
+                onChildClick={handleArtistPick}
                 isRequestTriggered={isRequestTriggered}
             />
             <ConcertList

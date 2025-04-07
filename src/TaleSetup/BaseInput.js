@@ -126,8 +126,11 @@ const BaseInput = forwardRef(({ setConcerts,
   }, []);
 
   useImperativeHandle(ref, () => ({
-    handleRequestFromParent: (artist) => {
+    handleArtistChoiceUpdateFromParent: (artist) => {
       submitArtistInfo(artist);
+    },
+    handleRouteChoiceUpdateFromParent: (concerts) => {
+      pickRoute(concerts);
     },
     handleReEvaluation: (updatedArtistWishlist) => {
       console.log(`trigger re-evaluation: ${JSON.stringify(updatedArtistWishlist)}`);
@@ -136,6 +139,44 @@ const BaseInput = forwardRef(({ setConcerts,
   }));
 
   const [artistName, setArtistName] = useState("Taylor Swift");
+
+  const pickRoute = (concerts) => {
+    // clear existing concerts and artist wishlist
+    setConcerts([]);
+    setFollowedArtists([]);
+
+    //update artist withlist to include the artist from the concerts
+    const artistInfoList = concerts.map(concert => {
+      return { WishlistArtistName: concert.artistName, WishlistArtistId: concert.artistId }
+    });
+    var updatedArtists = followedArtists;
+
+    artistInfoList.forEach(artistInfo => {
+      if (!artistWishlist.some(artistWishlistItem => artistWishlistItem.WishlistArtistId === artistInfo.WishlistArtistId)) {
+        artistWishlist.push(artistInfo);
+
+        //add the artist we just typed into the followed artist section, so next we don't have to type it next time
+        //check for duplicates
+        const hasElementWithValue = followedArtists.some(artist => artist.id === artistInfo.id);
+
+        if (!hasElementWithValue) {
+          updatedArtists.push(artistInfo);
+        }
+      }
+    });
+
+    setArtistWishlist(artistWishlist);
+    setConcerts(concerts);
+
+    setOpen(false);
+    closeDialog();
+
+
+
+    setFollowedArtists(updatedArtists);
+
+  }
+
   const submitArtistInfo = async (incomingArtistInfo) => {
 
     /*if (artistWishlist.length >= 5) {
@@ -309,7 +350,7 @@ const BaseInput = forwardRef(({ setConcerts,
                 "& label": {
                   color: "white",
                 },
-                width:{xs:'100%'}
+                width: { xs: '100%' }
               }}
               label="Enter Artist Name:"
               value={artistName} onChange={(e) => {
