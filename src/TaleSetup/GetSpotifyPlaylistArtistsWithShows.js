@@ -117,7 +117,7 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts,
 
                 console.table(clusters);
                 //give each cluster a name
-                clusters.array.forEach(async cluster => {
+                clusters.forEach(async cluster => {
                     const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
                     await FetchName(nameInput).then((suggestions) => {
                         if (suggestions.length >= 1) {
