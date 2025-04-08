@@ -57,6 +57,9 @@ function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onChildClick, i
         <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
           {commaSeparatedfollowedArtists}
         </Grid>
+        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
+          {commaSeparatedTripSuggestions}
+        </Grid>
       </Box>)}
       {isLoading && <CircularProgress sx={{ mt: 5 }} />}
     </Grid>
