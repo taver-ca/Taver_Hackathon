@@ -7,7 +7,7 @@ import RouteChoiceList from './RouteChoiceList.js';
 
 
 // Distance threshold (in degrees, you can adjust this)
-const distanceThreshold = 1.0;
+const distanceThreshold = 10.0;
 
 // Helper function: calculate Euclidean distance
 function calculateDistance(a, b) {
@@ -38,7 +38,7 @@ function groupByProximityWithUniqueArtists(events, threshold) {
             });
 
             cluster.push(event); // Include current event in its cluster
-            if (cluster.length >= 3) {
+            if (cluster.length >2 && cluster.length < 7) {
                 clusters.push(cluster);
             }
         }
@@ -58,7 +58,6 @@ function GetSpotifyPlaylistArtistsWithShows({
     setIsRequestTriggered,
     setAllConcerts,
     setTripSuggestions,
-    tripSuggestions,
     openRouteDialogFromParent,
     closeRouteDialog,
     setRoute }) {
@@ -133,10 +132,9 @@ function GetSpotifyPlaylistArtistsWithShows({
                 // let the clustering BEGIN!!!!!
                 // move the code below to it's separate function sometime later
                 // but we are at a hackathon so fuck best practices
-
                 var clusters = groupByProximityWithUniqueArtists(updatedGigs, distanceThreshold);
 
-                console.table(clusters);
+                //console.table(clusters);
                 // Remove duplicates within each cluster by `id`
                 clusters = clusters.map(cluster => {
                     const seenIds = new Set();
@@ -161,18 +159,21 @@ function GetSpotifyPlaylistArtistsWithShows({
                     .sort((a, b) => b.length - a.length); // Sort clusters by length (descending)
                 clusters = clusters.slice(0, 3); // Keep only the top 3 clusters
 
-                console.table(clusters);
+                //console.table(clusters);
                 //give each cluster a name, wait until we get the name from the backend
                 await Promise.all(
                 clusters.map(async cluster => {
                     const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
+                    console.table(nameInput);
                     await FetchName(nameInput).then((suggestions) => {
                         if (suggestions.length >= 1) {
                             cluster.posterName = suggestions[0].title;
                         }
                     });
                 }));
+                //passing the clusters to the parent component
                 setTripSuggestions(clusters);
+                //using the cluster to trigger the route dialog right here
                 setCalculatedRoutes(clusters);                
             }
             return;
