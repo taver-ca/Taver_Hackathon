@@ -47,8 +47,17 @@ function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onChildClick, i
 
   return (
     <Grid spacing={2}>
-      <Typography>Artists from your playlist</Typography>
+      <Typography>Trip suggestions</Typography>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center">
+        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
+          {commaSeparatedTripSuggestions}
+        </Grid>
+      </Box>
 
+      <Typography>Artists from your playlist</Typography>
       {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (<Box
         display="flex"
         justifyContent="center"
@@ -56,9 +65,6 @@ function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onChildClick, i
       >
         <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
           {commaSeparatedfollowedArtists}
-        </Grid>
-        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
-          {commaSeparatedTripSuggestions}
         </Grid>
       </Box>)}
       {isLoading && <CircularProgress sx={{ mt: 5 }} />}

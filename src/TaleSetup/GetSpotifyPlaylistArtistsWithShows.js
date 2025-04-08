@@ -7,7 +7,7 @@ import RouteChoiceList from './RouteChoiceList.js';
 
 
 // Distance threshold (in degrees, you can adjust this)
-const distanceThreshold = 10.0;
+const distanceThreshold = 4;
 
 // Helper function: calculate Euclidean distance
 function calculateDistance(a, b) {
@@ -221,6 +221,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                     </Button>
                 </Stack>
             </form>
+
             <Dialog open={open || openRouteDialogFromParent} onClose={closeRouteDialog}>
                 <DialogTitle>{"Choices Choices Choices..."}</DialogTitle>
                 <DialogContent>
