@@ -62,8 +62,9 @@ function GetSpotifyPlaylistArtistsWithShows({
     openRouteDialogFromParent,
     closeRouteDialog,
     setRoute }) {
-    const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
+    const [spotifyPlayList, setSpotifyPlaylist] = useState("");
+    const [calculatedRoutes, setCalculatedRoutes] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
     const handleClose = () => {
@@ -71,12 +72,14 @@ function GetSpotifyPlaylistArtistsWithShows({
         closeRouteDialog();
     };
 
+    
+
     useEffect(() => {
         console.log("opening route dialog");
-        if (tripSuggestions && tripSuggestions.length > 0) {
+        if (calculatedRoutes && calculatedRoutes.length > 0) {
             setOpen(true);
         }
-    }, [tripSuggestions]);
+    }, [calculatedRoutes]);
 
     let handleSubmit = async (e) => {
         e.preventDefault();
@@ -159,7 +162,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                 clusters = clusters.slice(0, 3); // Keep only the top 3 clusters
 
                 console.table(clusters);
-                //give each cluster a name
+                //give each cluster a name, wait until we get the name from the backend
                 await Promise.all(
                 clusters.map(async cluster => {
                     const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
@@ -170,6 +173,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                     });
                 }));
                 setTripSuggestions(clusters);
+                setCalculatedRoutes(clusters);                
             }
             return;
         }).catch((err) => {
@@ -224,7 +228,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                     </DialogContentText>
                     <List>
                         {
-                            tripSuggestions && <RouteChoiceList routes={tripSuggestions} onRouteClick={setRoute} />
+                            <RouteChoiceList routes={calculatedRoutes} onRouteClick={setRoute} />
                         }
                     </List>
                     <DialogActions>
