@@ -171,8 +171,6 @@ const BaseInput = forwardRef(({ setConcerts,
     setOpen(false);
     closeDialog();
 
-
-
     setFollowedArtists(updatedArtists);
 
   }
@@ -256,11 +254,9 @@ const BaseInput = forwardRef(({ setConcerts,
   let handleSubmit = async (e) => {
     e.preventDefault();
     FetchArtist(artistName).then((resJson) => {
-      // setArtistList(resJson);
       newArtistList(resJson);
       setOpen(true);
     });
-    //submitArtist(artistName);
   };
 
   const generateOptimizedConcertRoute = (allConcerts, userLocation, artistWishlist) => {
