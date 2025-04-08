@@ -160,14 +160,15 @@ function GetSpotifyPlaylistArtistsWithShows({
 
                 console.table(clusters);
                 //give each cluster a name
-                clusters.forEach(async cluster => {
+                await Promise.all(
+                clusters.map(async cluster => {
                     const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
                     await FetchName(nameInput).then((suggestions) => {
                         if (suggestions.length >= 1) {
                             cluster.posterName = suggestions[0].title;
                         }
                     });
-                });
+                }));
                 setTripSuggestions(clusters);
             }
             return;
