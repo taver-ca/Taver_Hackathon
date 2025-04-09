@@ -71,6 +71,7 @@ function App() {
                   setArtistWishlist={setArtistWishlist}
                   setIsRequestTriggered={setIsRequestTriggered}
                   setTripSuggestions={setTripSuggestions}
+                  setPosterName={setPosterName}
                   startDate={startDate}
                   endDate={endDate}
                   concerts={concerts}

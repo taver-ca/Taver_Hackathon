@@ -96,8 +96,11 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
 const BaseInput = forwardRef(({ setConcerts,
   setUserLocation,
   setMapStyle,
-  startDate,
+  setFollowedArtists,
   setAllConcerts,
+  setArtistWishlist,
+  setPosterName,
+  startDate,
   endDate,
   allConcerts,
   userLocation,
@@ -107,9 +110,8 @@ const BaseInput = forwardRef(({ setConcerts,
   closeDialog,
   newArtistList,
   followedArtists,
-  setFollowedArtists,
   artistWishlist,
-  setArtistWishlist
+
 }, ref) => {
 
   useEffect(() => {
@@ -133,19 +135,18 @@ const BaseInput = forwardRef(({ setConcerts,
       pickRoute(concerts);
     },
     handleReEvaluation: (updatedArtistWishlist) => {
-      console.log(`trigger re-evaluation: ${JSON.stringify(updatedArtistWishlist)}`);
       generateOptimizedConcertRoute(allConcerts, userLocation, updatedArtistWishlist);
     },
   }));
 
-  const [artistName, setArtistName] = useState("Taylor Swift");
+  const [artistName, setArtistName] = useState("");
 
   const pickRoute = (concerts) => {
-    // clear existing concerts and artist wishlist
+    // clear existing concerts and followed artist
     setConcerts([]);
     setFollowedArtists([]);
 
-    //update artist withlist to include the artist from the concerts
+    //update artist wishlist to include the artist from the concerts
     const artistInfoList = concerts.map(concert => {
       return { WishlistArtistName: concert.artistName, WishlistArtistId: concert.artistId }
     });
@@ -165,12 +166,11 @@ const BaseInput = forwardRef(({ setConcerts,
       }
     });
 
+    setPosterName(concerts.posterName);
     setArtistWishlist(artistWishlist);
     setConcerts(concerts);
-
     setOpen(false);
     closeDialog();
-
     setFollowedArtists(updatedArtists);
 
   }

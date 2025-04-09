@@ -21,6 +21,8 @@ const TaleSetup = ({ setStartDate,
     setFollowedArtists,
     setArtistWishlist,
     setIsRequestTriggered,
+    setTripSuggestions,
+    setPosterName,
     startDate,
     endDate,
     concerts,
@@ -34,7 +36,6 @@ const TaleSetup = ({ setStartDate,
     openRouteDialog,
     isRequestTriggered,
     tripSuggestions,
-    setTripSuggestions,
 }) => {
 
 
@@ -67,6 +68,9 @@ const TaleSetup = ({ setStartDate,
                 setUserLocation={setUserLocation}
                 setMapStyle={setMapStyle}
                 setAllConcerts={setAllConcerts}
+                setPosterName={setPosterName}
+                setFollowedArtists={setFollowedArtists}
+                setArtistWishlist={setArtistWishlist}
                 startDate={startDate}
                 endDate={endDate}
                 allConcerts={allConcerts}
@@ -74,10 +78,8 @@ const TaleSetup = ({ setStartDate,
                 updateArtistNameInParent={(value) => setArtistName(value)}
                 newArtistList={setArtistList}
                 artistListFromParent={artistList}
-                followedArtists={followedArtists}
-                setFollowedArtists={setFollowedArtists}
+                followedArtists={followedArtists}                
                 artistWishlist={artistWishlist}
-                setArtistWishlist={setArtistWishlist}
                 openDialogFromParent={openDialog}
                 closeDialog={() => {
                     setOpenDialog(false);
