@@ -107,7 +107,8 @@ const TaleSetup = ({ setStartDate,
             <YourSpotifyArtistsWithShows
                 artists={followedArtists}
                 tripSuggestions={tripSuggestions}
-                onChildClick={handleArtistPick}
+                onArtistClick={handleArtistPick}
+                onTripSuggestionClick={handleRoutePick}
                 isRequestTriggered={isRequestTriggered}
             />
             <ConcertList
