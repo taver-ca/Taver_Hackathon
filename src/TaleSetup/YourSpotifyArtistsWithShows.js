@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Chip, Box, CircularProgress, Typography } from '@mui/material';
 import SwipeableTextMobileStepper from './ArtistsCarrousel'
 
-function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onChildClick, isRequestTriggered }) {
+function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onArtistClick, onTripSuggestionClick, isRequestTriggered }) {
   const [groupedNames, setGroupedNames] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,8 +27,12 @@ function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onChildClick, i
 
 
   const handleClick = (artistName) => {
-    onChildClick(artistName);
+    onArtistClick(artistName);
   };
+
+  const handleTripSuggestionClick = (tripSuggestion) => {
+    onTripSuggestionClick(tripSuggestion);
+  }
 
   const commaSeparatedfollowedArtists = artists.map((artist, index) => {
     return (
@@ -40,15 +44,24 @@ function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onChildClick, i
   const commaSeparatedTripSuggestions = tripSuggestions.map((tripSuggestion, index) => {
     return (
       <Grid item key={index}>
-        <Chip sx={{ background: "teal" }} label={tripSuggestion.posterName} color="success" onClick={() => handleClick(tripSuggestion)} />
+        <Chip sx={{ background: "teal" }} label={tripSuggestion.posterName} color="primary" onClick={() => handleTripSuggestionClick(tripSuggestion)} />
       </Grid>
     );
   });
 
   return (
     <Grid spacing={2}>
-      <Typography>Artists from your playlist</Typography>
+      <Typography>Trip suggestions</Typography>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center">
+        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
+          {commaSeparatedTripSuggestions}
+        </Grid>
+      </Box>
 
+      <Typography>Artists from your playlist</Typography>
       {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (<Box
         display="flex"
         justifyContent="center"

@@ -1,11 +1,84 @@
-import React, { useState } from 'react';
-import { Stack, TextField, Button, Typography } from '@mui/material';
-import geocluster from 'geocluster';
+import React, { useState, useEffect } from 'react';
+import { Stack, TextField, Button, Typography, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List } from '@mui/material';
+import DismissButton from "./../TaleSetup/DismissButton.js";
+import { FetchName } from './../Odyssey/FetchName.js';
+import RouteChoiceList from './RouteChoiceList.js';
 
-function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, startDate, endDate, setFollowedArtists, setIsRequestTriggered, setAllConcerts, setTripSuggestions }) {
-    const [spotifyPlayList, setSpotifyPlaylist] = useState("");
+
+
+// Distance threshold (in degrees, you can adjust this)
+const distanceThreshold = 4;
+
+// Helper function: calculate Euclidean distance
+function calculateDistance(a, b) {
+    return Math.sqrt(Math.pow(a.location.gpsCoordinate.coords.latitude - b.location.gpsCoordinate.coords.latitude, 2) + Math.pow(a.location.gpsCoordinate.coords.longitude - b.location.gpsCoordinate.coords.longitude, 2));
+}
+
+// Group events based on proximity, ensuring unique artistId in each cluster
+function groupByProximityWithUniqueArtists(events, threshold) {
+    const clusters = [];
+    const visited = new Set();
+
+    events.forEach(event => {
+        if (!visited.has(event.id)) {
+            const cluster = [];
+            const artistIdsInCluster = new Set();
+            visited.add(event.id);
+            artistIdsInCluster.add(event.artistId);
+
+            events.forEach(otherEvent => {
+                if (!visited.has(otherEvent.id) && !artistIdsInCluster.has(otherEvent.artistId)) {
+                    const distance = calculateDistance(event, otherEvent);
+                    if (distance <= threshold) {
+                        cluster.push(otherEvent);
+                        visited.add(otherEvent.id);
+                        artistIdsInCluster.add(otherEvent.artistId);
+                    }
+                }
+            });
+
+            cluster.push(event); // Include current event in its cluster
+            if (cluster.length >2 && cluster.length < 7) {
+                clusters.push(cluster);
+            }
+        }
+    });
+
+    return clusters;
+}
+
+
+
+function GetSpotifyPlaylistArtistsWithShows({
+    allConcerts,
+    followedArtists,
+    startDate,
+    endDate,
+    setFollowedArtists,
+    setIsRequestTriggered,
+    setAllConcerts,
+    setTripSuggestions,
+    openRouteDialogFromParent,
+    closeRouteDialog,
+    setRoute }) {
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
+    const [spotifyPlayList, setSpotifyPlaylist] = useState("");
+    const [calculatedRoutes, setCalculatedRoutes] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+        setOpen(false);
+        closeRouteDialog();
+    };
+
+    
+
+    useEffect(() => {
+        console.log("opening route dialog");
+        if (calculatedRoutes && calculatedRoutes.length > 0) {
+            setOpen(true);
+        }
+    }, [calculatedRoutes]);
 
     let handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,6 +110,7 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
             console.log(`response status code: ${res.status}`);
             if (res.status === 200) {
                 let resJson = await res.json();
+                //console.table(resJson);
                 const existingArtists = followedArtists;
                 const incomingArtists = resJson.artistList;
                 const existingGigs = allConcerts;
@@ -47,30 +121,20 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
                 const updatedGigs = [...existingGigs, ...incomingGigs].filter(
                     (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
                 );
+
                 if (updatedArtists.length < 1) {
                     alert(`Oof, nobody from this playlist is on tour...`);
                 }
                 setFollowedArtists(updatedArtists);
+                setAllConcerts(updatedGigs);
 
                 // suggest potential routes to user here
                 // let the clustering BEGIN!!!!!
                 // move the code below to it's separate function sometime later
                 // but we are at a hackathon so fuck best practices
-                // Extract lat-lon pairs and keep track of indices
-                const coordinates = updatedGigs.map((gig) => [gig.location.gpsCoordinate.coords.latitude, gig.location.gpsCoordinate.coords.longitude]);
-                // Perform clustering
-                const bias = 0.05;
-                const result = geocluster(coordinates, bias);
+                var clusters = groupByProximityWithUniqueArtists(updatedGigs, distanceThreshold);
 
-                // Map cluster into trip suggestion
-                var clusters = result.map(cluster => (
-                    cluster.elements.map(coords => {
-                        const index = coordinates.findIndex(
-                            ([lat, lon]) => lat === coords[0] && lon === coords[1]
-                        );
-                        return existingGigs[index];
-                    })
-                ));
+                //console.table(clusters);
                 // Remove duplicates within each cluster by `id`
                 clusters = clusters.map(cluster => {
                     const seenIds = new Set();
@@ -94,8 +158,23 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
                     .filter(cluster => cluster.length > 1) // Remove clusters with length of 1
                     .sort((a, b) => b.length - a.length); // Sort clusters by length (descending)
                 clusters = clusters.slice(0, 3); // Keep only the top 3 clusters
-                console.table(clusters);
+
+                //console.table(clusters);
+                //give each cluster a name, wait until we get the name from the backend
+                await Promise.all(
+                clusters.map(async cluster => {
+                    const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
+                    console.table(nameInput);
+                    await FetchName(nameInput).then((suggestions) => {
+                        if (suggestions.length >= 1) {
+                            cluster.posterName = suggestions[0].title;
+                        }
+                    });
+                }));
+                //passing the clusters to the parent component
                 setTripSuggestions(clusters);
+                //using the cluster to trigger the route dialog right here
+                setCalculatedRoutes(clusters);                
             }
             return;
         }).catch((err) => {
@@ -104,6 +183,9 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
         });
         setIsRequestTriggered(false);
     };
+
+
+
 
     return (
         <Stack spacing={2}>
@@ -139,6 +221,23 @@ function GetSpotifyPlaylistArtistsWithShows({ allConcerts, followedArtists, star
                     </Button>
                 </Stack>
             </form>
+
+            <Dialog open={open || openRouteDialogFromParent} onClose={closeRouteDialog}>
+                <DialogTitle>{"Choices Choices Choices..."}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        We figured out some cool routes based on your Spotify playlist. Feel free to pick one. Or make your own.
+                    </DialogContentText>
+                    <List>
+                        {
+                            <RouteChoiceList routes={calculatedRoutes} onRouteClick={setRoute} />
+                        }
+                    </List>
+                    <DialogActions>
+                        <DismissButton onClick={handleClose} />
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
         </Stack>);
 }
 

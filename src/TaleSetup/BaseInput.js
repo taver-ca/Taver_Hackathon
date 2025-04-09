@@ -96,8 +96,11 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
 const BaseInput = forwardRef(({ setConcerts,
   setUserLocation,
   setMapStyle,
-  startDate,
+  setFollowedArtists,
   setAllConcerts,
+  setArtistWishlist,
+  setPosterName,
+  startDate,
   endDate,
   allConcerts,
   userLocation,
@@ -107,9 +110,8 @@ const BaseInput = forwardRef(({ setConcerts,
   closeDialog,
   newArtistList,
   followedArtists,
-  setFollowedArtists,
   artistWishlist,
-  setArtistWishlist
+
 }, ref) => {
 
   useEffect(() => {
@@ -126,16 +128,53 @@ const BaseInput = forwardRef(({ setConcerts,
   }, []);
 
   useImperativeHandle(ref, () => ({
-    handleRequestFromParent: (artist) => {
+    handleArtistChoiceUpdateFromParent: (artist) => {
       submitArtistInfo(artist);
     },
+    handleRouteChoiceUpdateFromParent: (concerts) => {
+      pickRoute(concerts);
+    },
     handleReEvaluation: (updatedArtistWishlist) => {
-      console.log(`trigger re-evaluation: ${JSON.stringify(updatedArtistWishlist)}`);
       generateOptimizedConcertRoute(allConcerts, userLocation, updatedArtistWishlist);
     },
   }));
 
-  const [artistName, setArtistName] = useState("Taylor Swift");
+  const [artistName, setArtistName] = useState("");
+
+  const pickRoute = (concerts) => {
+    // clear existing concerts and followed artist
+    setConcerts([]);
+    setFollowedArtists([]);
+
+    //update artist wishlist to include the artist from the concerts
+    const artistInfoList = concerts.map(concert => {
+      return { WishlistArtistName: concert.artistName, WishlistArtistId: concert.artistId }
+    });
+    var updatedArtists = followedArtists;
+
+    artistInfoList.forEach(artistInfo => {
+      if (!artistWishlist.some(artistWishlistItem => artistWishlistItem.WishlistArtistId === artistInfo.WishlistArtistId)) {
+        artistWishlist.push(artistInfo);
+
+        //add the artist we just typed into the followed artist section, so next we don't have to type it next time
+        //check for duplicates
+        const hasElementWithValue = followedArtists.some(artist => artist.id === artistInfo.id);
+
+        if (!hasElementWithValue) {
+          updatedArtists.push(artistInfo);
+        }
+      }
+    });
+
+    setPosterName(concerts.posterName);
+    setArtistWishlist(artistWishlist);
+    setConcerts(concerts);
+    setOpen(false);
+    closeDialog();
+    setFollowedArtists(updatedArtists);
+
+  }
+
   const submitArtistInfo = async (incomingArtistInfo) => {
 
     /*if (artistWishlist.length >= 5) {
@@ -215,11 +254,9 @@ const BaseInput = forwardRef(({ setConcerts,
   let handleSubmit = async (e) => {
     e.preventDefault();
     FetchArtist(artistName).then((resJson) => {
-      // setArtistList(resJson);
       newArtistList(resJson);
       setOpen(true);
     });
-    //submitArtist(artistName);
   };
 
   const generateOptimizedConcertRoute = (allConcerts, userLocation, artistWishlist) => {
@@ -309,7 +346,7 @@ const BaseInput = forwardRef(({ setConcerts,
                 "& label": {
                   color: "white",
                 },
-                width:{xs:'100%'}
+                width: { xs: '100%' }
               }}
               label="Enter Artist Name:"
               value={artistName} onChange={(e) => {

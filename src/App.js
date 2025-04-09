@@ -27,7 +27,10 @@ function App() {
   const [followedArtists, setFollowedArtists] = useState([]);
   const [artistName, setArtistName] = useState("");
   const [artistList, setArtistList] = useState([]);
+  //artist search dialog
   const [openDialog, setOpenDialog] = useState(false);
+  //route suggestion dialog
+  const [openRouteDialog, setOpenRouteDialog] = useState(false);
   const [shareId, setShareId] = useState("");
   const [tripSuggestions, setTripSuggestions] = useState([]);
   const [startDate, setStartDate] = useState(
@@ -58,6 +61,7 @@ function App() {
                   setEndDate={setEndDate}
                   setArtistList={setArtistList}
                   setOpenDialog={setOpenDialog}
+                  setOpenRouteDialog={setOpenRouteDialog}
                   setConcerts={setConcerts}
                   setUserLocation={setUserLocation}
                   setMapStyle={setMapStyle}
@@ -67,6 +71,7 @@ function App() {
                   setArtistWishlist={setArtistWishlist}
                   setIsRequestTriggered={setIsRequestTriggered}
                   setTripSuggestions={setTripSuggestions}
+                  setPosterName={setPosterName}
                   startDate={startDate}
                   endDate={endDate}
                   concerts={concerts}
@@ -77,6 +82,7 @@ function App() {
                   followedArtists={followedArtists}
                   artistWishlist={artistWishlist}
                   openDialog={openDialog}
+                  openRouteDialog={openRouteDialog}
                   isRequestTriggered={isRequestTriggered}
                   tripSuggestions={tripSuggestions} />
               </Grid>
