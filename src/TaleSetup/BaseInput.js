@@ -169,10 +169,10 @@ const BaseInput = forwardRef(({ setConcerts,
 
   const submitArtistInfo = async (incomingArtistInfo) => {
 
-    /*if (artistWishlist.length >= 5) {
+    if (artistWishlist.length >= 5) {
       alert(`You can have only 5 artists at a time.`)
       return
-    }*/
+    }
     let incomingArtistName = incomingArtistInfo.name;
     let incomingArtistId = incomingArtistInfo.id
     try {
