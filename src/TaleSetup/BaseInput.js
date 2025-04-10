@@ -155,14 +155,6 @@ const BaseInput = forwardRef(({ setConcerts,
     artistInfoList.forEach(artistInfo => {
       if (!artistWishlist.some(artistWishlistItem => artistWishlistItem.WishlistArtistId === artistInfo.WishlistArtistId)) {
         artistWishlist.push(artistInfo);
-
-        //add the artist we just typed into the followed artist section, so next we don't have to type it next time
-        //check for duplicates
-        const hasElementWithValue = followedArtists.some(artist => artist.id === artistInfo.id);
-
-        if (!hasElementWithValue) {
-          updatedArtists.push(artistInfo);
-        }
       }
     });
 
