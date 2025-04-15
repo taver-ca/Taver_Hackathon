@@ -108,6 +108,7 @@ const BaseInput = forwardRef(({ setConcerts,
   artistListFromParent,
   openDialogFromParent,
   closeDialog,
+  closeRouteDialog,
   newArtistList,
   followedArtists,
   artistWishlist,
@@ -161,10 +162,8 @@ const BaseInput = forwardRef(({ setConcerts,
     setPosterName(concerts.posterName);
     setArtistWishlist(artistWishlist);
     setConcerts(concerts);
-    setOpen(false);
-    closeDialog();
+    closeRouteDialog();
     setFollowedArtists(updatedArtists);
-
   }
 
   const submitArtistInfo = async (incomingArtistInfo) => {

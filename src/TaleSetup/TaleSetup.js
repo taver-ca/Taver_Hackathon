@@ -84,6 +84,9 @@ const TaleSetup = ({ setStartDate,
                 closeDialog={() => {
                     setOpenDialog(false);
                 }}
+                closeRouteDialog={() => {
+                    setOpenRouteDialog(false);
+                }}
                 ref={childRef}
             />
             <GetSpotifyPlaylistArtistsWithShows

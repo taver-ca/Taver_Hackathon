@@ -9,9 +9,17 @@ import RouteChoiceList from './RouteChoiceList.js';
 // Distance threshold (in degrees, you can adjust this)
 const distanceThreshold = 4;
 
+// Time threshold (in milliseconds)
+const timeThreshold = 120 * 60 * 60 * 1000; // 24 hours
+
 // Helper function: calculate Euclidean distance
 function calculateDistance(a, b) {
     return Math.sqrt(Math.pow(a.location.gpsCoordinate.coords.latitude - b.location.gpsCoordinate.coords.latitude, 2) + Math.pow(a.location.gpsCoordinate.coords.longitude - b.location.gpsCoordinate.coords.longitude, 2));
+}
+
+// Helper function: calculate time difference
+function calculateTimeDifference(timeA, timeB) {
+    return Math.abs(new Date(timeA).getTime() - new Date(timeB).getTime());
 }
 
 // Group events based on proximity, ensuring unique artistId in each cluster
@@ -29,7 +37,8 @@ function groupByProximityWithUniqueArtists(events, threshold) {
             events.forEach(otherEvent => {
                 if (!visited.has(otherEvent.id) && !artistIdsInCluster.has(otherEvent.artistId)) {
                     const distance = calculateDistance(event, otherEvent);
-                    if (distance <= threshold) {
+                    const timeDifference = calculateTimeDifference(event.date, otherEvent.date);
+                    if (distance <= distanceThreshold && timeDifference <= timeThreshold) {
                         cluster.push(otherEvent);
                         visited.add(otherEvent.id);
                         artistIdsInCluster.add(otherEvent.artistId);
