@@ -1,11 +1,17 @@
-export const FetchArtist = async (artistName) => {
+export const FetchArtist = async (artistName, startDate, endDate) => {
   const response = await fetch(
-    `${process.env.REACT_APP_BACKEND}/GetArtistsByName/${artistName}`,
+    `${process.env.REACT_APP_BACKEND}/GetArtistsByName`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "content-type": "application/json;charset=utf-8",
       },
+
+      body: JSON.stringify({
+        artistName: artistName,
+        startDate: startDate,
+        endDate: endDate
+      })
     }
   );
   console.log(`response status code: ${response.status}`);

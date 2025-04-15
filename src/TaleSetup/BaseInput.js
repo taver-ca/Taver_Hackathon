@@ -273,7 +273,7 @@ const BaseInput = forwardRef(({
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    FetchArtist(artistName).then((resJson) => {
+    FetchArtist(artistName, startDate, endDate).then((resJson) => {
       newArtistList(resJson);
       setOpen(true);
     });

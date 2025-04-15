@@ -30,7 +30,7 @@ function PickDate({
     setEndDate(date);
     window.localStorage.setItem("endDate", date);
     updateEndDateInParent(date);
-    FetchArtist(artistName).then((resJson) => {
+    FetchArtist(artistName, startDate, date).then((resJson) => {
       newArtistList(resJson);
       openDialog(true);
     });
