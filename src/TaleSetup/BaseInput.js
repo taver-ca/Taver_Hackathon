@@ -154,7 +154,7 @@ const BaseInput = forwardRef(({
     // clear existing concerts and followed artist
     setConcerts([]);
     setFollowedArtists([]);
-
+    setArtistWishlist([]);
     //update artist wishlist to include the artist from the concerts
     const artistInfoList = concerts.map(concert => {
       return { WishlistArtistName: concert.artistName, WishlistArtistId: concert.artistId }
