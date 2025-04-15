@@ -74,6 +74,7 @@ const TaleSetup = ({ setStartDate,
                 startDate={startDate}
                 endDate={endDate}
                 allConcerts={allConcerts}
+                concerts={concerts}
                 userLocation={userLocation}
                 updateArtistNameInParent={(value) => setArtistName(value)}
                 newArtistList={setArtistList}

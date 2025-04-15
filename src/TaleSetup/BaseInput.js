@@ -4,6 +4,8 @@ import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
 import { FetchArtist } from "./FetchArtist";
+import moment from "moment";
+
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
@@ -42,6 +44,10 @@ function getTotalDistance(concerts, userLocation) {
   return totalDistance;
 }
 
+function formattedDate(incomingDate) {
+  var date = new Date(incomingDate);
+  return moment(date).format('YYYY/MM/DD');
+}
 
 
 function generateCombinations(dictionary) {
@@ -93,7 +99,8 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
   return earthRadiusKm * c;
 }
 
-const BaseInput = forwardRef(({ setConcerts,
+const BaseInput = forwardRef(({ 
+  setConcerts,
   setUserLocation,
   setMapStyle,
   setFollowedArtists,
@@ -103,6 +110,7 @@ const BaseInput = forwardRef(({ setConcerts,
   startDate,
   endDate,
   allConcerts,
+  concerts,
   userLocation,
   updateArtistNameInParent,
   artistListFromParent,
@@ -196,6 +204,27 @@ const BaseInput = forwardRef(({ setConcerts,
           alert(`no upcoming concerts for ${incomingArtistName} found`);
           return;
         }
+
+        //check if artist is already featured in somebody else's concert 
+
+        //in order to check this 
+        //check if existing concert titles includes incoming artist's concert titles
+        //check if existing concert titles includes incoming artist's name 
+
+        var existingConcertTitles = concerts.map(concert => concert.title.toLowerCase());
+        var incomingConcertTitles = incomingConcerts.map(concert => concert.title.toLowerCase());
+
+        var checkDuplicatesIndex = existingConcertTitles.findIndex((concertTitle) => {
+          return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
+        });
+
+        if (checkDuplicatesIndex !== -1) {
+          if (incomingArtistName !== concerts[checkDuplicatesIndex].artist.toLowerCase()) {
+            alert(`${incomingArtistName} is already performing as part of ${concerts[checkDuplicatesIndex].title} on ${formattedDate(concerts[checkDuplicatesIndex].date)}`);
+          }
+          return;
+        }
+
         var updatedArtistWishlist = artistWishlist;
         if (!updatedArtistWishlist.some(artistWishlistItem => artistWishlistItem.WishlistArtistId === incomingArtistId)) {
           updatedArtistWishlist.push({ WishlistArtistName: incomingArtistName, WishlistArtistId: incomingArtistId });
