@@ -204,12 +204,14 @@ const BaseInput = forwardRef(({
         //check if artist is already featured in somebody else's concert 
 
         //in order to check this 
-        //check if existing concert titles includes incoming artist's Id
+        //check if existing concert titles includes incoming artist's concert titles
+        //check if existing concert titles includes incoming artist's name 
 
-        var existingConcertArtistIdS = concerts.map(concert => concert.artists)
+        var existingConcertTitles = concerts.map(concert => concert.title.toLowerCase());
+        var incomingConcertTitles = incomingConcerts.map(concert => concert.title.toLowerCase());
 
-        var checkDuplicatesIndex = existingConcertArtistIdS.findIndex((concertArtistIds) => {
-          return concertArtistIds.includes(incomingArtistId);
+        var checkDuplicatesIndex = existingConcertTitles.findIndex((concertTitle) => {
+          return concertTitle.includes(incomingArtistName) || incomingConcertTitles.includes(concertTitle);
         });
 
         if (checkDuplicatesIndex !== -1) {
@@ -280,7 +282,7 @@ const BaseInput = forwardRef(({
     //filter out concerts that are not performed by the artists from the artist wish list
     //allow concert with duplicate id at this stage, inform user of the dupcliate at the end
     var initialFilteredConcerts = allConcerts.filter((concert) => {
-      return artistWishlist.some(artistWishlistItem => concert.artists.Contains(artistWishlistItem.WishlistArtistId));
+      return artistWishlist.some(artistWishlistItem => artistWishlistItem.WishlistArtistId === concert.artistId)
     });
     //group the concerts by artistId
     var groupedByArtistConcertList = initialFilteredConcerts.reduce((r, a) => {
