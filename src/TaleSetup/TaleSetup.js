@@ -4,8 +4,8 @@ import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
 import MapStyle from "./MapStyle.js";
-import { useRef } from "react";
-import { Box, Stack } from "@mui/material";
+import { useRef, useState } from "react";
+import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
 
 
 
@@ -38,19 +38,33 @@ const TaleSetup = ({ setStartDate,
     isRequestTriggered,
     tripSuggestions,
 }) => {
-
-
     const childRef = useRef();
     const handleArtistPick = (artistName) => {
         childRef.current.handleArtistChoiceUpdateFromParent(artistName);
     };
-    const handleRoutePick = (route) => {        
+    const handleRoutePick = (route) => {
         childRef.current.handleRouteChoiceUpdateFromParent(route);
     }
     const triggerReEvaluation = (updatedArtistWishlist) => {
         console.log("trigger re-evaluation");
         childRef.current.handleReEvaluation(updatedArtistWishlist);
     }
+
+    const [activeTab, setActiveTab] = useState(0);
+
+    const handleTabChange = (event, newValue) => {
+        setActiveTab(newValue);
+    };
+
+    const TabPanel = ({ children, value, index }) => (
+        <div hidden={value !== index}>
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
 
     return (
         <Stack sx={{ container: true, flexDirection: 'column' }} spacing={4}>
@@ -80,7 +94,7 @@ const TaleSetup = ({ setStartDate,
                 updateArtistNameInParent={(value) => setArtistName(value)}
                 newArtistList={setArtistList}
                 artistListFromParent={artistList}
-                followedArtists={followedArtists}                
+                followedArtists={followedArtists}
                 artistWishlist={artistWishlist}
                 openDialogFromParent={openDialog}
                 closeDialog={() => {
@@ -91,40 +105,91 @@ const TaleSetup = ({ setStartDate,
                 }}
                 ref={childRef}
             />
-            <MapStyle setMapStyle={setMapStyle}/>
-            <GetSpotifyPlaylistArtistsWithShows
-                setFollowedArtists={setFollowedArtists}
-                setIsRequestTriggered={setIsRequestTriggered}
-                setAllConcerts={setAllConcerts}
-                setTripSuggestions={setTripSuggestions}
-                setOpenRouteDialog={setOpenRouteDialog}
-                followedArtists={followedArtists}                
-                startDate={startDate}
-                endDate={endDate}
-                allConcerts={allConcerts}
-                openDialog={openDialog}
-                openRouteDialogFromParent={openRouteDialog}
-                closeRouteDialog={() => {
-                    setOpenRouteDialog(false);
-                }}
-                trippSuggestions={tripSuggestions}
-                setRoute={handleRoutePick}
-            />
-            <YourSpotifyArtistsWithShows
-                artists={followedArtists}
-                tripSuggestions={tripSuggestions}
-                onArtistClick={handleArtistPick}
-                onTripSuggestionClick={handleRoutePick}
-                isRequestTriggered={isRequestTriggered}
-            />
-            <ConcertList
-                setConcerts={setConcerts}
-                setAllConcerts={setAllConcerts}
-                artistWishlist={artistWishlist}
-                setArtistWishlist={setArtistWishlist}
-                concerts={concerts}
-                triggerReEvaluation={triggerReEvaluation}
-            />
+            {/* <MapStyle setMapStyle={setMapStyle}/> */}
+            <Box sx={{ position: 'relative', minHeight: '100vh' }}>
+            <Box sx={{
+                    position: 'absolute',
+                    width: '100%',
+                    boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
+                }}>
+                    <Tabs
+                       value={activeTab}
+                       onChange={handleTabChange}
+                       variant="scrollable"
+                       scrollButtons="auto"
+                       sx={{
+                        "& .MuiTabs-scrollButtons": {
+                          color: "#1976d2", // Aligning with MUI's primary color
+                          backgroundColor: "#e3f2fd", // Default light blue for buttons
+                          borderRadius: "8px", // Rounded edges for a modern look
+                          padding: "6px", // Balanced padding
+                          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", // Subtle shadow for depth
+                          transition: "background-color 0.3s ease, transform 0.3s ease", // Smooth transitions
+                          "&:hover": {
+                            backgroundColor: "#bbdefb", // Slightly darker blue on hover
+                            transform: "scale(1.05)", // Subtle scale effect
+                          },
+                        },
+                        "& .MuiTabs-scrollButtons.Mui-disabled": {
+                          opacity: 0.5, // Disabled buttons appear semi-transparent
+                          cursor: "not-allowed", // Clear disabled state
+                        },
+                        "& .MuiTab-root": {
+                          color: "white", // Make tab text white
+                          "&.Mui-selected": {
+                            color: "white", // Ensure selected tab text is also white
+                          },
+                        },
+                      }}
+                    >
+                        <Tab label="Import Playlist" />
+                        <Tab label="Artists & Suggestions" />
+                        <Tab label="Schedule" />
+                    </Tabs>
+                </Box>
+                <Box sx={{ p: 2 }}>
+                    <TabPanel value={activeTab} index={0}>
+                        <GetSpotifyPlaylistArtistsWithShows
+                            setFollowedArtists={setFollowedArtists}
+                            setIsRequestTriggered={setIsRequestTriggered}
+                            setAllConcerts={setAllConcerts}
+                            setTripSuggestions={setTripSuggestions}
+                            setOpenRouteDialog={setOpenRouteDialog}
+                            followedArtists={followedArtists}
+                            startDate={startDate}
+                            endDate={endDate}
+                            allConcerts={allConcerts}
+                            openDialog={openDialog}
+                            openRouteDialogFromParent={openRouteDialog}
+                            closeRouteDialog={() => {
+                                setOpenRouteDialog(false);
+                            }}
+                            trippSuggestions={tripSuggestions}
+                            setRoute={handleRoutePick}
+                        />
+                    </TabPanel>
+                    <TabPanel value={activeTab} index={1}>
+                        <YourSpotifyArtistsWithShows
+                            artists={followedArtists}
+                            tripSuggestions={tripSuggestions}
+                            onArtistClick={handleArtistPick}
+                            onTripSuggestionClick={handleRoutePick}
+                            isRequestTriggered={isRequestTriggered}
+                        />
+                    </TabPanel>
+                    <TabPanel value={activeTab} index={2}>
+                        <ConcertList
+                            setConcerts={setConcerts}
+                            setAllConcerts={setAllConcerts}
+                            artistWishlist={artistWishlist}
+                            setArtistWishlist={setArtistWishlist}
+                            concerts={concerts}
+                            triggerReEvaluation={triggerReEvaluation}
+                        />
+                    </TabPanel>
+                </Box>
+               
+            </Box>
         </Stack>);
 };
 export default TaleSetup;
