@@ -3,11 +3,8 @@ import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithS
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
-import MapStyle from "./MapStyle.js";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
-
-
 
 const TaleSetup = ({ setStartDate,
     setEndDate,
@@ -38,9 +35,28 @@ const TaleSetup = ({ setStartDate,
     isRequestTriggered,
     tripSuggestions,
 }) => {
+
+    const getArtistWishlist = useMemo(() => {
+        return artistWishlist.reduce((acc, item) => {
+            acc[item.WishlistArtistId] = item;
+            return acc;
+        }, {});
+    }, [artistWishlist]);
+
     const childRef = useRef();
-    const handleArtistPick = (artistName) => {
-        childRef.current.handleArtistChoiceUpdateFromParent(artistName);
+    const handleArtistPick = (artist) => {
+        const isSelected = getArtistWishlist?.[artist.id];
+
+        const newConcerts = concerts.filter(({ artistId }) => artistId !== artist.id);
+        const newArtistWishlist = artistWishlist.filter(({ WishlistArtistId }) => WishlistArtistId !== artist.id)
+
+        if (isSelected) {
+            setConcerts(newConcerts);
+            setArtistWishlist(newArtistWishlist);
+        } else {
+            childRef.current.handleArtistChoiceUpdateFromParent(artist);
+        }
+
     };
     const handleRoutePick = (route) => {
         childRef.current.handleRouteChoiceUpdateFromParent(route);
@@ -95,7 +111,7 @@ const TaleSetup = ({ setStartDate,
                 newArtistList={setArtistList}
                 artistListFromParent={artistList}
                 followedArtists={followedArtists}
-                artistWishlist={artistWishlist}
+                artistWishlist={[...artistWishlist]}
                 openDialogFromParent={openDialog}
                 closeDialog={() => {
                     setOpenDialog(false);
