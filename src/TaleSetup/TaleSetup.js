@@ -3,6 +3,7 @@ import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithS
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
+import MapStyle from "./MapStyle.js";
 import { useRef } from "react";
 import { Box, Stack } from "@mui/material";
 
@@ -90,6 +91,7 @@ const TaleSetup = ({ setStartDate,
                 }}
                 ref={childRef}
             />
+            <MapStyle setMapStyle={setMapStyle}/>
             <GetSpotifyPlaylistArtistsWithShows
                 setFollowedArtists={setFollowedArtists}
                 setIsRequestTriggered={setIsRequestTriggered}
