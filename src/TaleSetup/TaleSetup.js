@@ -3,10 +3,8 @@ import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithS
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
-import { useRef, useMemo } from "react";
-import { Box, Stack } from "@mui/material";
-
-
+import { useRef, useState, useMemo } from "react";
+import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
 
 const TaleSetup = ({ setStartDate,
     setEndDate,
@@ -68,6 +66,22 @@ const TaleSetup = ({ setStartDate,
         childRef.current.handleReEvaluation(updatedArtistWishlist);
     }
 
+    const [activeTab, setActiveTab] = useState(0);
+
+    const handleTabChange = (event, newValue) => {
+        setActiveTab(newValue);
+    };
+
+    const TabPanel = ({ children, value, index }) => (
+        <div hidden={value !== index}>
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+
     return (
         <Stack sx={{ container: true, flexDirection: 'column' }} spacing={4}>
             <Box>
@@ -107,40 +121,86 @@ const TaleSetup = ({ setStartDate,
                 }}
                 ref={childRef}
             />
-            <GetSpotifyPlaylistArtistsWithShows
-                setFollowedArtists={setFollowedArtists}
-                setIsRequestTriggered={setIsRequestTriggered}
-                setAllConcerts={setAllConcerts}
-                setTripSuggestions={setTripSuggestions}
-                setOpenRouteDialog={setOpenRouteDialog}
-                followedArtists={followedArtists}
-                startDate={startDate}
-                endDate={endDate}
-                allConcerts={allConcerts}
-                openDialog={openDialog}
-                openRouteDialogFromParent={openRouteDialog}
-                closeRouteDialog={() => {
-                    setOpenRouteDialog(false);
-                }}
-                trippSuggestions={tripSuggestions}
-                setRoute={handleRoutePick}
-            />
-            <YourSpotifyArtistsWithShows
-                artists={followedArtists}
-                tripSuggestions={tripSuggestions}
-                onArtistClick={handleArtistPick}
-                onTripSuggestionClick={handleRoutePick}
-                isRequestTriggered={isRequestTriggered}
-                artistWishlist={getArtistWishlist}
-            />
-            <ConcertList
-                setConcerts={setConcerts}
-                setAllConcerts={setAllConcerts}
-                artistWishlist={artistWishlist}
-                setArtistWishlist={setArtistWishlist}
-                concerts={concerts}
-                triggerReEvaluation={triggerReEvaluation}
-            />
+            {/* <MapStyle setMapStyle={setMapStyle}/> */}
+            <Box sx={{ position: 'relative', minHeight: '100vh' }}>
+            <Box sx={{
+                    position: 'absolute',
+                    width: '100%',
+                    boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
+                }}>
+                    <Tabs
+                       value={activeTab}
+                       onChange={handleTabChange}
+                       variant="scrollable"
+                       scrollButtons="auto"
+                       sx={{
+                        "& .MuiTabs-scrollButtons": {
+                          "&:hover": {
+                            backgroundColor: "#bbdefb", // Slightly darker blue on hover
+                            transform: "scale(1.05)", // Subtle scale effect
+                          },
+                        },
+                        "& .MuiTabs-scrollButtons.Mui-disabled": {
+                          opacity: 0.5, // Disabled buttons appear semi-transparent
+                          cursor: "not-allowed", // Clear disabled state
+                        },
+                        "& .MuiTab-root": {
+                          color: "white", // Make tab text white
+                          "&.Mui-selected": {
+                            color: "white", // Ensure selected tab text is also white
+                          },
+                        },
+                      }}
+                    >
+                        <Tab label="Import Playlist" />
+                        <Tab label="Artists & Suggestions" />
+                        <Tab label="Schedule" />
+                    </Tabs>
+                </Box>
+                <Box sx={{ py: 5 }}>
+                    <TabPanel value={activeTab} index={0}>
+                        <GetSpotifyPlaylistArtistsWithShows
+                            setFollowedArtists={setFollowedArtists}
+                            setIsRequestTriggered={setIsRequestTriggered}
+                            setAllConcerts={setAllConcerts}
+                            setTripSuggestions={setTripSuggestions}
+                            setOpenRouteDialog={setOpenRouteDialog}
+                            followedArtists={followedArtists}
+                            startDate={startDate}
+                            endDate={endDate}
+                            allConcerts={allConcerts}
+                            openDialog={openDialog}
+                            openRouteDialogFromParent={openRouteDialog}
+                            closeRouteDialog={() => {
+                                setOpenRouteDialog(false);
+                            }}
+                            trippSuggestions={tripSuggestions}
+                            setRoute={handleRoutePick}
+                        />
+                    </TabPanel>
+                    <TabPanel value={activeTab} index={1}>
+                        <YourSpotifyArtistsWithShows
+                            artists={followedArtists}
+                            artistWishlist={getArtistWishlist}
+                            tripSuggestions={tripSuggestions}
+                            onArtistClick={handleArtistPick}
+                            onTripSuggestionClick={handleRoutePick}
+                            isRequestTriggered={isRequestTriggered}
+                        />
+                    </TabPanel>
+                    <TabPanel value={activeTab} index={2}>
+                        <ConcertList
+                            setConcerts={setConcerts}
+                            setAllConcerts={setAllConcerts}
+                            artistWishlist={artistWishlist}
+                            setArtistWishlist={setArtistWishlist}
+                            concerts={concerts}
+                            triggerReEvaluation={triggerReEvaluation}
+                        />
+                    </TabPanel>
+                </Box>
+               
+            </Box>
         </Stack>);
 };
 export default TaleSetup;
