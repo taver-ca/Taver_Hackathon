@@ -3,7 +3,7 @@ import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithS
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Box, Stack } from "@mui/material";
 
 
@@ -38,12 +38,29 @@ const TaleSetup = ({ setStartDate,
     tripSuggestions,
 }) => {
 
+    const getArtistWishlist = useMemo(() => {
+        return artistWishlist.reduce((acc, item) => {
+            acc[item.WishlistArtistId] = item;
+            return acc;
+        }, {});
+    }, [artistWishlist]);
 
     const childRef = useRef();
-    const handleArtistPick = (artistName) => {
-        childRef.current.handleArtistChoiceUpdateFromParent(artistName);
+    const handleArtistPick = (artist) => {
+        const isSelected = getArtistWishlist?.[artist.id];
+
+        const newConcerts = concerts.filter(({ artistId }) => artistId !== artist.id);
+        const newArtistWishlist = artistWishlist.filter(({ WishlistArtistId }) => WishlistArtistId !== artist.id)
+
+        if (isSelected) {
+            setConcerts(newConcerts);
+            setArtistWishlist(newArtistWishlist);
+        } else {
+            childRef.current.handleArtistChoiceUpdateFromParent(artist);
+        }
+
     };
-    const handleRoutePick = (route) => {        
+    const handleRoutePick = (route) => {
         childRef.current.handleRouteChoiceUpdateFromParent(route);
     }
     const triggerReEvaluation = (updatedArtistWishlist) => {
@@ -79,8 +96,8 @@ const TaleSetup = ({ setStartDate,
                 updateArtistNameInParent={(value) => setArtistName(value)}
                 newArtistList={setArtistList}
                 artistListFromParent={artistList}
-                followedArtists={followedArtists}                
-                artistWishlist={artistWishlist}
+                followedArtists={followedArtists}
+                artistWishlist={[...artistWishlist]}
                 openDialogFromParent={openDialog}
                 closeDialog={() => {
                     setOpenDialog(false);
@@ -96,7 +113,7 @@ const TaleSetup = ({ setStartDate,
                 setAllConcerts={setAllConcerts}
                 setTripSuggestions={setTripSuggestions}
                 setOpenRouteDialog={setOpenRouteDialog}
-                followedArtists={followedArtists}                
+                followedArtists={followedArtists}
                 startDate={startDate}
                 endDate={endDate}
                 allConcerts={allConcerts}
@@ -114,6 +131,7 @@ const TaleSetup = ({ setStartDate,
                 onArtistClick={handleArtistPick}
                 onTripSuggestionClick={handleRoutePick}
                 isRequestTriggered={isRequestTriggered}
+                artistWishlist={getArtistWishlist}
             />
             <ConcertList
                 setConcerts={setConcerts}

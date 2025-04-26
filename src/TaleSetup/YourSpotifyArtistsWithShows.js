@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Chip, Box, CircularProgress, Typography } from '@mui/material';
 import SwipeableTextMobileStepper from './ArtistsCarrousel'
 
-function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onArtistClick, onTripSuggestionClick, isRequestTriggered }) {
+function YourSpotifyArtistsWithShows({
+  artistWishlist,
+  tripSuggestions,
+  artists,
+  onArtistClick,
+  onTripSuggestionClick,
+  isRequestTriggered
+}) {
   const [groupedNames, setGroupedNames] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,7 +44,7 @@ function YourSpotifyArtistsWithShows({ tripSuggestions, artists, onArtistClick, 
   const commaSeparatedfollowedArtists = artists.map((artist, index) => {
     return (
       <Grid item key={index}>
-        <Chip sx={{ background: "limegreen" }} label={artist.name} color="success" onClick={() => handleClick(artist)} />
+        <Chip sx={{ background: artistWishlist?.[artist.id] ? "gray" : "limegreen" }} label={artist.name} color="success" onClick={() => handleClick(artist)} />
       </Grid>
     );
   });

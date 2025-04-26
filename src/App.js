@@ -54,7 +54,7 @@ function App() {
             <Grid
               className="App-header"
               container
-              spacing={3}              
+              spacing={3}
             >
               <Grid item xs={11} sm={11} md={4} lg={3} xl={3} sx={{ minHeight: { xs: '50vh', sm: '50vh', md: '100vh' }}}>
                 <TaleSetup setStartDate={setStartDate}
@@ -74,13 +74,13 @@ function App() {
                   setPosterName={setPosterName}
                   startDate={startDate}
                   endDate={endDate}
-                  concerts={concerts}
+                  concerts={[...concerts]}
                   artistName={artistName}
                   allConcerts={allConcerts}
                   userLocation={userLocation}
                   artistList={artistList}
                   followedArtists={followedArtists}
-                  artistWishlist={artistWishlist}
+                  artistWishlist={[...artistWishlist]}
                   openDialog={openDialog}
                   openRouteDialog={openRouteDialog}
                   isRequestTriggered={isRequestTriggered}
@@ -97,7 +97,7 @@ function App() {
                   startDate={startDate}
                   endDate={endDate}
                   shareId={shareId}
-                  posterNameSuggestions = {posterNameSuggestions} 
+                  posterNameSuggestions = {posterNameSuggestions}
                   setPosterNameSuggestions = {setPosterNameSuggestions}
                   />
               </Grid>
