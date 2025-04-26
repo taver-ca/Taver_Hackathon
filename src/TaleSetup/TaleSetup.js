@@ -119,12 +119,6 @@ const TaleSetup = ({ setStartDate,
                        scrollButtons="auto"
                        sx={{
                         "& .MuiTabs-scrollButtons": {
-                          color: "#1976d2", // Aligning with MUI's primary color
-                          backgroundColor: "#e3f2fd", // Default light blue for buttons
-                          borderRadius: "8px", // Rounded edges for a modern look
-                          padding: "6px", // Balanced padding
-                          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)", // Subtle shadow for depth
-                          transition: "background-color 0.3s ease, transform 0.3s ease", // Smooth transitions
                           "&:hover": {
                             backgroundColor: "#bbdefb", // Slightly darker blue on hover
                             transform: "scale(1.05)", // Subtle scale effect
@@ -147,7 +141,7 @@ const TaleSetup = ({ setStartDate,
                         <Tab label="Schedule" />
                     </Tabs>
                 </Box>
-                <Box sx={{ p: 2 }}>
+                <Box sx={{ py: 5 }}>
                     <TabPanel value={activeTab} index={0}>
                         <GetSpotifyPlaylistArtistsWithShows
                             setFollowedArtists={setFollowedArtists}
