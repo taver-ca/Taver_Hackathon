@@ -57,7 +57,7 @@ function YourSpotifyArtistsWithShows({
   });
 
   return (
-    <Grid container={true} spacing={2} >
+    <Grid spacing={2} >
       <Box sx={{ mt: 3, mb: 3 }}>
         <Typography>Trip Suggestions</Typography>
       </Box>

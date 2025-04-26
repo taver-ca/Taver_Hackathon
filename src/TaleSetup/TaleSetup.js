@@ -181,6 +181,7 @@ const TaleSetup = ({ setStartDate,
                     <TabPanel value={activeTab} index={1}>
                         <YourSpotifyArtistsWithShows
                             artists={followedArtists}
+                            artistWishlist={getArtistWishlist}
                             tripSuggestions={tripSuggestions}
                             onArtistClick={handleArtistPick}
                             onTripSuggestionClick={handleRoutePick}
