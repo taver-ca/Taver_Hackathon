@@ -7,10 +7,7 @@ import { FetchArtist } from "./FetchArtist";
 import moment from "moment";
 
 
-const mapStyles = [
-  { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
-  { mapId: "53a5c2c14f51f10b", displayName: "Dark Theme", buttonColorCss: "#404040" },
-];
+
 
 function getTotalDistance(concerts, userLocation) {
 
@@ -102,7 +99,6 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
 const BaseInput = forwardRef(({ 
   setConcerts,
   setUserLocation,
-  setMapStyle,
   setFollowedArtists,
   setAllConcerts,
   setArtistWishlist,
@@ -277,7 +273,7 @@ const BaseInput = forwardRef(({
     });
   };
 
-  const generateOptimizedConcertRoute = (allConcerts, userLocation, artistWishlist) => {
+  const  generateOptimizedConcertRoute = (allConcerts, userLocation, artistWishlist) => {
     //generate an optimized route based on existing concerts saved and the artist wishlist, with consideration to user current location
     //console.log(`generate optimized concert route for the current selected artist`);
     //console.log(JSON.stringify(artistWishlist));
@@ -382,8 +378,7 @@ const BaseInput = forwardRef(({
           </Stack>
         </form>
       </Stack>
-
-
+      
       <Dialog open={open || openDialogFromParent} onClose={handleClose}>
         <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
         <DialogContent>
@@ -400,37 +395,7 @@ const BaseInput = forwardRef(({
         </DialogContent>
       </Dialog>
 
-      <FormControl fullWidth>
-        <InputLabel
-          sx={{
-            color: 'white'
-          }}
-          variant="standard" htmlFor="mapStyle">
-          Map Style:
-        </InputLabel>
-        <NativeSelect
-          sx={{
-            color: 'white',
-            "& input": {
-              color: "white",
-            },
-            "& label": {
-              color: "white",
-            },
-            "& svg": {
-              color: "white",
-            }
-          }}
-          defaultValue={mapStyles[0]}
-          id="mapStyle"
-          onChange={(event) => setMapStyle(event.target.value)}>
-          {mapStyles.map((mapStyle) => (
-            <option style={{ backgroundColor: 'darkgrey' }} key={mapStyle.mapId} value={mapStyle.mapId}>
-              {mapStyle.displayName}
-            </option >
-          ))}
-        </NativeSelect>
-      </FormControl>
+      
     </Stack>
   );
 });
