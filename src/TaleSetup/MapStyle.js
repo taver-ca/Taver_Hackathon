@@ -9,7 +9,7 @@ const mapStyles = [
 const MapStyle = ({ setMapStyle }) => {
 
   return (
-    <FormControl fullWidth>
+    <FormControl sx={{ mt: 3, mb: 3 }} fullWidth>
       <InputLabel
         sx={{
           color: 'white'

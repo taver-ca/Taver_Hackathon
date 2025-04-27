@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo, useEffect } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
 import BaseInput from "./BaseInput.js";
 import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";

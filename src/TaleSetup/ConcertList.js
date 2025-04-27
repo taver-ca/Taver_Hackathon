@@ -6,11 +6,10 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, Button, Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
-import { Button } from "@mui/material";
 function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
   return moment(date).format("YYYY/MM/DD hh:mm A");
@@ -144,9 +143,11 @@ class ConcertList extends React.Component {
     return (
       <div>
         {hasConcerts && (
-          <Typography>
-            Upcoming Concerts ({this.state.concerts.length}) :
-          </Typography>
+          <Box sx={{ mt: 3, mb: 3 }}>
+            <Typography>
+              Upcoming Concerts ({this.state.concerts.length}) :
+            </Typography>
+          </Box>
         )}
         {hasConcerts && (
           <Button onClick={onClearAllPress} variant="outlined" color="warning">

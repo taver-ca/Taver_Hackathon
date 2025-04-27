@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, TextField, Button, Typography, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List } from '@mui/material';
+import { Stack, TextField, Button, Typography, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Box } from '@mui/material';
 import DismissButton from "./../TaleSetup/DismissButton.js";
 import { FetchName } from './../Odyssey/FetchName.js';
 import RouteChoiceList from './RouteChoiceList.js';
@@ -206,7 +206,9 @@ function GetSpotifyPlaylistArtistsWithShows({
 
     return (
         <Stack spacing={2}>
-            <Typography>Find concerts from playlist</Typography>
+            <Box >
+                <Typography sx={{ mt: 3, mb: 3 }}>Find concerts from playlist</Typography>
+            </Box>
             <form onSubmit={handlePlaylistSubmit}>
                 <Stack
                     direction={'column'}
