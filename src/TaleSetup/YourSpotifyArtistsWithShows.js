@@ -8,11 +8,12 @@ function YourSpotifyArtistsWithShows({
   artists,
   onArtistClick,
   onTripSuggestionClick,
-  isRequestTriggered
+  isArtistRequestTriggered,
+  isSuggestionRequestTriggered
 }) {
   const [groupedNames, setGroupedNames] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [isArtistLoading, setIsArtistLoading] = useState(false);
+  const [isSuggestionLoading, setIsSuggestionLoading] = useState(false);
   useEffect(() => {
     if (!artists) return
     artists.sort((a, b) => a.name.localeCompare(b.name));
@@ -29,9 +30,12 @@ function YourSpotifyArtistsWithShows({
   }, [artists]);
 
   useEffect(() => {
-    setIsLoading(isRequestTriggered);
-  }, [isRequestTriggered])
+    setIsArtistLoading(isArtistRequestTriggered);
+  }, [isArtistRequestTriggered]);
 
+  useEffect(() => {
+    setIsSuggestionLoading(isSuggestionRequestTriggered);
+  }, [isSuggestionRequestTriggered]);
 
   const handleClick = (artistName) => {
     onArtistClick(artistName);
@@ -59,6 +63,20 @@ function YourSpotifyArtistsWithShows({
   return (
     <Grid spacing={2} >
       <Box sx={{ mt: 3, mb: 3 }}>
+        <Typography>Artists from your playlist</Typography>
+      </Box>
+      {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (<Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
+          {commaSeparatedfollowedArtists}
+        </Grid>
+      </Box>)}
+      {isArtistLoading && <CircularProgress sx={{ mt: 5 }} />}
+
+      <Box sx={{ mt: 3, mb: 3 }}>
         <Typography>Trip Suggestions</Typography>
       </Box>
       <Box
@@ -69,18 +87,7 @@ function YourSpotifyArtistsWithShows({
           {commaSeparatedTripSuggestions}
         </Grid>
       </Box>
-
-      <Typography>Artists from your playlist</Typography>
-      {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (<Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
-          {commaSeparatedfollowedArtists}
-        </Grid>
-      </Box>)}
-      {isLoading && <CircularProgress sx={{ mt: 5 }} />}
+      {isSuggestionLoading && <CircularProgress sx={{ mt: 5 }} />}
     </Grid>
   );
 }

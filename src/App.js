@@ -18,7 +18,8 @@ function App() {
   //concerts is used to display the current optimized route
   const [concerts, setConcerts] = useState([]);
   const [artistWishlist, setArtistWishlist] = useState([]);
-  const [isRequestTriggered, setIsRequestTriggered] = useState(false);
+  const [isArtistRequestTriggered, setIsArtistRequestTriggered] = useState(false);
+  const [isSuggestionRequestTriggered, setIsSuggestionRequestTriggered] = useState(false);
   //all concerts is used to reoptimize the whole route... based on incoming concert
   const [allConcerts, setAllConcerts] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
@@ -69,7 +70,8 @@ function App() {
                   setArtistName={setArtistName}
                   setFollowedArtists={setFollowedArtists}
                   setArtistWishlist={setArtistWishlist}
-                  setIsRequestTriggered={setIsRequestTriggered}
+                  setIsArtistRequestTriggered={setIsArtistRequestTriggered}
+                  setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
                   setTripSuggestions={setTripSuggestions}
                   setPosterName={setPosterName}
                   startDate={startDate}
@@ -83,7 +85,8 @@ function App() {
                   artistWishlist={[...artistWishlist]}
                   openDialog={openDialog}
                   openRouteDialog={openRouteDialog}
-                  isRequestTriggered={isRequestTriggered}
+                  isArtistRequestTriggered={isArtistRequestTriggered}
+                  isSuggestionRequestTriggered={isSuggestionRequestTriggered}
                   tripSuggestions={tripSuggestions} />
               </Grid>
               <Grid item xs={11} sm={11} md={7} lg={7} xl={7} sx={{ marginTop: 3}}>

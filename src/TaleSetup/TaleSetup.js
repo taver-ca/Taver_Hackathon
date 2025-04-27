@@ -18,7 +18,8 @@ const TaleSetup = ({ setStartDate,
     setArtistName,
     setFollowedArtists,
     setArtistWishlist,
-    setIsRequestTriggered,
+    setIsArtistRequestTriggered,
+    setIsSuggestionRequestTriggered,
     setTripSuggestions,
     setPosterName,
     startDate,
@@ -32,7 +33,8 @@ const TaleSetup = ({ setStartDate,
     artistWishlist,
     openDialog,
     openRouteDialog,
-    isRequestTriggered,
+    isArtistRequestTriggered,
+    isSuggestionRequestTriggered,
     tripSuggestions,
 }) => {
 
@@ -161,7 +163,8 @@ const TaleSetup = ({ setStartDate,
                     <TabPanel value={activeTab} index={0}>
                         <GetSpotifyPlaylistArtistsWithShows
                             setFollowedArtists={setFollowedArtists}
-                            setIsRequestTriggered={setIsRequestTriggered}
+                            setIsArtistRequestTriggered={setIsArtistRequestTriggered}
+                            setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
                             setAllConcerts={setAllConcerts}
                             setTripSuggestions={setTripSuggestions}
                             setOpenRouteDialog={setOpenRouteDialog}
@@ -185,7 +188,8 @@ const TaleSetup = ({ setStartDate,
                             tripSuggestions={tripSuggestions}
                             onArtistClick={handleArtistPick}
                             onTripSuggestionClick={handleRoutePick}
-                            isRequestTriggered={isRequestTriggered}
+                            isArtistRequestTriggered={isArtistRequestTriggered}
+                            isSuggestionRequestTriggered={isSuggestionRequestTriggered}
                         />
                     </TabPanel>
                     <TabPanel value={activeTab} index={2}>

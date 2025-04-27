@@ -47,7 +47,7 @@ function groupByProximityWithUniqueArtists(events, threshold) {
             });
 
             cluster.push(event); // Include current event in its cluster
-            if (cluster.length >2 && cluster.length < 7) {
+            if (cluster.length > 2 && cluster.length < 7) {
                 clusters.push(cluster);
             }
         }
@@ -64,7 +64,8 @@ function GetSpotifyPlaylistArtistsWithShows({
     startDate,
     endDate,
     setFollowedArtists,
-    setIsRequestTriggered,
+    setIsArtistRequestTriggered,
+    setIsSuggestionRequestTriggered,
     setAllConcerts,
     setTripSuggestions,
     openRouteDialogFromParent,
@@ -80,7 +81,7 @@ function GetSpotifyPlaylistArtistsWithShows({
         closeRouteDialog();
     };
 
-    
+
 
     useEffect(() => {
         console.log("opening route dialog");
@@ -104,7 +105,7 @@ function GetSpotifyPlaylistArtistsWithShows({
         const endIndex = url.indexOf("?"); // Find the index of the question mark
 
         const extractedPlaylistId = url.substring(startIndex, endIndex);
-        setIsRequestTriggered(true);
+        setIsArtistRequestTriggered(true);
         await fetch(`${process.env.REACT_APP_BACKEND}/GetSpotifyPlaylistArtistsWithGigs`, {
             method: 'POST',
             headers: {
@@ -134,9 +135,13 @@ function GetSpotifyPlaylistArtistsWithShows({
                 if (updatedArtists.length < 1) {
                     alert(`Oof, nobody from this playlist is on tour...`);
                 }
-                setFollowedArtists(updatedArtists);
-                setAllConcerts(updatedGigs);
-
+                await new Promise(resolve => {
+                    setFollowedArtists(updatedArtists);
+                    setAllConcerts(updatedGigs);
+                    resolve();
+                });
+                setIsArtistRequestTriggered(false);
+                setIsSuggestionRequestTriggered(true);
                 // suggest potential routes to user here
                 // let the clustering BEGIN!!!!!
                 // move the code below to it's separate function sometime later
@@ -171,26 +176,31 @@ function GetSpotifyPlaylistArtistsWithShows({
                 //console.table(clusters);
                 //give each cluster a name, wait until we get the name from the backend
                 await Promise.all(
-                clusters.map(async cluster => {
-                    const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
-                    console.table(nameInput);
-                    await FetchName(nameInput).then((suggestions) => {
-                        if (suggestions.length >= 1) {
-                            cluster.posterName = suggestions[0].title;
-                        }
-                    });
-                }));
-                //passing the clusters to the parent component
-                setTripSuggestions(clusters);
+                    clusters.map(async cluster => {
+                        const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
+                        console.table(nameInput);
+                        await FetchName(nameInput).then((suggestions) => {
+                            if (suggestions.length >= 1) {
+                                cluster.posterName = suggestions[0].title;
+                            }
+                        });
+                    }));
+                await new Promise(resolve => {
+                    //passing the clusters to the parent component
+                    setTripSuggestions(clusters);
+
+                    resolve();
+                });
                 //using the cluster to trigger the route dialog right here
-                setCalculatedRoutes(clusters);                
+                setCalculatedRoutes(clusters);
+                setIsSuggestionRequestTriggered(false);
+
             }
             return;
         }).catch((err) => {
             console.log("Some error occured");
             console.log(err);
         });
-        setIsRequestTriggered(false);
     };
 
 
