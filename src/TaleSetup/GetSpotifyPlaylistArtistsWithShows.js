@@ -3,6 +3,7 @@ import { Stack, TextField, Button, Typography, DialogContent, DialogContentText,
 import DismissButton from "./../TaleSetup/DismissButton.js";
 import { FetchName } from './../Odyssey/FetchName.js';
 import RouteChoiceList from './RouteChoiceList.js';
+import dayjs, { Dayjs } from 'dayjs';
 
 
 
@@ -74,11 +75,17 @@ function GetSpotifyPlaylistArtistsWithShows({
     const [calculatedRoutes, setCalculatedRoutes] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
-
+    // Time threshold (in milliseconds)
+    const [timeThreshold, setTimeThreshold] = useState(7 * 24 * 60 * 60 * 1000);
     // Distance threshold (in degrees, you can adjust this)
     const distanceThreshold = 4;
-    // Time threshold (in milliseconds)
-    const timeThreshold = endDate.getTime() - startDate.getTime();
+
+    useEffect(() => {
+        let filteredEndDate = endDate instanceof Date ? endDate.getTime() : new Date(endDate).getTime();
+        let filteredStartDate = startDate instanceof Date ? startDate.getTime() : new Date(startDate).getTime();
+        setTimeThreshold( filteredEndDate - filteredStartDate);
+    }, [startDate, endDate]);
+
     const handleClose = () => {
         setOpen(false);
         closeRouteDialog();
