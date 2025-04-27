@@ -202,10 +202,7 @@ function GetSpotifyPlaylistArtistsWithShows({
             console.log(err);
         });
     };
-
-
-
-
+    
     return (
         <Stack spacing={2}>
             <Typography>Find concerts from playlist</Typography>

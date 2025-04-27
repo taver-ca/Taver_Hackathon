@@ -124,35 +124,35 @@ const TaleSetup = ({ setStartDate,
                 ref={childRef}
             />
             {/* <MapStyle setMapStyle={setMapStyle}/> */}
-            <Box sx={{ position: 'relative', minHeight: '100vh' }}>
-            <Box sx={{
+            <Box sx={{ position: 'relative' }}>
+                <Box sx={{
                     position: 'absolute',
                     width: '100%',
                     boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
                 }}>
                     <Tabs
-                       value={activeTab}
-                       onChange={handleTabChange}
-                       variant="scrollable"
-                       scrollButtons="auto"
-                       sx={{
-                        "& .MuiTabs-scrollButtons": {
-                          "&:hover": {
-                            backgroundColor: "#bbdefb", // Slightly darker blue on hover
-                            transform: "scale(1.05)", // Subtle scale effect
-                          },
-                        },
-                        "& .MuiTabs-scrollButtons.Mui-disabled": {
-                          opacity: 0.5, // Disabled buttons appear semi-transparent
-                          cursor: "not-allowed", // Clear disabled state
-                        },
-                        "& .MuiTab-root": {
-                          color: "white", // Make tab text white
-                          "&.Mui-selected": {
-                            color: "white", // Ensure selected tab text is also white
-                          },
-                        },
-                      }}
+                        value={activeTab}
+                        onChange={handleTabChange}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        sx={{
+                            "& .MuiTabs-scrollButtons": {
+                                "&:hover": {
+                                    backgroundColor: "#bbdefb", // Slightly darker blue on hover
+                                    transform: "scale(1.05)", // Subtle scale effect
+                                },
+                            },
+                            "& .MuiTabs-scrollButtons.Mui-disabled": {
+                                opacity: 0.5, // Disabled buttons appear semi-transparent
+                                cursor: "not-allowed", // Clear disabled state
+                            },
+                            "& .MuiTab-root": {
+                                color: "white", // Make tab text white
+                                "&.Mui-selected": {
+                                    color: "white", // Ensure selected tab text is also white
+                                },
+                            },
+                        }}
                     >
                         <Tab label="Import Playlist" />
                         <Tab label="Artists & Suggestions" />
@@ -203,7 +203,7 @@ const TaleSetup = ({ setStartDate,
                         />
                     </TabPanel>
                 </Box>
-               
+
             </Box>
         </Stack>);
 };
