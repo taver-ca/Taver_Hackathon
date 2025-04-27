@@ -1,10 +1,12 @@
+import { useRef, useState, useMemo } from "react";
+import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
 import BaseInput from "./BaseInput.js";
 import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
-import { useRef, useState, useMemo } from "react";
-import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
+import MapStyle from "./MapStyle.js";
+
 
 const TaleSetup = ({ setStartDate,
     setEndDate,
@@ -123,7 +125,6 @@ const TaleSetup = ({ setStartDate,
                 }}
                 ref={childRef}
             />
-            {/* <MapStyle setMapStyle={setMapStyle}/> */}
             <Box sx={{ position: 'relative' }}>
                 <Box sx={{
                     position: 'absolute',
@@ -157,6 +158,7 @@ const TaleSetup = ({ setStartDate,
                         <Tab label="Import Playlist" />
                         <Tab label="Artists & Suggestions" />
                         <Tab label="Schedule" />
+                        <Tab label="Map Style" />
                     </Tabs>
                 </Box>
                 <Box sx={{ py: 5 }}>
@@ -202,8 +204,10 @@ const TaleSetup = ({ setStartDate,
                             triggerReEvaluation={triggerReEvaluation}
                         />
                     </TabPanel>
+                    <TabPanel value={activeTab} index={3}>
+                        <MapStyle setMapStyle={setMapStyle} />
+                    </TabPanel>
                 </Box>
-
             </Box>
         </Stack>);
 };

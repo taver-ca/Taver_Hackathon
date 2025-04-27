@@ -81,8 +81,6 @@ function GetSpotifyPlaylistArtistsWithShows({
         closeRouteDialog();
     };
 
-
-
     useEffect(() => {
         console.log("opening route dialog");
         if (calculatedRoutes && calculatedRoutes.length > 0) {
@@ -178,7 +176,6 @@ function GetSpotifyPlaylistArtistsWithShows({
                 await Promise.all(
                     clusters.map(async cluster => {
                         const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
-                        console.table(nameInput);
                         await FetchName(nameInput).then((suggestions) => {
                             if (suggestions.length >= 1) {
                                 cluster.posterName = suggestions[0].title;
@@ -188,11 +185,10 @@ function GetSpotifyPlaylistArtistsWithShows({
                 await new Promise(resolve => {
                     //passing the clusters to the parent component
                     setTripSuggestions(clusters);
-
+                    //using the cluster to trigger the route dialog right here
+                    setCalculatedRoutes(clusters);
                     resolve();
                 });
-                //using the cluster to trigger the route dialog right here
-                setCalculatedRoutes(clusters);
                 setIsSuggestionRequestTriggered(false);
 
             }
@@ -202,7 +198,10 @@ function GetSpotifyPlaylistArtistsWithShows({
             console.log(err);
         });
     };
-    
+
+
+
+
     return (
         <Stack spacing={2}>
             <Typography>Find concerts from playlist</Typography>
