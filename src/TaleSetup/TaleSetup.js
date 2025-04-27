@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
 import BaseInput from "./BaseInput.js";
 import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";
@@ -39,6 +39,8 @@ const TaleSetup = ({ setStartDate,
     isSuggestionRequestTriggered,
     tripSuggestions,
 }) => {
+    const isArtistTabDisabled = followedArtists.length === 0;
+    const isScheduleTabDisabled = concerts.length === 0;
 
     const getArtistWishlist = useMemo(() => {
         return artistWishlist.reduce((acc, item) => {
@@ -157,9 +159,9 @@ const TaleSetup = ({ setStartDate,
                         }}
                     >
                         <Tab label="Import Playlist" />
-                        <Tab label="Artists & Suggestions" />
-                        <Tab label="Schedule" />
-                        <Tab label="Map Style" />
+                        <Tab disabled={isArtistTabDisabled} label="Artists & Suggestions" />
+                        <Tab disabled={isScheduleTabDisabled} label="Schedule" />
+                        <Tab disabled={isArtistTabDisabled || isScheduleTabDisabled} label="Map Style" />
                     </Tabs>
                 </Box>
                 <Box sx={{ py: 5 }}>
