@@ -96,7 +96,7 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
   return earthRadiusKm * c;
 }
 
-const BaseInput = forwardRef(({ 
+const BaseInput = forwardRef(({
   setConcerts,
   setUserLocation,
   setFollowedArtists,
@@ -155,16 +155,11 @@ const BaseInput = forwardRef(({
     const artistInfoList = concerts.map(concert => {
       return { WishlistArtistName: concert.artistName, WishlistArtistId: concert.artistId }
     });
-    var updatedArtists = followedArtists;
 
-    artistInfoList.forEach(artistInfo => {
-      if (!artistWishlist.some(artistWishlistItem => artistWishlistItem.WishlistArtistId === artistInfo.WishlistArtistId)) {
-        artistWishlist.push(artistInfo);
-      }
-    });
+    const updatedArtists = [...followedArtists];
 
     setPosterName(concerts.posterName);
-    setArtistWishlist(artistWishlist);
+    setArtistWishlist(artistInfoList);
     setConcerts(concerts);
     closeRouteDialog();
     setFollowedArtists(updatedArtists);
@@ -275,7 +270,7 @@ const BaseInput = forwardRef(({
     });
   };
 
-  const  generateOptimizedConcertRoute = (allConcerts, userLocation, artistWishlist) => {
+  const generateOptimizedConcertRoute = (allConcerts, userLocation, artistWishlist) => {
     //generate an optimized route based on existing concerts saved and the artist wishlist, with consideration to user current location
     //console.log(`generate optimized concert route for the current selected artist`);
     //console.log(JSON.stringify(artistWishlist));
@@ -380,7 +375,7 @@ const BaseInput = forwardRef(({
           </Stack>
         </form>
       </Stack>
-      
+
       <Dialog open={open || openDialogFromParent} onClose={handleClose}>
         <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
         <DialogContent>
@@ -397,7 +392,7 @@ const BaseInput = forwardRef(({
         </DialogContent>
       </Dialog>
 
-      
+
     </Stack>
   );
 });
