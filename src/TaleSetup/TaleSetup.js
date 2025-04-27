@@ -117,6 +117,7 @@ const TaleSetup = ({ setStartDate,
                 followedArtists={followedArtists}
                 artistWishlist={[...artistWishlist]}
                 openDialogFromParent={openDialog}
+                setActiveTab={setActiveTab}
                 closeDialog={() => {
                     setOpenDialog(false);
                 }}
@@ -181,6 +182,7 @@ const TaleSetup = ({ setStartDate,
                             }}
                             trippSuggestions={tripSuggestions}
                             setRoute={handleRoutePick}
+                            setActiveTab={setActiveTab}
                         />
                     </TabPanel>
                     <TabPanel value={activeTab} index={1}>

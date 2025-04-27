@@ -70,7 +70,8 @@ function GetSpotifyPlaylistArtistsWithShows({
     setTripSuggestions,
     openRouteDialogFromParent,
     closeRouteDialog,
-    setRoute }) {
+    setRoute,
+    setActiveTab }) {
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const [calculatedRoutes, setCalculatedRoutes] = useState([]);
@@ -88,7 +89,7 @@ function GetSpotifyPlaylistArtistsWithShows({
         }
     }, [calculatedRoutes]);
 
-    let handleSubmit = async (e) => {
+    let handlePlaylistSubmit = async (e) => {
         e.preventDefault();
         const url = spotifyPlayList;
         const urlValidate = new RegExp("^https://open\\.spotify\\.com/playlist/[a-zA-Z0-9]{22}(\\?si=.*)?$");
@@ -104,6 +105,7 @@ function GetSpotifyPlaylistArtistsWithShows({
 
         const extractedPlaylistId = url.substring(startIndex, endIndex);
         setIsArtistRequestTriggered(true);
+        setActiveTab(1); // Switch to the second tab in the TaleSetup component 
         await fetch(`${process.env.REACT_APP_BACKEND}/GetSpotifyPlaylistArtistsWithGigs`, {
             method: 'POST',
             headers: {
@@ -205,7 +207,7 @@ function GetSpotifyPlaylistArtistsWithShows({
     return (
         <Stack spacing={2}>
             <Typography>Find concerts from playlist</Typography>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handlePlaylistSubmit}>
                 <Stack
                     direction={'column'}
                     spacing={2}

@@ -116,7 +116,7 @@ const BaseInput = forwardRef(({
   newArtistList,
   followedArtists,
   artistWishlist,
-
+  setActiveTab,
 }, ref) => {
 
   useEffect(() => {
@@ -151,7 +151,7 @@ const BaseInput = forwardRef(({
     setConcerts([]);
     setFollowedArtists([]);
     setArtistWishlist([]);
-    
+
     //update artist wishlist to include the artist from the concerts
     const artistInfoList = concerts.map(concert => {
       return { WishlistArtistName: concert.artistName, WishlistArtistId: concert.artistId }
@@ -167,7 +167,7 @@ const BaseInput = forwardRef(({
   }
 
   const submitArtistInfo = async (incomingArtistInfo) => {
-
+    setActiveTab(1); // Switch to the second tab in the TaleSetup component 
     if (artistWishlist.length >= 5) {
       alert(`You can have only 5 artists at a time.`)
       return
@@ -198,7 +198,6 @@ const BaseInput = forwardRef(({
         }
 
         //check if artist is already featured in somebody else's concert 
-
         //in order to check this 
         //check if existing concert titles includes incoming artist's concert titles
         //check if existing concert titles includes incoming artist's name 
