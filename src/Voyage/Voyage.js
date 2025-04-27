@@ -95,6 +95,9 @@ const Voyage = ({
     return (
         <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' }, mb: 10 }}>
             <Stack disablePadding spacing={3} id="sharepage">
+                <Box>
+                    <img src={window.location.origin + "/Taver.png"} alt="Taver" />
+                </Box>
                 {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
                 <Typography
                     variant="h3"

@@ -6,11 +6,7 @@ import RouteChoiceList from './RouteChoiceList.js';
 
 
 
-// Distance threshold (in degrees, you can adjust this)
-const distanceThreshold = 4;
 
-// Time threshold (in milliseconds)
-const timeThreshold = 120 * 60 * 60 * 1000; // 24 hours
 
 // Helper function: calculate Euclidean distance
 function calculateDistance(a, b) {
@@ -23,7 +19,7 @@ function calculateTimeDifference(timeA, timeB) {
 }
 
 // Group events based on proximity, ensuring unique artistId in each cluster
-function groupByProximityWithUniqueArtists(events, threshold) {
+function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThreshold) {
     const clusters = [];
     const visited = new Set();
 
@@ -72,11 +68,17 @@ function GetSpotifyPlaylistArtistsWithShows({
     closeRouteDialog,
     setRoute,
     setActiveTab }) {
+
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const [calculatedRoutes, setCalculatedRoutes] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
+
+    // Distance threshold (in degrees, you can adjust this)
+    const distanceThreshold = 4;
+    // Time threshold (in milliseconds)
+    const timeThreshold = endDate.getTime() - startDate.getTime();
     const handleClose = () => {
         setOpen(false);
         closeRouteDialog();
@@ -146,7 +148,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                 // let the clustering BEGIN!!!!!
                 // move the code below to it's separate function sometime later
                 // but we are at a hackathon so fuck best practices
-                var clusters = groupByProximityWithUniqueArtists(updatedGigs, distanceThreshold);
+                var clusters = groupByProximityWithUniqueArtists(updatedGigs, distanceThreshold, timeThreshold);
 
                 //console.table(clusters);
                 // Remove duplicates within each cluster by `id`
@@ -230,7 +232,6 @@ function GetSpotifyPlaylistArtistsWithShows({
                         helperText={errorMessage}
                         error={errorMessage}
                     />
-
                     <Button
                         disabled={(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
                         type="submit"

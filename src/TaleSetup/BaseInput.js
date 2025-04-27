@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, FormControl, InputLabel, NativeSelect, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography } from '@mui/material';
+import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography } from '@mui/material';
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
 import { FetchArtist } from "./FetchArtist";
@@ -383,7 +383,8 @@ const BaseInput = forwardRef(({
             There are a few artists with similar names, please pick one.
           </DialogContentText>
           <List>
-            {artistListFromParent && <ArtistChoiceList artists={artistListFromParent} onArtistClick={submitArtistInfo} />
+            {
+              artistListFromParent && <ArtistChoiceList artists={artistListFromParent} onArtistClick={submitArtistInfo} />
             }
           </List>
           <DialogActions>
