@@ -128,7 +128,7 @@ const TaleSetup = ({ setStartDate,
                 }}
                 ref={childRef}
             />
-            <Box sx={{ position: 'relative' }}>
+            <Stack sx={{ position: 'relative' }} spacing={8}>
                 <Box sx={{
                     position: 'absolute',
                     width: '100%',
@@ -166,7 +166,7 @@ const TaleSetup = ({ setStartDate,
                         <Tab disabled={isArtistTabDisabled || isScheduleTabDisabled} label="Map Style" />
                     </Tabs>
                 </Box>
-                <Box sx={{ py: 5 }}>
+                <Box>
                     <TabPanel value={activeTab} index={0}>
                         <GetSpotifyPlaylistArtistsWithShows
                             setFollowedArtists={setFollowedArtists}
@@ -214,7 +214,7 @@ const TaleSetup = ({ setStartDate,
                         <MapStyle setMapStyle={setMapStyle} />
                     </TabPanel>
                 </Box>
-            </Box>
+            </Stack>
         </Stack>);
 };
 export default TaleSetup;
