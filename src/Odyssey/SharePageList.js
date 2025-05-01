@@ -10,9 +10,10 @@ function formattedDate(incomingDate) {
 
 const SharePageList = ({ concerts }) => {
     return (
-        <List >
+        <List>
             {concerts.map((concert, index) => (
                 <ListItem
+                    sx={{ background: '#70afbf', borderRadius: 2, mb: 1, boxShadow: 2}}
                     key={index}
                     disablePadding>
                     <ListItemButton>
@@ -27,8 +28,8 @@ const SharePageList = ({ concerts }) => {
                             secondary={
                                 <React.Fragment>
                                     <Stack direction="row" spacing={1} justifyContent={'space-between'}>
-                                        <Chip color="primary" label={`${concert.location.address}`} />
-                                        <Chip color="primary" label={`${formattedDate(concert.date)}`} />
+                                        <Chip style={{ flexGrow: 1 }} color="primary" label={`${concert.location.address}`} />
+                                        <Chip style={{ flexGrow: 1 }} color="primary" label={`${formattedDate(concert.date)}`} />
                                     </Stack>
                                 </React.Fragment>
                             } />

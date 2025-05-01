@@ -45,7 +45,7 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, posterName
     return (
         <Stack disablePadding spacing={3}>
             {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
-            <Stack spacing={2} direction={'row'} sx={{ width: '100%' }} >
+            <Stack spacing={2} direction={'row'} >
                 {isLoading ? <Stack direction={"column"} sx={{ flex: 1 }} alignItems="center"> <CircularProgress size={24} /> </Stack> :
                     <TextField
                         variant="standard"
@@ -63,7 +63,7 @@ const SharePage = ({ concerts, userLocation, mapStyle, setPosterName, posterName
                     Generate
                 </Button>
             </Stack>
-            <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
+            <Stack justifyContent="space-evenly" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" }}} >
                 <SharePageList concerts={concerts1} />
                 <SharePageList concerts={concerts2} />
             </Stack>

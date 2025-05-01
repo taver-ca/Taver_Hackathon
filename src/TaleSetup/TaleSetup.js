@@ -81,8 +81,14 @@ const TaleSetup = ({ setStartDate,
     const TabPanel = ({ children, value, index }) => (
         <div hidden={value !== index}>
             {value === index && (
-                <Box >
-                    <Typography>{children}</Typography>
+                <Box 
+                sx={{ 
+                    borderRadius: 1, 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    alignItems: 'center' 
+                }}>
+                    {children}
                 </Box>
             )}
         </div>

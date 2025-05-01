@@ -6,7 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
-import { Stack, Typography, Button, Box } from "@mui/material";
+import { Stack, Typography, Button, Box, Card, CardHeader, CardContent } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
@@ -37,7 +37,7 @@ class ConcertList extends React.Component {
     const renderConcertList = this.state.concerts.map((concert, index) => {
       return (
         <ListItem
-        sx={{ background: "#70afbf", borderRadius: 2, mb: 1, boxShadow: 2 }}
+          sx={{ background: "#70afbf", borderRadius: 2, mb: 1, boxShadow: 2 }}
           key={index}
           disablePadding={{ xs: true, sm: false }}
           secondaryAction={<IconButton
@@ -93,7 +93,7 @@ class ConcertList extends React.Component {
           >
             <DeleteIcon sx={{ color: "red" }} />
           </IconButton>}
-          >
+        >
           <ListItemButton >
             <ListItemAvatar>
               <Avatar alt={`${concert.artist}`} src={`${concert.image.url}`} />
@@ -102,26 +102,26 @@ class ConcertList extends React.Component {
               primary={`${concert.title}`}
               secondary={
                 <Stack
-                    direction="row"
-                    justifyContent={"space-between"}
-                    display={"flex"}
+                  direction="row"
+                  justifyContent={"space-between"}
+                  display={"flex"}
+                >
+                  <Stack
+                    width={'100%'}
+                    direction="column"
+                    spacing={1}
                   >
-                    <Stack
-                      width={'100%'}
-                      direction="column"                   
-                      spacing={1}
-                    >
-                      <Chip
-                        color="primary"
-                        label={`${concert.location.name}`}
-                      />
-                      <Chip
-                        color="secondary"
-                        label={`${formattedDate(concert.date)}`}
-                      />
-                    </Stack>
-                    
+                    <Chip
+                      color="primary"
+                      label={`${concert.location.name}`}
+                    />
+                    <Chip
+                      color="secondary"
+                      label={`${formattedDate(concert.date)}`}
+                    />
                   </Stack>
+
+                </Stack>
               }
             />
           </ListItemButton>
@@ -139,32 +139,31 @@ class ConcertList extends React.Component {
       }
     };
     return (
-      <Box sx={{ width: {xs:"100%",sm:"100%", md:"90%"} }}>
-        {hasConcerts && (
-          <Box sx={{ mt: 3, mb: 3 }}>
-            <Typography>
-              Upcoming Concerts ({this.state.concerts.length}) :
-            </Typography>
-          </Box>
-        )}
-        {hasConcerts && (
-          <Button onClick={onClearAllPress} variant="outlined" color="warning">
-            Clear All
-          </Button>
-        )}
-        <List
-          sx={{
-            width: {
-              xs: "100%",
-              sm: "100%",
-              md: "100%",
-              lg: "110%",
-              xl: "110%",
-            },
-          }}
-        >
-          {renderConcertList}
-        </List>
+      <Box sx={{ width: "90%" }}>
+        <Card sx={{ backgroundColor: "#70afbf" }}
+          variant="elevation" elevation={3}>
+          {hasConcerts && (
+            <CardHeader
+              sx={{ backgroundColor: "#5e97a5", color: "white" }}
+              title={`Upcoming Concerts (${this.state.concerts.length}) / 5 :`}
+              action={
+                <Button onClick={onClearAllPress} variant="outlined" color="warning">
+                  Clear All
+                </Button>
+              }>
+            </CardHeader>
+          )}
+          <CardContent>
+            <List
+              sx={{
+                width: "100%",
+              }}
+            >
+              {renderConcertList}
+            </List>
+          </CardContent>
+
+        </Card>
       </Box>)
   }
 }
