@@ -37,7 +37,7 @@ class ConcertList extends React.Component {
     const renderConcertList = this.state.concerts.map((concert, index) => {
       return (
         <ListItem
-          sx={{ background: "#70afbf", borderRadius: 2, mb: 1, boxShadow: 2 }}
+          sx={{ background: "#e2e900", borderRadius: 2, mb: 1, boxShadow: 2 }}
           key={index}
           disablePadding={{ xs: true, sm: false }}
           secondaryAction={<IconButton
@@ -99,7 +99,7 @@ class ConcertList extends React.Component {
               <Avatar alt={`${concert.artist}`} src={`${concert.image.url}`} />
             </ListItemAvatar>
             <ListItemText
-              sx={{ color: "white" }}
+              sx={{ color: "black" }}
               primary={`${concert.title}`}
               secondary={
                 <Stack
