@@ -132,7 +132,9 @@ const TaleSetup = ({ setStartDate,
                 <Box sx={{
                     position: 'absolute',
                     width: '100%',
-                    boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 5px 1px rgba(0,0,0,0.1)',
+                    backgroundColor: '#5e97a5',
+                    borderRadius: '4px'
                 }}>
                     <Tabs
                         value={activeTab}
@@ -147,7 +149,7 @@ const TaleSetup = ({ setStartDate,
                                 },
                             },
                             "& .MuiTabs-scrollButtons.Mui-disabled": {
-                                opacity: 0.5, // Disabled buttons appear semi-transparent
+                                opacity: 0.2, // Disabled buttons appear semi-transparent
                                 cursor: "not-allowed", // Clear disabled state
                             },
                             "& .MuiTab-root": {

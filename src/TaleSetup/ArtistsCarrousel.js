@@ -12,23 +12,13 @@ function SwipeableTextMobileStepper({ groupedNames, handleArtistClick }) {
   }
 
   const [disableAutoScroll, setDisableAutoScroll] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
   const [toltipOpen, setToltipOpen] = useState(false)
 
   const handleLetterClick = (letter) => {
     setDisableAutoScroll(true)
     setToltipOpen(letter)
   }
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
-  const handleStepChange = (step) => {
-    setActiveStep(step);
-  };
 
   const chunkCarrousel = (arr, size) =>
     Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>

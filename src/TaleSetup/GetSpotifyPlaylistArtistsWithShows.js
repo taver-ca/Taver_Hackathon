@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, TextField, Button, Typography, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Box } from '@mui/material';
+import { Stack, TextField, Button, Typography, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Box, Card, CardHeader, CardContent } from '@mui/material';
 import DismissButton from "./../TaleSetup/DismissButton.js";
 import { FetchName } from './../Odyssey/FetchName.js';
 import RouteChoiceList from './RouteChoiceList.js';
@@ -83,7 +83,7 @@ function GetSpotifyPlaylistArtistsWithShows({
     useEffect(() => {
         let filteredEndDate = endDate instanceof Date ? endDate.getTime() : new Date(endDate).getTime();
         let filteredStartDate = startDate instanceof Date ? startDate.getTime() : new Date(startDate).getTime();
-        setTimeThreshold( filteredEndDate - filteredStartDate);
+        setTimeThreshold(filteredEndDate - filteredStartDate);
     }, [startDate, endDate]);
 
     const handleClose = () => {
@@ -214,40 +214,41 @@ function GetSpotifyPlaylistArtistsWithShows({
 
 
     return (
-        <Stack spacing={2}>
-            <Box >
-                <Typography sx={{ mt: 3, mb: 3 }}>Find concerts from playlist</Typography>
-            </Box>
-            <form onSubmit={handlePlaylistSubmit}>
-                <Stack
-                    direction={'column'}
-                    spacing={2}
-                    container
-                    alignItems="center">
-                    <TextField
-                        sx={{
-                            "& input": {
-                                color: "white",
-                            },
-                            "& label": {
-                                color: "white",
-                            },
-                            width: { xs: '100%' }
-                        }}
-                        label="Spotify Playlist URL:"
-                        value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
-                        helperText={errorMessage}
-                        error={errorMessage}
-                    />
-                    <Button
-                        disabled={(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
-                        type="submit"
-                        variant="contained"
-                        color="primary">
-                        Submit
-                    </Button>
-                </Stack>
-            </form>
+        <Stack spacing={3} sx={{ container: true, flexDirection: 'column', paddingTop: 3 }}>
+            <Card sx={{ backgroundColor: "#70afbf", mt: 1 }} variant="elevation" elevation={3}>
+                <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }}  title="Find artists on tour from your playlist" />
+                <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}><form onSubmit={handlePlaylistSubmit}>
+                    <Stack
+                        direction={'column'}
+                        spacing={2}
+                        container
+                        alignItems="center">
+                        <TextField
+                            sx={{
+                                "& input": {
+                                    color: "white",
+                                },
+                                "& label": {
+                                    color: "white",
+                                },
+                                width: { xs: '100%' }
+                            }}
+                            label="Spotify Playlist URL:"
+                            value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
+                            helperText={errorMessage}
+                            error={errorMessage}
+                        />
+                        <Button
+                            disabled={(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
+                            type="submit"
+                            variant="contained"
+                            color="primary">
+                            Submit
+                        </Button>
+                    </Stack>
+                </form>
+                </CardContent>
+            </Card>
 
             <Dialog open={open || openRouteDialogFromParent} onClose={closeRouteDialog}>
                 <DialogTitle>{"Choices Choices Choices..."}</DialogTitle>
