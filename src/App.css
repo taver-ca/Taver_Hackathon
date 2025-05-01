@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #7fc9dc;
   min-height: 105vh;
   display: flex;
   align-items: center;
@@ -25,7 +25,7 @@
 }
 
 .Voyage {
-  background-color: #282c34;
+  background-color: #7fc9dc;
   min-height: 100vh;
   display: flex;
   align-items: start;
