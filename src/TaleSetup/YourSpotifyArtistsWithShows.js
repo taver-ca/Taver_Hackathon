@@ -62,26 +62,26 @@ function YourSpotifyArtistsWithShows({
 
   return (
     <Grid spacing={3} >
-      <Card sx={{backgroundColor:"#70afbf" }}
-      variant="elevation" elevation={3}>
+      <Card sx={{ backgroundColor: "#70afbf" }}
+        variant="elevation" elevation={3}>
         <CardHeader
           sx={{ backgroundColor: "#5e97a5", color: "white" }}
-                title ="Artists from your playlist">
+          title="Artists from your playlist">
 
         </CardHeader>
         <CardContent>
           {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (
-            <Grid  container spacing={1} direction="row" justifyContent="center">
+            <Grid container spacing={1} direction="row" justifyContent="center">
               {commaSeparatedfollowedArtists}
             </Grid>)}
           {isArtistLoading && <CircularProgress sx={{ mt: 5 }} />}</CardContent>
       </Card>
 
-      <Card sx={{backgroundColor:"#70afbf", mt:2 }}
-      variant="elevation" elevation={3}>
+      <Card sx={{ backgroundColor: "#70afbf", mt: 2 }}
+        variant="elevation" elevation={3}>
         <CardHeader
           sx={{ backgroundColor: "#5e97a5", color: "white" }}
-                title ="Trip Suggestions">
+          title="Trip Suggestions">
         </CardHeader>
         <CardContent>
           <Grid container spacing={1} direction="row" justifyContent="center">

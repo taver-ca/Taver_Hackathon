@@ -99,6 +99,7 @@ class ConcertList extends React.Component {
               <Avatar alt={`${concert.artist}`} src={`${concert.image.url}`} />
             </ListItemAvatar>
             <ListItemText
+              sx={{ color: "white" }}
               primary={`${concert.title}`}
               secondary={
                 <Stack
@@ -139,7 +140,7 @@ class ConcertList extends React.Component {
       }
     };
     return (
-      <Box sx={{ width: "90%" }}>
+      <Box>
         <Card sx={{ backgroundColor: "#70afbf" }}
           variant="elevation" elevation={3}>
           {hasConcerts && (
