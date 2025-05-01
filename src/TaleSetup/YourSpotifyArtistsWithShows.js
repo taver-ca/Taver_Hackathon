@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Chip, Box, CircularProgress, Typography } from '@mui/material';
+import { Grid, Chip, Box, CircularProgress, Typography, Card, CardContent, CardHeader } from '@mui/material';
 import SwipeableTextMobileStepper from './ArtistsCarrousel'
 
 function YourSpotifyArtistsWithShows({
@@ -61,33 +61,35 @@ function YourSpotifyArtistsWithShows({
   });
 
   return (
-    <Grid spacing={2} >
-      <Box sx={{ mt: 3, mb: 3 }}>
-        <Typography>Artists from your playlist</Typography>
-      </Box>
-      {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (<Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
-          {commaSeparatedfollowedArtists}
-        </Grid>
-      </Box>)}
-      {isArtistLoading && <CircularProgress sx={{ mt: 5 }} />}
+    <Grid  spacing={3} >
+      <Card sx={{backgroundColor:"#70afbf", mt:3 }}
+      variant="elevation" elevation={3}>
+        <CardHeader
+          sx={{ backgroundColor: "#5e97a5", color: "white" }}
+                title ="Artists from your playlist">
 
-      <Box sx={{ mt: 3, mb: 3 }}>
-        <Typography>Trip Suggestions</Typography>
-      </Box>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center">
-        <Grid xs={10} md={10} container spacing={1} direction="row" justifyContent="center">
-          {commaSeparatedTripSuggestions}
-        </Grid>
-      </Box>
-      {isSuggestionLoading && <CircularProgress sx={{ mt: 5 }} />}
+        </CardHeader>
+        <CardContent>
+          {artists.length > 25 ? (<SwipeableTextMobileStepper groupedNames={groupedNames} handleArtistClick={handleClick} />) : (
+            <Grid  container spacing={1} direction="row" justifyContent="center">
+              {commaSeparatedfollowedArtists}
+            </Grid>)}
+          {isArtistLoading && <CircularProgress sx={{ mt: 5 }} />}</CardContent>
+      </Card>
+
+      <Card sx={{backgroundColor:"#70afbf", mt:2 }}
+      variant="elevation" elevation={3}>
+        <CardHeader
+          sx={{ backgroundColor: "#5e97a5", color: "white" }}
+                title ="Trip Suggestions">
+        </CardHeader>
+        <CardContent>
+          <Grid container spacing={1} direction="row" justifyContent="center">
+            {commaSeparatedTripSuggestions}
+          </Grid>
+          {isSuggestionLoading && <CircularProgress sx={{ mt: 5 }} />}
+        </CardContent>
+      </Card>
     </Grid>
   );
 }
