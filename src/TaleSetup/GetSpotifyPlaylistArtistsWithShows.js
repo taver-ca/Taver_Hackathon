@@ -214,7 +214,7 @@ function GetSpotifyPlaylistArtistsWithShows({
 
 
     return (
-        <Stack spacing={3} sx={{ container: true, flexDirection: 'column', paddingTop: 3 }}>
+        <Stack spacing={3} sx={{ container: true, flexDirection: 'column', paddingTop: 0 }}>
             <Card sx={{ backgroundColor: "#70afbf", mt: 1 }} variant="elevation" elevation={3}>
                 <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }}  title="Find artists on tour from your playlist" />
                 <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}><form onSubmit={handlePlaylistSubmit}>
