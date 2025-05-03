@@ -146,9 +146,9 @@ class ConcertList extends React.Component {
           {hasConcerts && (
             <CardHeader
               sx={{ backgroundColor: "#5e97a5", color: "white" }}
-              title={`Upcoming Concerts (${this.state.concerts.length}) / 5 :`}
+              title={`Upcoming Concerts ${this.state.concerts.length} / 5 :`}
               action={
-                <Button onClick={onClearAllPress} variant="outlined" color="warning">
+                <Button onClick={onClearAllPress} variant="contained" color="warning">
                   Clear All
                 </Button>
               }>

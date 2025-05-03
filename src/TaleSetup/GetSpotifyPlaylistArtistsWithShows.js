@@ -216,7 +216,7 @@ function GetSpotifyPlaylistArtistsWithShows({
     return (
         <Stack spacing={3} sx={{ container: true, flexDirection: 'column', paddingTop: 0 }}>
             <Card sx={{ backgroundColor: "#70afbf", mt: 1 }} variant="elevation" elevation={3}>
-                <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }}  title="Find artists on tour from your playlist" />
+                <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }}  title="See who's on tour from your playlist" />
                 <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}><form onSubmit={handlePlaylistSubmit}>
                     <Stack
                         direction={'column'}
@@ -234,6 +234,8 @@ function GetSpotifyPlaylistArtistsWithShows({
                                 width: { xs: '100%' }
                             }}
                             label="Spotify Playlist URL:"
+                            placeholder='https://open.spotify.com/playlist/37i9dQZF1DWXT8uSSn6PRy'
+                            InputLabelProps={{ shrink: true }}
                             value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
                             helperText={errorMessage}
                             error={errorMessage}

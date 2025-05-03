@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography } from '@mui/material';
+import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography, Card, CardContent,CardHeader } from '@mui/material';
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
 import { FetchArtist } from "./FetchArtist";
@@ -332,50 +332,58 @@ const BaseInput = forwardRef(({
   return (
 
     <Stack direction={'column'} spacing={2}>
-      <Stack justifyContent="center" direction={'row'} spacing={2}>
-        <Typography>Tour map mode:</Typography>
-        <Switch
-          checked={isChecked}
-          onChange={handleSwitchChange}
-          inputProps={{ 'aria-label': 'Toggle Switch' }}
-        />
-      </Stack>
-
-      <Stack
-        direction={'column'}
-        spacing={2}>
-        <form onSubmit={handleSubmit}>
-          <Stack direction={'column'}
-            spacing={2}
-            container
-            alignItems="center">
-            <TextField
-              sx={{
-                "& input": {
-                  color: "white",
-                },
-                "& label": {
-                  color: "white",
-                },
-                width: { xs: '100%' }
-              }}
-              label="Enter Artist Name:"
-              value={artistName} onChange={(e) => {
-                setArtistName(e.target.value);
-                updateArtistNameInParent(e.target.value);
-              }}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-            >
-              Submit
-            </Button>
+      <Card sx={{ backgroundColor: "#70afbf" }}>
+        <CardHeader
+          sx={{ backgroundColor: "#5e97a5", color: "white" }}
+          title="Who do you want to see?">
+        </CardHeader>
+        <CardContent>
+        <Stack justifyContent="center" direction={'row'} spacing={2}>
+          <Typography color={"white"}>Tour map mode:</Typography>
+          <Switch
+            checked={isChecked}
+            onChange={handleSwitchChange}
+            inputProps={{ 'aria-label': 'Toggle Switch' }}
+          />
+        </Stack>
+          <Stack
+            direction={'column'}
+            spacing={2}>
+            <form onSubmit={handleSubmit}>
+              <Stack direction={'column'}
+                spacing={2}
+                container
+                alignItems="center">
+                <TextField
+                  sx={{
+                    "& input": {
+                      color: "white",
+                    },
+                    "& label": {
+                      color: "white",
+                    },
+                    width: { xs: '100%' }
+                  }}
+                  label="Enter Artist Name:"
+                  InputLabelProps={{ shrink: true }}
+                  placeholder="Taylor Swift"
+                  value={artistName} onChange={(e) => {
+                    setArtistName(e.target.value);
+                    updateArtistNameInParent(e.target.value);
+                  }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                >
+                  Submit
+                </Button>
+              </Stack>
+            </form>
           </Stack>
-        </form>
-      </Stack>
-
+        </CardContent>
+      </Card>
       <Dialog open={open || openDialogFromParent} onClose={handleClose}>
         <DialogTitle>{"Uhhh? Which one exactly?"}</DialogTitle>
         <DialogContent>
@@ -392,8 +400,6 @@ const BaseInput = forwardRef(({
           </DialogActions>
         </DialogContent>
       </Dialog>
-
-
     </Stack>
   );
 });
