@@ -149,20 +149,15 @@ const BaseInput = forwardRef(({
   const pickRoute = (concerts) => {
     // clear existing concerts and followed artist
     setConcerts([]);
-    setFollowedArtists([]);
     setArtistWishlist([]);
-
     //update artist wishlist to include the artist from the concerts
     const artistInfoList = concerts.map(concert => {
-      return { WishlistArtistName: concert.artistName, WishlistArtistId: concert.artistId }
+      return { WishlistArtistName: concert.artist, WishlistArtistId: concert.artistId }
     });
 
-    const updatedArtists = [...followedArtists];
-
     setPosterName(concerts.posterName);
-    setArtistWishlist(artistInfoList);
     setConcerts(concerts);
-    setFollowedArtists(updatedArtists);
+    setArtistWishlist(artistInfoList);
     closeRouteDialog();
   }
 
