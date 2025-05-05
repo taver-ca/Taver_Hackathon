@@ -72,7 +72,6 @@ const Odyssey = ({
 
             if (res.status === 200) {
                 let talesLink = await res.json();
-
                 if (document.hasFocus()) {
                     //we will not create a new entry into the database once a shareId is present.
                     setShareId(talesLink.shareId);
@@ -85,13 +84,16 @@ const Odyssey = ({
                     });
                 } else {
                     console.error('Document is not focused');
+                    alert('huh? Document is not focused?');
                 }
 
             } else {
-                console.log("Some error occured");
+                console.log("Backend error: ", res.status);
+                alert('Looks like our server isn\'t working at the moment, please try again later.');
             }
         } catch (err) {
             console.log(err);
+            alert('Looks like our server isn\'t working at the moment, please try again later.');
         }
         //make a request to taverondemand.azurewebsites.net/api/SaveTrips
         setIsLoading(false);
