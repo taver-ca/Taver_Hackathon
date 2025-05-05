@@ -97,6 +97,7 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
 }
 
 const BaseInput = forwardRef(({
+  setIsTourMapChecked,
   setConcerts,
   setUserLocation,
   setFollowedArtists,
@@ -104,6 +105,7 @@ const BaseInput = forwardRef(({
   setArtistWishlist,
   setPosterName,
   startDate,
+  isTourMapChecked,
   endDate,
   allConcerts,
   concerts,
@@ -228,7 +230,7 @@ const BaseInput = forwardRef(({
         //clear the displayed concert, we will have to re-generate everything from scratch to maintain consistency (and by consistency I mean the order you pick artist should have no effect on how the route should be planned out)
         setConcerts(emptyConcert);
         //now.. are we rendering a route for multiple artist or just simply showing route of one single artist
-        if (isChecked) {
+        if (isTourMapChecked) {
           setConcerts(incomingConcerts);
         }
         else {
@@ -312,7 +314,7 @@ const BaseInput = forwardRef(({
     }
   }
 
-  const [isChecked, setIsChecked] = useState(false);
+
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
@@ -321,7 +323,7 @@ const BaseInput = forwardRef(({
   };
 
   const handleSwitchChange = () => {
-    setIsChecked((prev) => !prev);
+    setIsTourMapChecked((prev) => !prev);
   };
 
   return (
@@ -336,7 +338,7 @@ const BaseInput = forwardRef(({
         <Stack justifyContent="center" direction={'row'} spacing={2}>
           <Typography color={"white"}>Tour map mode:</Typography>
           <Switch
-            checked={isChecked}
+            checked={isTourMapChecked}
             onChange={handleSwitchChange}
             inputProps={{ 'aria-label': 'Toggle Switch' }}
           />

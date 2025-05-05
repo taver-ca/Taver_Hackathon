@@ -39,6 +39,7 @@ const TaleSetup = ({ setStartDate,
     isSuggestionRequestTriggered,
     tripSuggestions,
 }) => {
+    const [isTourMapChecked, setIsTourMapChecked] = useState(false);
     const isArtistTabDisabled = followedArtists.length === 0;
     const isScheduleTabDisabled = concerts.length === 0;
 
@@ -97,15 +98,10 @@ const TaleSetup = ({ setStartDate,
         <Stack sx={{ container: true, flexDirection: 'column' }} spacing={4}>
             <Box>
                 <img src={window.location.origin + "/Taver.png"} alt="Taver" />
-            </Box>
-            <PickDate
-                updateStartDateInParent={setStartDate}
-                updateEndDateInParent={setEndDate}
-                artistName={artistName}
-                newArtistList={setArtistList}
-                openDialog={setOpenDialog}
-            />
+            </Box>           
+
             <BaseInput
+                setIsTourMapChecked={setIsTourMapChecked}                
                 setConcerts={setConcerts}
                 setUserLocation={setUserLocation}
                 setMapStyle={setMapStyle}
@@ -113,6 +109,7 @@ const TaleSetup = ({ setStartDate,
                 setPosterName={setPosterName}
                 setFollowedArtists={setFollowedArtists}
                 setArtistWishlist={setArtistWishlist}
+                isTourMapChecked={isTourMapChecked}
                 startDate={startDate}
                 endDate={endDate}
                 allConcerts={allConcerts}
@@ -133,7 +130,14 @@ const TaleSetup = ({ setStartDate,
                 }}
                 ref={childRef}
             />
-            <Stack sx={{ position: 'relative' }} spacing={8}>
+            {!isTourMapChecked && (<PickDate
+                updateStartDateInParent={setStartDate}
+                updateEndDateInParent={setEndDate}
+                artistName={artistName}
+                newArtistList={setArtistList}
+                openDialog={setOpenDialog}
+            />)}
+            {!isTourMapChecked && (<Stack sx={{ position: 'relative' }} spacing={8}>
                 <Box sx={{
                     position: 'absolute',
                     width: '100%',
@@ -219,7 +223,7 @@ const TaleSetup = ({ setStartDate,
                         <MapStyle setMapStyle={setMapStyle} />
                     </TabPanel>
                 </Box>
-            </Stack>
+            </Stack>)}
         </Stack>);
 };
 export default TaleSetup;
