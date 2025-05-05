@@ -13,9 +13,8 @@ const SharePageList = ({ concerts }) => {
         <List>
             {concerts.map((concert, index) => (
                 <ListItem
-                    sx={{ background: '#70afbf', borderRadius: 2, mb: 1, boxShadow: 2}}
-                    key={index}
-                    disablePadding>
+                    sx={{ background: '#70afbf', borderRadius: 2, mb:3, boxShadow: 2}}
+                    key={index}>
                     <ListItemButton>
                         <ListItemAvatar>
                             <Avatar

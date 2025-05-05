@@ -33,7 +33,7 @@ const Voyage = ({
         html2canvas(element, {
             logging: true,
             proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
-            backgroundColor: "#282c34",
+            backgroundColor: "#7fc9dc",
 
             ignoreElements: (node) => {
                 return node.nodeName === "IFRAME";
@@ -106,8 +106,8 @@ const Voyage = ({
     const concerts2 = concerts.slice(middleIndex);
 
     return (
-        <Stack spacing={3} sx={{ width: { xs: '100%', sm: '90%', md: '50%' }, mb: 10 }}>
-            <Stack disablePadding spacing={3} id="sharepage">
+        <Stack spacing={3} sx={{ width: '100%' }}>
+            <Stack spacing={3} sx={{ px:{xs:5, sm:10, md:25, lg:50, xl:75} }}id="sharepage">
                 <Box>
                     <img src={window.location.origin + "/Taver.png"} alt="Taver" />
                 </Box>
@@ -115,7 +115,7 @@ const Voyage = ({
                 <Typography
                     variant="h3"
                 >{posterName}</Typography>
-                <Stack justifyContent="center" container sx={{ flexDirection: { xs: "column", sm: "row", md: "row" } }} >
+                <Stack justifyContent="space-evenly" container  spacing={{xs:-3,sm:-2, md:0}} sx={{ flexDirection: { xs: "column", sm: "column", md: "row" } }} >
                     <SharePageList concerts={concerts1} />
                     <SharePageList concerts={concerts2} />
                 </Stack>
