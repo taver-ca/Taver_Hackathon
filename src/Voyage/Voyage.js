@@ -106,7 +106,7 @@ const Voyage = ({
     const concerts2 = concerts.slice(middleIndex);
 
     return (
-        <Stack spacing={3} sx={{ width: '100%' }}>
+        <Stack spacing={3} marginBottom={10} sx={{ width: '100%' }}>
             <Stack spacing={3} sx={{ px:{xs:5, sm:10, md:25, lg:50, xl:75} }}id="sharepage">
                 <Box>
                     <img src={window.location.origin + "/Taver.png"} alt="Taver" />
@@ -122,7 +122,6 @@ const Voyage = ({
             </Stack>
             <Stack
                 container
-                spacing={0}
                 direction="column"
                 alignItems="center"
             >
