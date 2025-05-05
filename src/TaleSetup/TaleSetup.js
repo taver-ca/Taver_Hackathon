@@ -40,6 +40,7 @@ const TaleSetup = ({ setStartDate,
     tripSuggestions,
 }) => {
     const [isTourMapChecked, setIsTourMapChecked] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const isArtistTabDisabled = followedArtists.length === 0;
     const isScheduleTabDisabled = concerts.length === 0;
 
@@ -53,7 +54,6 @@ const TaleSetup = ({ setStartDate,
     const childRef = useRef();
     const handleArtistPick = (artist) => {
         const isSelected = getArtistWishlist?.[artist.id];
-
         const newConcerts = concerts.filter(({ artistId }) => artistId !== artist.id);
         const newArtistWishlist = artistWishlist.filter(({ WishlistArtistId }) => WishlistArtistId !== artist.id)
 

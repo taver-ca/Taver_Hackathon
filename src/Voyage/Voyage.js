@@ -9,8 +9,6 @@ import html2canvas from "html2canvas";
 import canvas2image from "@reglendo/canvas2image";
 function toLowerCaseKeys(obj) { if (Array.isArray(obj)) { return obj.map(toLowerCaseKeys); } else if (obj !== null && obj.constructor === Object) { return Object.keys(obj).reduce((acc, key) => { const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); acc[lowerCaseKey] = toLowerCaseKeys(obj[key]); return acc; }, {}); } return obj; }
 
-
-
 const Voyage = ({
     concerts,
     userLocation,
@@ -28,13 +26,19 @@ const Voyage = ({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
     });
 
+    const [showButton, setShowButton] = useState(true);
+
     const handleDownloadImage = async function () {
+        Promise.resolve((resolve) => {
+            // Hide the button before processing
+            setShowButton(false);
+            resolve();
+        })
+
         const element = document.getElementById("sharepage");
         html2canvas(element, {
             logging: true,
             proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
-            backgroundColor: "#7fc9dc",
-
             ignoreElements: (node) => {
                 return node.nodeName === "IFRAME";
             },
@@ -43,6 +47,8 @@ const Voyage = ({
             let finalPosterName = posterName || "poster";
             canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
         });
+
+        setShowButton(true);
     };
 
     useEffect(() => {
@@ -100,40 +106,49 @@ const Voyage = ({
             </Box>);
     }
 
-
-    const middleIndex = Math.ceil(concerts.length / 2);
-    const concerts1 = concerts.slice(0, middleIndex);
-    const concerts2 = concerts.slice(middleIndex);
-
     return (
-        <Stack spacing={3} marginBottom={10} sx={{ width: '100%' }}>
-            <Stack spacing={3} sx={{ px:{xs:5, sm:10, md:25, lg:50, xl:75} }}id="sharepage">
+        <Stack sx={{ width: '100%', position: 'relative' }} backgroundColor="#7fc9dc">
+            {/* Background Map */}
+            {isLoaded ? (
+                <Box sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    zIndex: 0, // Sends the map to the background
+                }}>
+                    <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
+                </Box>
+            ) : null}
+
+            {/* Foreground Content */}
+            <Stack
+                spacing={1}
+                sx={{
+                    backgroundColor: 'rgba(94, 151, 165, 0.8)', // Semi-transparent background
+                    px: { md: 3 },
+                    py: { xs: 3 },
+                    position: 'relative',
+                    zIndex: 1,
+                    width: { xs: '100%', xl: '20%' }, // Make it take up only a portion at xl
+                    height: { xs: '100%', sm: '100%', md: '100%' }, // Full height for smaller screens
+                    left: { md: 20 }, // Push left at md
+                    top: { md: 20 }, // Adjust top position for smaller screens
+                    borderRadius: 2
+                }}>
                 <Box>
                     <img src={window.location.origin + "/Taver.png"} alt="Taver" />
                 </Box>
-                {isLoaded ? <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} /> : null}
-                <Typography
-                    variant="h3"
-                >{posterName}</Typography>
-                <Stack justifyContent="space-evenly" container  spacing={{xs:-3,sm:-2, md:0}} sx={{ flexDirection: { xs: "column", sm: "column", md: "row" } }} >
-                    <SharePageList concerts={concerts1} />
-                    <SharePageList concerts={concerts2} />
+                <Typography variant="h3">{posterName}</Typography>
+                <Stack justifyContent="space-evenly" container sx={{ flexDirection: "column" }}>
+                    <SharePageList concerts={concerts} />
                 </Stack>
-            </Stack>
-            <Stack
-                container
-                direction="column"
-                alignItems="center"
-            >
-                <Button
-                    id="sharebutton"
-                    color="primary"
-                    disabled={concerts.length === 0}
-                    onClick={handleDownloadImage}
-                    variant="contained"
-                >
-                    Share As Image
-                </Button>
+                {/* Share Button */}
+                <Stack container direction="column" alignItems="center">
+                    {showButton && <Button id="sharebutton" color="primary" disabled={concerts.length === 0} onClick={handleDownloadImage} variant="contained">
+                        Share As Image
+                    </Button>}
+                </Stack>
             </Stack>
         </Stack>
     );

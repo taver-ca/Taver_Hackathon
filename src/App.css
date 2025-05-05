@@ -25,11 +25,8 @@
 }
 
 .Voyage {
-  background-color: #7fc9dc;
-  min-height: 100vh;
   display: flex;
   align-items: start;
-  padding-top: 2%;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
+import React, { useState, useEffect, useRef } from "react";
+import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer} from "@react-google-maps/api";
+import { Card, Avatar, CardHeader } from "@mui/material";
 import Box from '@mui/material/Box';
 
 function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path) {
@@ -57,7 +58,6 @@ const concertToMarker = (concert) => {
 };
 
 const containerStyle = {
-  width: '100%',
   paddingTop: '66.67%', // 3:2 aspect ratio 
   position: 'relative',
 };
@@ -70,18 +70,6 @@ const mapContainerStyle = {
 };
 
 
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-  return size;
-}
 
 function Map({ concerts, userLocation, mapStyle }) {
   const [activeMarker, setActiveMarker] = useState(null);
@@ -171,7 +159,7 @@ function Map({ concerts, userLocation, mapStyle }) {
     }
   }, [markers, mapStyleId]);
 
-  const [width, height] = useWindowSize();
+
   const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location, address: concert.location.address }));
 
   console.log(output);
@@ -184,9 +172,17 @@ function Map({ concerts, userLocation, mapStyle }) {
         onLoad={handleOnLoad}
         options={{
           mapId: mapStyle,
-          minZoom: 1,
+          minZoom: 0,
           maxZoom: 17,
-          disableDefaultUI: true
+          disableDefaultUI: true,
+          gestureHandling: "greedy",
+          restriction: {
+            latLngBounds: {
+              north: 85,   // North Pole
+              south: -90,  // South Pole
+            },
+            strictBounds: true,
+          },
         }}
         mapContainerStyle={mapContainerStyle}
       >
@@ -226,7 +222,6 @@ function Map({ concerts, userLocation, mapStyle }) {
                 return { lat: markerPosition.lat(), lng: markerPosition.lng() };
               });
 
-
               pathCopy.forEach((point, index) => {
                 clusterPoints.forEach((clusterPoint) => {
                   if (clusterPoint.lat === point.lat && clusterPoint.lng === point.lng) {
@@ -255,10 +250,14 @@ function Map({ concerts, userLocation, mapStyle }) {
                   >
                     {activeMarker === id ? (
                       <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
-                        <div className="info">
-                          <img src={artistImageUrl} width={45} height={45} className="artist" alt={name} style={{ objectFit: "cover", objectPosition: "center" }} />
-                          <div><p style={{ color: 'black' }}>{name}</p><p style={{ color: 'black' }}>{address}</p></div>
-                        </div>
+                        <Card sx={{ display: "flex", alignItems: "center", maxWidth: 345, position: "relative" }}>
+                          <CardHeader
+                          avatar={<Avatar src={artistImageUrl} alt={name} sx={{ width: 45, height: 45 }} />}
+                          title={name}
+                          subheader={address}
+                          >
+                          </CardHeader>                         
+                        </Card>
                       </InfoWindowF>
                     ) : null}
                   </MarkerF>

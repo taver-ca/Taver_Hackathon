@@ -57,7 +57,7 @@ function App() {
               container
               spacing={3}
             >
-              <Grid item xs={11} sm={11} md={4} lg={3} xl={3} sx={{ minHeight: { xs: '50vh', sm: '50vh', md: '100vh' }}}>
+              <Grid item xs={11} sm={11} md={4} lg={3} xl={3} sx={{ minHeight: { xs: '50vh', sm: '50vh', md: '100vh' } }}>
                 <TaleSetup setStartDate={setStartDate}
                   setEndDate={setEndDate}
                   setArtistList={setArtistList}
@@ -89,7 +89,7 @@ function App() {
                   isSuggestionRequestTriggered={isSuggestionRequestTriggered}
                   tripSuggestions={tripSuggestions} />
               </Grid>
-              <Grid item xs={11} sm={11} md={7} lg={7} xl={7} sx={{ marginTop: 3}}>
+              <Grid item xs={11} sm={11} md={7} lg={7} xl={7} sx={{ marginTop: 3 }}>
                 <Odyssey
                   setPosterName={setPosterName}
                   setShareId={setShareId}
@@ -100,17 +100,18 @@ function App() {
                   startDate={startDate}
                   endDate={endDate}
                   shareId={shareId}
-                  posterNameSuggestions = {posterNameSuggestions}
-                  setPosterNameSuggestions = {setPosterNameSuggestions}
-                  />
+                  posterNameSuggestions={posterNameSuggestions}
+                  setPosterNameSuggestions={setPosterNameSuggestions}
+                />
               </Grid>
             </Grid>
           } />
           <Route path="/tales/:guid" element={
             <Grid
               className="Voyage"
-            >
-              <Voyage
+              id="sharepage"
+              height={"100vh"}>           
+            <Voyage
                 concerts={concerts}
                 mapStyle={mapStyle}
                 userLocation={userLocation}
