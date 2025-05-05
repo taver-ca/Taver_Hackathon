@@ -1,13 +1,10 @@
 import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import * as React from 'react';
-import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography, Card, CardContent,CardHeader } from '@mui/material';
+import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
 import { FetchArtist } from "./FetchArtist";
 import moment from "moment";
-
-
-
 
 function getTotalDistance(concerts, userLocation) {
 
@@ -184,7 +181,6 @@ const BaseInput = forwardRef(({
         })
       });
 
-
       if (res.status === 200) {
 
         let incomingConcerts = await res.json();
@@ -261,8 +257,10 @@ const BaseInput = forwardRef(({
 
   let handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     FetchArtist(artistName, startDate, endDate).then((resJson) => {
       newArtistList(resJson);
+      setIsLoading(false);
       setOpen(true);
     });
   };
@@ -316,6 +314,7 @@ const BaseInput = forwardRef(({
 
 
   const [open, setOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -335,18 +334,18 @@ const BaseInput = forwardRef(({
           title="Who do you want to see?">
         </CardHeader>
         <CardContent>
-        <Stack justifyContent="center" direction={'row'} spacing={2}>
-          <Typography color={"white"}>Tour map mode:</Typography>
-          <Switch
-            checked={isTourMapChecked}
-            onChange={handleSwitchChange}
-            inputProps={{ 'aria-label': 'Toggle Switch' }}
-          />
-        </Stack>
+          <Stack justifyContent="center" direction={'row'} spacing={2}>
+            <Typography color={"white"}>Tour map mode:</Typography>
+            <Switch
+              checked={isTourMapChecked}
+              onChange={handleSwitchChange}
+              inputProps={{ 'aria-label': 'Toggle Switch' }}
+            />
+          </Stack>
           <Stack
             direction={'column'}
             spacing={2}>
-            <form onSubmit={handleSubmit}>
+            {isLoading ? (<Stack direction={"column"} sx={{ flex: 1 }} alignItems="center"> <CircularProgress size={24} /> </Stack>) : (<form onSubmit={handleSubmit}>
               <Stack direction={'column'}
                 spacing={2}
                 container
@@ -377,7 +376,8 @@ const BaseInput = forwardRef(({
                   Submit
                 </Button>
               </Stack>
-            </form>
+            </form>)}
+
           </Stack>
         </CardContent>
       </Card>
