@@ -45,32 +45,45 @@ const Voyage = ({
         });
     };
 
-    //get that row data from database
-    //if unable to retrieve data redirect user to the main page, let them know first though
     useEffect(() => {
-        // Fetch data from an API 
-        console.log("requesting data from server");
-        fetch(`${process.env.REACT_APP_BACKEND}/RetrieveTrip?tripId=${guid}`,
-            {
-                method: "GET",
-                headers: {
-                    "content-type": "application/json;charset=utf-8",
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                //these are json strings, will need to be deserialized
-                var parsedConcerts = JSON.parse(data.ConcertJson);
-                var transformedConcerts = toLowerCaseKeys(parsedConcerts);
-                var coords = data.StartingLocation.match(/-?\d+\.\d+/g);
-                var result = { coords: { longitude: parseFloat(coords[0]), latitude: parseFloat(coords[1]) } };
+        const fetchTripData = async () => {
+            try {
+                console.log("requesting data from server");
+                const response = await fetch(`${process.env.REACT_APP_BACKEND}/RetrieveTrip?tripId=${guid}`, {
+                    method: "GET",
+                    headers: {
+                        "content-type": "application/json;charset=utf-8",
+                    },
+                });
 
-                setPosterName(data.TripName);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (!data.concertJson || !data.startingLocation) {
+                    throw new Error("Invalid data structure received from server.");
+                }
+
+                // Deserialization
+                var parsedConcerts = JSON.parse(data.concertJson);
+                var transformedConcerts = toLowerCaseKeys(parsedConcerts);
+                var coords = data.startingLocation;
+                var result = { coords: { longitude: coords.Longitude, latitude: coords.Latitude } };
+
+                setPosterName(data.tripName);
                 setConcerts(transformedConcerts);
                 setUserLocation(result);
-                setMapStyle(data.MapStyleId);
-                setLoading(false);
-            });
+                setMapStyle(data.mapStyleId);
+            } catch (error) {
+                alert("An error occurred while loading the trip data. Please try again later.");
+                console.error("Error fetching trip data:", error);
+            }
+            setLoading(false);
+        };
+
+        fetchTripData();
     }, []);
 
     // ...

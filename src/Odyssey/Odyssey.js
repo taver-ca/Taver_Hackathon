@@ -80,6 +80,7 @@ const Odyssey = ({
                     navigator.clipboard.writeText(link).then(function () {
                         alert(`The link to your journey is ${link}, now go tell your friends all about it!`);
                     }).catch(function (err) {
+                        alert('Failed to copy the link to your clipboard, please try again!');
                         console.error('Could not copy text: ', err);
                     });
                 } else {
