@@ -88,11 +88,11 @@ const Voyage = ({
     }, []);
 
     useEffect(() => {
-        if (!mapRef) { 
-          return
+        if (!mapRef) {
+            return
         }
         // detected rendering
-      }, mapRef)
+    }, mapRef)
 
     // ...
     if (loading) {
@@ -128,8 +128,8 @@ const Voyage = ({
                 backgroundColor: '#70afbf',
                 color: 'white',
                 position: 'absolute',
-                top: 30,
-                left: 30,
+                top: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
+                left: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
                 zIndex: 2,
                 '&:hover': {
                     backgroundColor: '#e2e900', // Slightly darker shade for hover effect
@@ -143,11 +143,11 @@ const Voyage = ({
                     spacing={1}
                     sx={{
                         backgroundColor: 'rgba(94, 151, 165, 0.8)', // Semi-transparent background
-                        px: { xs: 1 },
+                        px: { xs: 0, sm: 1 },
                         py: { xs: 3 },
                         position: 'relative',
                         zIndex: 1,
-                        width: { xs: '100%', sm:'100%', md:'40%', lg:'30%', xl:'25%' }, // Make it take up only a portion at xl
+                        width: { xs: '100%', sm: '100%', md: '40%', lg: '30%', xl: '25%' }, // Make it take up only a portion at xl
                         height: '100%', // Full height for smaller screens
                         left: { md: 20 }, // Push left at md
                         top: { md: 20 }, // Adjust top position for smaller screens
@@ -171,9 +171,7 @@ const Voyage = ({
                         </Button>
                         <Button id="sharebutton" color="primary" disabled={concerts.length === 0}
                             onClick={async () => {
-                                setShowButton(false);
                                 await handleDownloadImage();
-                                setShowButton(true);
                             }} variant="contained">
                             Share As Image
                         </Button>
