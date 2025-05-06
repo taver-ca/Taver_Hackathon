@@ -9,7 +9,10 @@ import html2canvas from "html2canvas";
 import canvas2image from "@reglendo/canvas2image";
 import ListIcon from '@mui/icons-material/List';
 import Fade from '@mui/material/Fade';
+import { useMediaQuery } from "@mui/material";
+
 function toLowerCaseKeys(obj) { if (Array.isArray(obj)) { return obj.map(toLowerCaseKeys); } else if (obj !== null && obj.constructor === Object) { return Object.keys(obj).reduce((acc, key) => { const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); acc[lowerCaseKey] = toLowerCaseKeys(obj[key]); return acc; }, {}); } return obj; }
+
 
 const Voyage = ({
     concerts,
@@ -28,8 +31,8 @@ const Voyage = ({
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
     });
+    const isScreenSmall = useMediaQuery("(max-width:1200px)");
 
-    const [showButton, setShowButton] = useState(true);
     const [showSchedule, setShowSchedule] = useState(true);
     const handleDownloadImage = async function () {
         const element = document.getElementById("sharepage");
@@ -169,7 +172,7 @@ const Voyage = ({
                             }} variant="contained">
                             Reset Map View
                         </Button>
-                        <Button id="sharebutton" color="primary" disabled={concerts.length === 0}
+                        <Button id="sharebutton" color="primary" disabled={concerts.length === 0 || isScreenSmall}
                             onClick={async () => {
                                 await handleDownloadImage();
                             }} variant="contained">
