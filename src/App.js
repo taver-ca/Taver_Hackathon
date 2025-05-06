@@ -94,7 +94,8 @@ function App() {
                   posterName={posterName}
                   shareId={shareId}
                   posterNameSuggestions={posterNameSuggestions}
-                  setPosterNameSuggestions={setPosterNameSuggestions} />
+                  setPosterNameSuggestions={setPosterNameSuggestions}
+                  />
             </Grid>
           } />
           <Route path="/tales/:guid" element={

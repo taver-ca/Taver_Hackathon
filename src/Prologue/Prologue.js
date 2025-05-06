@@ -1,23 +1,21 @@
-import { Stack, Typography, Box, Button, Fab, Grid, Tab, Tabs } from "@mui/material";
-import Map from "../Odyssey/map";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { Stack, Box, Fab } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from 'react-router-dom';
 import { useLoadScript } from "@react-google-maps/api"
+import { useMediaQuery } from "@mui/material";
+import Map from "../Odyssey/map";
 import CircularProgress from '@mui/material/CircularProgress';
+import html2canvas from "html2canvas";
+import canvas2image from "@reglendo/canvas2image";
 import ListIcon from '@mui/icons-material/List';
 import Fade from '@mui/material/Fade';
-import { useMediaQuery } from "@mui/material";
-import BaseInput from "./../TaleSetup/BaseInput.js";
-import GetSpotifyPlaylistArtistsWithShows from "./../TaleSetup/GetSpotifyPlaylistArtistsWithShows.js";
-import YourSpotifyArtistsWithShows from "./../TaleSetup/YourSpotifyArtistsWithShows.js";
-import PickDate from "./../TaleSetup/PickDate.js";
-import ConcertList from "./../TaleSetup/ConcertList.js";
-import MapStyle from "./../TaleSetup/MapStyle.js";
+import TaleSetup from "../TaleSetup/TaleSetup.js";
 
 
+function toLowerCaseKeys(obj) { if (Array.isArray(obj)) { return obj.map(toLowerCaseKeys); } else if (obj !== null && obj.constructor === Object) { return Object.keys(obj).reduce((acc, key) => { const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); acc[lowerCaseKey] = toLowerCaseKeys(obj[key]); return acc; }, {}); } return obj; }
 
-const Prologue = ({
-    setStartDate,
+
+const Prologue = ({ setStartDate,
     setEndDate,
     setArtistList,
     setOpenDialog,
@@ -46,73 +44,43 @@ const Prologue = ({
     openRouteDialog,
     isArtistRequestTriggered,
     isSuggestionRequestTriggered,
-    tripSuggestions,
+    tripSuggestions,    
     mapStyle,
     posterName,
+    shareId,
+    posterNameSuggestions,
+    setPosterNameSuggestions,
+    setShareId
 }) => {
-    const mapRef = useRef();
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
     });
+
+    const mapRef = useRef();
     const isScreenSmall = useMediaQuery("(max-width:1200px)");
 
     const [showSchedule, setShowSchedule] = useState(true);
-
-
-    const [isTourMapChecked, setIsTourMapChecked] = useState(false);
-    const isArtistTabDisabled = followedArtists.length === 0;
-    const isScheduleTabDisabled = concerts.length === 0;
-
-    const getArtistWishlist = useMemo(() => {
-        return artistWishlist.reduce((acc, item) => {
-            acc[item.WishlistArtistId] = item;
-            return acc;
-        }, {});
-    }, [artistWishlist]);
-
-    const childRef = useRef();
-    const handleArtistPick = (artist) => {
-        const isSelected = getArtistWishlist?.[artist.id];
-        const newConcerts = concerts.filter(({ artistId }) => artistId !== artist.id);
-        const newArtistWishlist = artistWishlist.filter(({ WishlistArtistId }) => WishlistArtistId !== artist.id)
-
-        if (isSelected) {
-            setConcerts(newConcerts);
-            setArtistWishlist(newArtistWishlist);
-        } else {
-            childRef.current.handleArtistChoiceUpdateFromParent(artist);
+    const handleDownloadImage = async function () {
+        const element = document.getElementById("sharepage");
+        html2canvas(element, {
+            logging: true,
+            proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
+            ignoreElements: (node) => {
+                return node.nodeName === "IFRAME";
+            },
+            scrollY: window.scrollY * -1,
+        }).then((canvas) => {
+            let finalPosterName = posterName || "poster";
+            canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
+        });
+    };
+    
+    useEffect(() => {
+        if (!mapRef) {
+            return
         }
-
-    };
-    const handleRoutePick = (route) => {
-        childRef.current.handleRouteChoiceUpdateFromParent(route);
-    }
-    const triggerReEvaluation = (updatedArtistWishlist) => {
-        console.log("trigger re-evaluation");
-        childRef.current.handleReEvaluation(updatedArtistWishlist);
-    }
-
-    const [activeTab, setActiveTab] = useState(0);
-
-    const handleTabChange = (event, newValue) => {
-        setActiveTab(newValue);
-    };
-
-    const TabPanel = ({ children, value, index }) => (
-        <div hidden={value !== index}>
-            {value === index && (
-                <Box
-                    sx={{
-                        borderRadius: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-
+        // detected rendering
+    }, mapRef)
 
 
     return (
@@ -145,9 +113,6 @@ const Prologue = ({
                 <ListIcon />
             </Fab>
 
-
-
-
             <Fade in={showSchedule} mountOnEnter unmountOnExit>
                 <Stack
                     spacing={1}
@@ -163,144 +128,41 @@ const Prologue = ({
                         top: { md: 20 }, // Adjust top position for smaller screens
                         borderRadius: 2
                     }}>
+                    <TaleSetup setStartDate={setStartDate}
+                        setEndDate={setEndDate}
+                        setArtistList={setArtistList}
+                        setOpenDialog={setOpenDialog}
+                        setOpenRouteDialog={setOpenRouteDialog}
+                        setConcerts={setConcerts}
+                        setUserLocation={setUserLocation}
+                        setMapStyle={setMapStyle}
+                        setAllConcerts={setAllConcerts}
+                        setArtistName={setArtistName}
+                        setFollowedArtists={setFollowedArtists}
+                        setArtistWishlist={setArtistWishlist}
+                        setIsArtistRequestTriggered={setIsArtistRequestTriggered}
+                        setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
+                        setTripSuggestions={setTripSuggestions}
+                        setPosterName={setPosterName}
+                        startDate={startDate}
+                        endDate={endDate}
+                        concerts={[...concerts]}
+                        artistName={artistName}
+                        allConcerts={allConcerts}
+                        userLocation={userLocation}
+                        artistList={artistList}
+                        followedArtists={followedArtists}
+                        artistWishlist={[...artistWishlist]}
+                        openDialog={openDialog}
+                        openRouteDialog={openRouteDialog}
+                        isArtistRequestTriggered={isArtistRequestTriggered}
+                        isSuggestionRequestTriggered={isSuggestionRequestTriggered}
+                        tripSuggestions={tripSuggestions} />
 
-<Box>
-                            <img src={window.location.origin + "/Taver.png"} alt="Taver" />
-                        </Box>
-
-                        <BaseInput
-                            setIsTourMapChecked={setIsTourMapChecked}
-                            setConcerts={setConcerts}
-                            setUserLocation={setUserLocation}
-                            setMapStyle={setMapStyle}
-                            setAllConcerts={setAllConcerts}
-                            setPosterName={setPosterName}
-                            setFollowedArtists={setFollowedArtists}
-                            setArtistWishlist={setArtistWishlist}
-                            isTourMapChecked={isTourMapChecked}
-                            startDate={startDate}
-                            endDate={endDate}
-                            allConcerts={allConcerts}
-                            concerts={concerts}
-                            userLocation={userLocation}
-                            updateArtistNameInParent={(value) => setArtistName(value)}
-                            newArtistList={setArtistList}
-                            artistListFromParent={artistList}
-                            followedArtists={followedArtists}
-                            artistWishlist={[...artistWishlist]}
-                            openDialogFromParent={openDialog}
-                            setActiveTab={setActiveTab}
-                            closeDialog={() => {
-                                setOpenDialog(false);
-                            }}
-                            closeRouteDialog={() => {
-                                setOpenRouteDialog(false);
-                            }}
-                            ref={childRef}
-                        />
-                        {!isTourMapChecked && (<PickDate
-                            updateStartDateInParent={setStartDate}
-                            updateEndDateInParent={setEndDate}
-                            artistName={artistName}
-                            newArtistList={setArtistList}
-                            openDialog={setOpenDialog}
-                        />)}
-                        {!isTourMapChecked && (<Stack sx={{ position: 'relative' }} spacing={8}>
-                            <Box sx={{
-                                position: 'absolute',
-                                width: '100%',
-                                boxShadow: '0 2px 5px 1px rgba(0,0,0,0.1)',
-                                backgroundColor: '#5e97a5',
-                                borderRadius: '4px'
-                            }}>
-                                <Tabs
-                                    value={activeTab}
-                                    onChange={handleTabChange}
-                                    variant="scrollable"
-                                    scrollButtons="auto"
-                                    sx={{
-                                        "& .MuiTabs-scrollButtons": {
-                                            "&:hover": {
-                                                backgroundColor: "#bbdefb", // Slightly darker blue on hover
-                                                transform: "scale(1.05)", // Subtle scale effect
-                                            },
-                                        },
-                                        "& .MuiTabs-scrollButtons.Mui-disabled": {
-                                            opacity: 0.2, // Disabled buttons appear semi-transparent
-                                            cursor: "not-allowed", // Clear disabled state
-                                        },
-                                        "& .MuiTab-root": {
-                                            color: "white", // Make tab text white
-                                            "&.Mui-selected": {
-                                                color: "white", // Ensure selected tab text is also white
-                                            },
-                                        },
-                                    }}
-                                >
-                                    <Tab label="Import Playlist" />
-                                    <Tab disabled={isArtistTabDisabled} label="Artists & Suggestions" />
-                                    <Tab disabled={isScheduleTabDisabled} label="Schedule" />
-                                    <Tab disabled={isArtistTabDisabled || isScheduleTabDisabled} label="Map Style" />
-                                </Tabs>
-                            </Box>
-                            <Box>
-                                <TabPanel value={activeTab} index={0}>
-                                    <GetSpotifyPlaylistArtistsWithShows
-                                        setFollowedArtists={setFollowedArtists}
-                                        setIsArtistRequestTriggered={setIsArtistRequestTriggered}
-                                        setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
-                                        setAllConcerts={setAllConcerts}
-                                        setTripSuggestions={setTripSuggestions}
-                                        setOpenRouteDialog={setOpenRouteDialog}
-                                        followedArtists={followedArtists}
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        allConcerts={allConcerts}
-                                        openDialog={openDialog}
-                                        openRouteDialogFromParent={openRouteDialog}
-                                        closeRouteDialog={() => {
-                                            setOpenRouteDialog(false);
-                                        }}
-                                        trippSuggestions={tripSuggestions}
-                                        setRoute={handleRoutePick}
-                                        setActiveTab={setActiveTab}
-                                    />
-                                </TabPanel>
-                                <TabPanel value={activeTab} index={1}>
-                                    <YourSpotifyArtistsWithShows
-                                        artists={followedArtists}
-                                        artistWishlist={getArtistWishlist}
-                                        tripSuggestions={tripSuggestions}
-                                        onArtistClick={handleArtistPick}
-                                        onTripSuggestionClick={handleRoutePick}
-                                        isArtistRequestTriggered={isArtistRequestTriggered}
-                                        isSuggestionRequestTriggered={isSuggestionRequestTriggered}
-                                    />
-                                </TabPanel>
-                                <TabPanel value={activeTab} index={2}>
-                                    <ConcertList
-                                        setConcerts={setConcerts}
-                                        setAllConcerts={setAllConcerts}
-                                        artistWishlist={artistWishlist}
-                                        setArtistWishlist={setArtistWishlist}
-                                        concerts={concerts}
-                                        triggerReEvaluation={triggerReEvaluation}
-                                    />
-                                </TabPanel>
-                                <TabPanel value={activeTab} index={3}>
-                                    <MapStyle setMapStyle={setMapStyle} />
-                                </TabPanel>
-                            </Box>
-                        </Stack>)}
                 </Stack>
-
             </Fade>
         </Stack>
     );
 };
-
-
-
-
 
 export default Prologue;
