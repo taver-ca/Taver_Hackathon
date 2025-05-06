@@ -1,7 +1,7 @@
 import { Stack, Typography, Box, Button, Fab, Grid } from "@mui/material";
 import Map from "../Odyssey/map";
 import SharePageList from "../Odyssey/SharePageList"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from 'react-router-dom';
 import { useLoadScript } from "@react-google-maps/api"
 import CircularProgress from '@mui/material/CircularProgress';
@@ -22,6 +22,7 @@ const Voyage = ({
     setMapStyle
 
 }) => {
+    const mapRef = useRef();
     const { guid } = useParams();
     const [loading, setLoading] = useState(true);
     const { isLoaded } = useLoadScript({
@@ -31,12 +32,6 @@ const Voyage = ({
     const [showButton, setShowButton] = useState(true);
     const [showSchedule, setShowSchedule] = useState(true);
     const handleDownloadImage = async function () {
-        Promise.resolve((resolve) => {
-            // Hide the button before processing
-            setShowButton(false);
-            resolve();
-        })
-
         const element = document.getElementById("sharepage");
         html2canvas(element, {
             logging: true,
@@ -49,8 +44,6 @@ const Voyage = ({
             let finalPosterName = posterName || "poster";
             canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
         });
-
-        setShowButton(true);
     };
 
     useEffect(() => {
@@ -94,6 +87,13 @@ const Voyage = ({
         fetchTripData();
     }, []);
 
+    useEffect(() => {
+        if (!mapRef) { 
+          return
+        }
+        // detected rendering
+      }, mapRef)
+
     // ...
     if (loading) {
         //do a throbber here
@@ -119,7 +119,7 @@ const Voyage = ({
                     width: '100%',
                     zIndex: 0, // Sends the map to the background
                 }}>
-                    <Map concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
+                    <Map ref={mapRef} concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
                 </Box>
             ) : null}
 
@@ -159,13 +159,24 @@ const Voyage = ({
                     </Grid>
                     <Typography variant="h3">{posterName}</Typography>
                     <Stack justifyContent="space-evenly" container sx={{ flexDirection: "column" }}>
-                        <SharePageList concerts={concerts} />
+                        <SharePageList concerts={concerts} showActiveConcert={(markerId) => mapRef.current?.handleShowActiveConcert(markerId)} />
                     </Stack>
                     {/* Share Button */}
-                    <Stack container direction="column" alignItems="center">
-                        {showButton && <Button id="sharebutton" color="primary" disabled={concerts.length === 0} onClick={handleDownloadImage} variant="contained">
+                    <Stack container spacing={2} direction="row" alignItems="center" justifyContent="center">
+                        <Button id="resetButton" color="primary" disabled={concerts.length === 0}
+                            onClick={() => {
+                                mapRef.current?.handleResetMapView();
+                            }} variant="contained">
+                            Reset Map View
+                        </Button>
+                        <Button id="sharebutton" color="primary" disabled={concerts.length === 0}
+                            onClick={async () => {
+                                setShowButton(false);
+                                await handleDownloadImage();
+                                setShowButton(true);
+                            }} variant="contained">
                             Share As Image
-                        </Button>}
+                        </Button>
                     </Stack>
                 </Stack>
             </Fade>

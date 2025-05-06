@@ -8,14 +8,18 @@ function formattedDate(incomingDate) {
     return moment(date).format('YYYY/MM/DD');
 }
 
-const SharePageList = ({ concerts }) => {
+const SharePageList = ({ concerts, showActiveConcert }) => {
     return (
         <List>
             {concerts.map((concert, index) => (
                 <ListItem
                     sx={{ background: '#70afbf', borderRadius: 2, mb: 1, boxShadow: 2, padding: 0 }}
                     key={index}>
-                    <ListItemButton>
+                    <ListItemButton
+                    sx={{ borderRadius: 2, background: '#70afbf', '&:hover': { background: '#e2e900' } }}
+                    onClick={() => {
+                        showActiveConcert(index);
+                    }}>
                         <ListItemAvatar>
                             <Avatar
                                 alt={`${concert.artist}`}

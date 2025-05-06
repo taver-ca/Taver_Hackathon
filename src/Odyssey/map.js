@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer} from "@react-google-maps/api";
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
 import { Card, Avatar, CardHeader } from "@mui/material";
 import Box from '@mui/material/Box';
 
@@ -41,12 +41,15 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, m
   polylineRef.current.setMap(mapRef.current);
 }
 
+function ResetMapView(mapRef, mapBoundsRef) {
+  mapRef.current.fitBounds(mapBoundsRef.current, 5);
+  mapRef.current.setZoom(mapRef.current.getZoom() - 0.5);
+}
 
 
-
-const concertToMarker = (concert) => {
+const concertToMarker = (concert, index) => {
   return {
-    id: concert.title + concert.date,
+    id: index,
     name: concert.title,
     artistImageUrl: concert.image.url,
     address: concert.location.name,
@@ -71,7 +74,8 @@ const mapContainerStyle = {
 
 
 
-function Map({ concerts, userLocation, mapStyle }) {
+const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
+
   const [activeMarker, setActiveMarker] = useState(null);
   const mapRef = useRef(null);
   const mapBoundsRef = useRef(null);
@@ -82,6 +86,17 @@ function Map({ concerts, userLocation, mapStyle }) {
     }
     setActiveMarker(marker);
   };
+
+
+  //allow outside components to call these functions
+  useImperativeHandle(ref, () => ({
+    handleResetMapView: () => {
+      ResetMapView(mapRef, mapBoundsRef);
+    },
+    handleShowActiveConcert: (index) => {
+      handleActiveMarker(index);
+    },
+  }));
 
   const rawMarkers = concerts.map(concertToMarker);
 
@@ -252,11 +267,11 @@ function Map({ concerts, userLocation, mapStyle }) {
                       <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
                         <Card sx={{ display: "flex", alignItems: "center", maxWidth: 345, position: "relative" }}>
                           <CardHeader
-                          avatar={<Avatar src={artistImageUrl} alt={name} sx={{ width: 45, height: 45 }} />}
-                          title={name}
-                          subheader={address}
+                            avatar={<Avatar src={artistImageUrl} alt={name} sx={{ width: 45, height: 45 }} />}
+                            title={name}
+                            subheader={address}
                           >
-                          </CardHeader>                         
+                          </CardHeader>
                         </Card>
                       </InfoWindowF>
                     ) : null}
@@ -266,8 +281,7 @@ function Map({ concerts, userLocation, mapStyle }) {
           )}
         </MarkerClusterer>
       </GoogleMap>
-    </Box>
-  );
-}
+    </Box>);
+});
 
 export default Map;
