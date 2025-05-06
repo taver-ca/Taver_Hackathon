@@ -143,12 +143,12 @@ const Voyage = ({
                     spacing={1}
                     sx={{
                         backgroundColor: 'rgba(94, 151, 165, 0.8)', // Semi-transparent background
-                        px: { md: 3 },
+                        px: { xs: 1 },
                         py: { xs: 3 },
                         position: 'relative',
                         zIndex: 1,
-                        width: { xs: '100%', xl: '20%' }, // Make it take up only a portion at xl
-                        height: { xs: '100%', sm: '100%', md: '100%' }, // Full height for smaller screens
+                        width: { xs: '100%', sm:'100%', md:'40%', lg:'30%', xl:'25%' }, // Make it take up only a portion at xl
+                        height: '100%', // Full height for smaller screens
                         left: { md: 20 }, // Push left at md
                         top: { md: 20 }, // Adjust top position for smaller screens
                         borderRadius: 2

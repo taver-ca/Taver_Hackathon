@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 
 const screenWidth = window.innerWidth;
 // Offset by a percentage of screen width (e.g., 10%)
-const panAmount = -(screenWidth * 0.1); // Moves left by 10% of screen width
+const panAmount = screenWidth > 600 ? -(screenWidth * 0.1): 0; // Moves left by 10% of screen width
 
 function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path) {
 
@@ -109,10 +109,10 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
   const rawMarkers = concerts.map(concertToMarker);
   //filter out duplicate shows 
   let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => (t.name === item.name && t.address === item.address)));
-  console.table(markers);
+
   //artifically adjust coordinates to avoid marker overlap
   markers = adjustCoordinates(markers);
-  console.table(markers);
+
 
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -145,9 +145,6 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
     }
     map.fitBounds(bounds);
     map.setCenter(bounds.getCenter());
-    console.log(`# of Placed Markers: ${markers.length}`);
-    markers.forEach(marker => { console.log(`position: ${marker.position.lat}, ${marker.position.lng}`) });
-
 
     let pathOptions = {
       strokeColor: "#FF0000",
@@ -204,11 +201,6 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
       UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path);
     }
   }, [markers, mapStyleId]);
-
-
-  const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location, address: concert.location.address }));
-
-  console.table(output);
 
   return (
     <Box sx={containerStyle}>
