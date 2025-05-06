@@ -3,6 +3,10 @@ import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-
 import { Card, Avatar, CardHeader } from "@mui/material";
 import Box from '@mui/material/Box';
 
+const screenWidth = window.innerWidth;
+// Offset by a percentage of screen width (e.g., 10%)
+const panAmount = -(screenWidth * 0.1); // Moves left by 10% of screen width
+
 function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path) {
 
   console.log(`map styleId: ${mapStyleId}`);
@@ -20,14 +24,12 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, m
 
   // Ensure the map has finished adjusting to the bounds before getting the zoom level 
   window.google.maps.event.addListenerOnce(mapRef.current, 'bounds_changed', () => {
-    const zoomLevel = mapRef.current.getZoom();
-    console.log('Zoom Level:', zoomLevel);
-    mapRef.current.setZoom(zoomLevel - 0.5);
+    mapRef.current.panBy(panAmount, 0);
   });
 
   if (activeMarker === null) {
-    mapRef.current.fitBounds(mapBoundsRef.current, 5);
-    mapRef.current.setZoom(mapRef.current.getZoom() - 0.5);
+    mapRef.current.fitBounds(mapBoundsRef.current, 20);
+
   }
   else {
     var index = markers.findIndex(marker => marker.id === activeMarker);
@@ -42,8 +44,8 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, m
 }
 
 function ResetMapView(mapRef, mapBoundsRef) {
-  mapRef.current.fitBounds(mapBoundsRef.current, 5);
-  mapRef.current.setZoom(mapRef.current.getZoom() - 0.5);
+  mapRef.current.fitBounds(mapBoundsRef.current, 20);
+  mapRef.current.panBy(panAmount, 0);
 }
 
 
@@ -61,11 +63,13 @@ const concertToMarker = (concert, index) => {
 };
 
 const containerStyle = {
-  paddingTop: '66.67%', // 3:2 aspect ratio 
-  position: 'relative',
+  width: "100vw",  // Full width of screen
+  height: "100vh", // Full height of screen
+  position: "relative",
 };
+
 const mapContainerStyle = {
-  position: 'absolute',
+  position: "absolute",
   top: 0,
   left: 0,
   right: 0,
@@ -80,6 +84,9 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
   const mapRef = useRef(null);
   const mapBoundsRef = useRef(null);
   const polylineRef = useRef(null);
+  const rawMarkers = concerts.map(concertToMarker);
+  //filter out duplicate shows 
+  let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => (t.name === item.name && t.address === item.address)));
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
       return;
@@ -91,17 +98,14 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
   //allow outside components to call these functions
   useImperativeHandle(ref, () => ({
     handleResetMapView: () => {
-      ResetMapView(mapRef, mapBoundsRef);
+      ResetMapView(mapRef, mapBoundsRef, markers);
     },
     handleShowActiveConcert: (index) => {
       handleActiveMarker(index);
     },
   }));
 
-  const rawMarkers = concerts.map(concertToMarker);
 
-  //filter out duplicate shows 
-  let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => (t.name === item.name && t.address === item.address)));
 
   const mapStyleId = mapStyle;
   const handleOnLoad = (map) => {
