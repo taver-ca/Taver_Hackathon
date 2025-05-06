@@ -7,6 +7,7 @@ import { Grid } from "@mui/material";
 import Voyage from "./Voyage/Voyage.js";
 import TaleSetup from "./TaleSetup/TaleSetup.js";
 import Odyssey from "./Odyssey/Odyssey.js";
+import Prologue from "./Prologue/Prologue.js";
 
 function App() {
   let cachedStartDate = localStorage.getItem("startDate");
@@ -56,9 +57,9 @@ function App() {
               className="App-header"
               container
               spacing={3}
+              height={"100vh"}
             >
-              <Grid item xs={11} sm={11} md={4} lg={3} xl={3} sx={{ minHeight: { xs: '50vh', sm: '50vh', md: '100vh' } }}>
-                <TaleSetup setStartDate={setStartDate}
+                <Prologue setStartDate={setStartDate}
                   setEndDate={setEndDate}
                   setArtistList={setArtistList}
                   setOpenDialog={setOpenDialog}
@@ -73,7 +74,7 @@ function App() {
                   setIsArtistRequestTriggered={setIsArtistRequestTriggered}
                   setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
                   setTripSuggestions={setTripSuggestions}
-                  setPosterName={setPosterName}
+                  setPosterName={setPosterName}                  
                   startDate={startDate}
                   endDate={endDate}
                   concerts={[...concerts]}
@@ -87,23 +88,13 @@ function App() {
                   openRouteDialog={openRouteDialog}
                   isArtistRequestTriggered={isArtistRequestTriggered}
                   isSuggestionRequestTriggered={isSuggestionRequestTriggered}
-                  tripSuggestions={tripSuggestions} />
-              </Grid>
-              <Grid item xs={11} sm={11} md={7} lg={7} xl={7} sx={{ marginTop: 3 }}>
-                <Odyssey
-                  setPosterName={setPosterName}
+                  tripSuggestions={tripSuggestions}
                   setShareId={setShareId}
-                  concerts={concerts}
-                  userLocation={userLocation}
                   mapStyle={mapStyle}
                   posterName={posterName}
-                  startDate={startDate}
-                  endDate={endDate}
                   shareId={shareId}
                   posterNameSuggestions={posterNameSuggestions}
-                  setPosterNameSuggestions={setPosterNameSuggestions}
-                />
-              </Grid>
+                  setPosterNameSuggestions={setPosterNameSuggestions} />
             </Grid>
           } />
           <Route path="/tales/:guid" element={
