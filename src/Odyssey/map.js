@@ -35,7 +35,7 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, m
     var index = markers.findIndex(marker => marker.id === activeMarker);
     var centerMarker = markers[index];
     mapRef.current.setCenter(centerMarker.position);
-    mapRef.current.setZoom(10);
+    mapRef.current.setZoom(17);
   }
 
   console.log("updating path");
@@ -77,6 +77,28 @@ const mapContainerStyle = {
 };
 
 
+const adjustCoordinates = (markers) => {
+  const offsetAmount = 0.0005; // Tiny shift (~11 meters)
+  const randomFactor = () => (Math.random() - 0.5) * offsetAmount * 2; // Random value between -offsetAmount and +offsetAmount
+
+  return markers.map((marker, index, arr) => {
+    const duplicates = arr.filter((m) => 
+      m.position.lat === marker.position.lat && m.position.lng === marker.position.lng
+    );
+
+    if (duplicates.length > 1) {
+      return {
+        ...marker,
+        position: {
+          lat: marker.position.lat + randomFactor(),
+          lng: marker.position.lng + randomFactor(),
+        },
+      };
+    }
+
+    return marker;
+  });
+};
 
 const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
 
@@ -87,6 +109,11 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
   const rawMarkers = concerts.map(concertToMarker);
   //filter out duplicate shows 
   let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => (t.name === item.name && t.address === item.address)));
+  console.table(markers);
+  //artifically adjust coordinates to avoid marker overlap
+  markers = adjustCoordinates(markers);
+  console.table(markers);
+
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
       return;
@@ -181,7 +208,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
 
   const output = concerts.map((concert) => ({ artist: concert.artist, date: concert.date, location: concert.location, address: concert.location.address }));
 
-  console.log(output);
+  console.table(output);
 
   return (
     <Box sx={containerStyle}>
@@ -222,6 +249,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
         <MarkerClusterer
           ignoreHidden={false}
           gridSize={20}
+          maxZoom={10}
           onClusteringEnd={(clusterer) => {
             var pathCopy = [...path];
             // build the clusteringPolyline
