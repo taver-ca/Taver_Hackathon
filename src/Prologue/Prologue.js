@@ -56,8 +56,7 @@ const Prologue = ({ setStartDate,
         }
         // detected rendering
     }, mapRef)
-
-    const showActiveConcert = (markerId) => mapRef.current?.handleShowActiveConcert(markerId);
+    
     return (
         <Stack sx={{ width: '100%', position: 'relative' }} backgroundColor="#7fc9dc">
             {/* Background Map */}

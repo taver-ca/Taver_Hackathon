@@ -129,7 +129,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
       ResetMapView(mapRef, mapBoundsRef, markers);
     },
     handleShowActiveConcert: (index) => {
-      console.log(`index is: ${index}`);
+      if (!index) { handleActiveMarker(null); }
       handleActiveMarker(index);
     },
   }));
