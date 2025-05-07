@@ -136,7 +136,17 @@ const ConcertList = ({ allConcerts,
     }
   };
   return (
-    <Box>
+    <Box
+      sx={{
+        maxHeight:{xs:'100vh',sm:'100vh',md:'75vh',lg:'70vh',xl:'70vh'},
+        overflow: 'scroll',
+        '&::-webkit-scrollbar': { display: 'none' }, // Hide scrollbar for Chrome, Safari, and Opera
+        '-ms-overflow-style': 'none', // Hide scrollbar for IE and Edge
+        'scrollbar-width': 'none', // Hide scrollbar for Firefox
+      }}
+
+
+    >
       <Card sx={{ backgroundColor: "#70afbf" }}
         variant="elevation" elevation={3}>
         {hasConcerts && (
