@@ -6,10 +6,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
-import { Stack, Typography, Button, Box, Card, CardHeader, CardContent } from "@mui/material";
+import { Stack, TextField, Typography, Button, Box, Card, CardHeader, CardContent } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
+import { GenerateTripTitle } from "../Odyssey/GenerateTripTitle";
+
 function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
   return moment(date).format("YYYY/MM/DD hh:mm A");
@@ -21,6 +23,19 @@ class ConcertList extends React.Component {
     this.state = {
       //pass concerts from maps into here
       concerts: this.props.concerts,
+      userLocation: this.props.userLocation,
+      startDate: this.props.startDate,
+      endDate: this.props.endDate,
+      shareId: this.props.shareId,
+      posterNameSuggestions: this.props.posterNameSuggestions,
+      setPosterNameSuggestions: this.props.setPosterNameSuggestions,
+      setPosterName: this.props.setPosterName,
+      setConcerts: this.props.setConcerts,
+      setAllConcerts: this.props.setAllConcerts,
+      setArtistWishlist: this.props.setArtistWishlist,
+      posterName: this.props.posterName,
+      artistWishlist: this.props.artistWishlist,
+      triggerReEvaluation: this.props.triggerReEvaluation
     };
   }
 
@@ -155,6 +170,29 @@ class ConcertList extends React.Component {
             </CardHeader>
           )}
           <CardContent>
+            <Stack spacing={2} direction={'row'} >
+              <TextField
+                variant="standard"
+                placeholder="Write a cool name for your trip here"
+                InputProps={{ sx: { 'input': { textAlign: 'center', color: 'white' } } }}
+                value={this.state.posterName}
+                onChange={(e) => this.state.setPosterName(e.target.value)}
+                sx={{ flex: 1 }} />
+              <Button
+                color="primary"
+                onClick={GenerateTripTitle(
+                  this.state.posterNameSuggestions,
+                  this.state.concerts,
+                  this.state.setPosterName,
+                  this.state.setPosterNameSuggestions,
+                  this.state.setIsLoading,
+                  this.state.posterName)}
+                disabled={(this.state.concerts.length === 0)}
+                justifyContent="flex-end"
+                variant="contained">
+                Generate
+              </Button>
+            </Stack>
             <List
               sx={{
                 width: "100%",

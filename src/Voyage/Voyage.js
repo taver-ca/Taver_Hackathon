@@ -157,8 +157,13 @@ const Voyage = ({
                         borderRadius: 2
                     }}>
 
-                    <Grid flexDirection="column" id="sharepage" sx={{ position: 'relative' }}>
-                        <img src={window.location.origin + "/Taver.png"} alt="Taver" />
+                    <Grid flexDirection="column" sx={{ position: 'relative' }}>
+                        <Box
+                            component="img"
+                            src={window.location.origin + "/Taver.png"}
+                            alt="Taver"
+                            sx={{ width: { xs: 200 }, height: "auto" }}
+                        />
                     </Grid>
                     <Typography variant="h3">{posterName}</Typography>
                     <Stack justifyContent="space-evenly" container sx={{ flexDirection: "column" }}>

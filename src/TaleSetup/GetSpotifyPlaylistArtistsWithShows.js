@@ -56,19 +56,21 @@ function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThresh
 
 
 function GetSpotifyPlaylistArtistsWithShows({
-    allConcerts,
-    followedArtists,
-    startDate,
-    endDate,
     setFollowedArtists,
     setIsArtistRequestTriggered,
     setIsSuggestionRequestTriggered,
     setAllConcerts,
     setTripSuggestions,
-    openRouteDialogFromParent,
-    closeRouteDialog,
     setRoute,
-    setActiveTab }) {
+    setActiveTab,
+    setPosterName,
+    allConcerts,
+    followedArtists,
+    startDate,
+    endDate,
+    openRouteDialogFromParent,
+    closeRouteDialog }
+) {
 
     const initialSpotifyURL = "https://open.spotify.com/playlist/";
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
@@ -134,6 +136,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                 const incomingArtists = resJson.artistList;
                 const existingGigs = allConcerts;
                 const incomingGigs = resJson.artistGigList;
+                const playlistName = resJson.playlistName;
                 const updatedArtists = [...existingArtists, ...incomingArtists].filter(
                     (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
                 );
@@ -145,6 +148,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                     alert(`Oof, nobody from this playlist is on tour...`);
                 }
                 await new Promise(resolve => {
+                    setPosterName(playlistName);
                     setFollowedArtists(updatedArtists);
                     setAllConcerts(updatedGigs);
                     resolve();
@@ -201,7 +205,6 @@ function GetSpotifyPlaylistArtistsWithShows({
                     resolve();
                 });
                 setIsSuggestionRequestTriggered(false);
-
             }
             return;
         }).catch((err) => {
@@ -210,13 +213,10 @@ function GetSpotifyPlaylistArtistsWithShows({
         });
     };
 
-
-
-
     return (
         <Stack spacing={3} sx={{ container: true, flexDirection: 'column', paddingTop: 0 }}>
             <Card sx={{ backgroundColor: "#70afbf", mt: 1 }} variant="elevation" elevation={3}>
-                <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }}  title="See who's on tour from your playlist" />
+                <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }} title="See who's on tour from your playlist" />
                 <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}><form onSubmit={handlePlaylistSubmit}>
                     <Stack
                         direction={'column'}

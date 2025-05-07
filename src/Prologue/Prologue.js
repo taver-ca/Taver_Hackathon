@@ -11,10 +11,6 @@ import ListIcon from '@mui/icons-material/List';
 import Fade from '@mui/material/Fade';
 import TaleSetup from "../TaleSetup/TaleSetup.js";
 
-
-function toLowerCaseKeys(obj) { if (Array.isArray(obj)) { return obj.map(toLowerCaseKeys); } else if (obj !== null && obj.constructor === Object) { return Object.keys(obj).reduce((acc, key) => { const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); acc[lowerCaseKey] = toLowerCaseKeys(obj[key]); return acc; }, {}); } return obj; }
-
-
 const Prologue = ({ setStartDate,
     setEndDate,
     setArtistList,
@@ -31,6 +27,8 @@ const Prologue = ({ setStartDate,
     setIsSuggestionRequestTriggered,
     setTripSuggestions,
     setPosterName,
+    setPosterNameSuggestions,
+    setShareId,
     startDate,
     endDate,
     concerts,
@@ -44,13 +42,11 @@ const Prologue = ({ setStartDate,
     openRouteDialog,
     isArtistRequestTriggered,
     isSuggestionRequestTriggered,
-    tripSuggestions,    
+    tripSuggestions,
     mapStyle,
     posterName,
     shareId,
-    posterNameSuggestions,
-    setPosterNameSuggestions,
-    setShareId
+    posterNameSuggestions
 }) => {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
@@ -74,7 +70,7 @@ const Prologue = ({ setStartDate,
             canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
         });
     };
-    
+
     useEffect(() => {
         if (!mapRef) {
             return
@@ -144,6 +140,8 @@ const Prologue = ({ setStartDate,
                         setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
                         setTripSuggestions={setTripSuggestions}
                         setPosterName={setPosterName}
+                        setPosterNameSuggestions={setPosterNameSuggestions}
+                        setShareId={setShareId}
                         startDate={startDate}
                         endDate={endDate}
                         concerts={[...concerts]}
@@ -157,7 +155,11 @@ const Prologue = ({ setStartDate,
                         openRouteDialog={openRouteDialog}
                         isArtistRequestTriggered={isArtistRequestTriggered}
                         isSuggestionRequestTriggered={isSuggestionRequestTriggered}
-                        tripSuggestions={tripSuggestions} />
+                        tripSuggestions={tripSuggestions}
+                        shareId={shareId}
+                        posterName={posterName}
+                        posterNameSuggestions={posterNameSuggestions}
+                    />
 
                 </Stack>
             </Fade>

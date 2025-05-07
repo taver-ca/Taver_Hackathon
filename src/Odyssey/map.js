@@ -28,6 +28,7 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, m
   });
 
   if (activeMarker === null) {
+    console.log("fitBounds");
     mapRef.current.fitBounds(mapBoundsRef.current, 20);
 
   }
@@ -216,7 +217,9 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
           gestureHandling: "greedy",
           restriction: {
             latLngBounds: {
-              north: 85,   // North Pole
+              west: 180,
+              east:-180,
+              north: 90,   // North Pole
               south: -90,  // South Pole
             },
             strictBounds: true,

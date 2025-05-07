@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from "react";
-import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Grid, Box, Stack, Tab, Tabs } from "@mui/material";
 import BaseInput from "./BaseInput.js";
 import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
@@ -8,7 +8,8 @@ import ConcertList from "./ConcertList.js";
 import MapStyle from "./MapStyle.js";
 
 
-const TaleSetup = ({ setStartDate,
+const TaleSetup = ({
+    setStartDate,
     setEndDate,
     setArtistList,
     setOpenDialog,
@@ -24,6 +25,8 @@ const TaleSetup = ({ setStartDate,
     setIsSuggestionRequestTriggered,
     setTripSuggestions,
     setPosterName,
+    setPosterNameSuggestions,
+    setShareId,
     startDate,
     endDate,
     concerts,
@@ -38,9 +41,11 @@ const TaleSetup = ({ setStartDate,
     isArtistRequestTriggered,
     isSuggestionRequestTriggered,
     tripSuggestions,
+    posterName,
+    shareId,
+    posterNameSuggestions,
 }) => {
     const [isTourMapChecked, setIsTourMapChecked] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const isArtistTabDisabled = followedArtists.length === 0;
     const isScheduleTabDisabled = concerts.length === 0;
 
@@ -74,7 +79,7 @@ const TaleSetup = ({ setStartDate,
     }
 
     const [activeTab, setActiveTab] = useState(0);
-
+    const isInputDisabled = activeTab >= 2;
     const handleTabChange = (event, newValue) => {
         setActiveTab(newValue);
     };
@@ -95,49 +100,56 @@ const TaleSetup = ({ setStartDate,
     );
 
     return (
-        <Stack sx={{ container: true, flexDirection: 'column' }} spacing={4}>
-            <Box>
-                <img src={window.location.origin + "/Taver.png"} alt="Taver" />
-            </Box>           
-
-            <BaseInput
-                setIsTourMapChecked={setIsTourMapChecked}                
-                setConcerts={setConcerts}
-                setUserLocation={setUserLocation}
-                setMapStyle={setMapStyle}
-                setAllConcerts={setAllConcerts}
-                setPosterName={setPosterName}
-                setFollowedArtists={setFollowedArtists}
-                setArtistWishlist={setArtistWishlist}
-                isTourMapChecked={isTourMapChecked}
-                startDate={startDate}
-                endDate={endDate}
-                allConcerts={allConcerts}
-                concerts={concerts}
-                userLocation={userLocation}
-                updateArtistNameInParent={(value) => setArtistName(value)}
-                newArtistList={setArtistList}
-                artistListFromParent={artistList}
-                followedArtists={followedArtists}
-                artistWishlist={[...artistWishlist]}
-                openDialogFromParent={openDialog}
-                setActiveTab={setActiveTab}
-                closeDialog={() => {
-                    setOpenDialog(false);
-                }}
-                closeRouteDialog={() => {
-                    setOpenRouteDialog(false);
-                }}
-                ref={childRef}
-            />
-            {!isTourMapChecked && (<PickDate
-                updateStartDateInParent={setStartDate}
-                updateEndDateInParent={setEndDate}
-                artistName={artistName}
-                newArtistList={setArtistList}
-                openDialog={setOpenDialog}
-            />)}
-            {!isTourMapChecked && (<Stack sx={{ position: 'relative' }} spacing={8}>
+        <Stack sx={{ px: 2, container: true, flexDirection: 'column', overflow: 'auto' }} spacing={2}>
+            <Grid flexDirection="column" sx={{ position: 'relative' }}>
+                <Box
+                    component="img"
+                    src={window.location.origin + "/Taver.png"}
+                    alt="Taver"
+                    sx={{ width: { xs: 200 }, height: "auto" }}
+                />
+            </Grid>
+            {!isInputDisabled && <Stack justifyContent="center" spacing={1} direction='row'>
+                <Grid flex={1}><BaseInput
+                    setIsTourMapChecked={setIsTourMapChecked}
+                    setConcerts={setConcerts}
+                    setUserLocation={setUserLocation}
+                    setMapStyle={setMapStyle}
+                    setAllConcerts={setAllConcerts}
+                    setPosterName={setPosterName}
+                    setFollowedArtists={setFollowedArtists}
+                    setArtistWishlist={setArtistWishlist}
+                    isTourMapChecked={isTourMapChecked}
+                    startDate={startDate}
+                    endDate={endDate}
+                    allConcerts={allConcerts}
+                    concerts={concerts}
+                    userLocation={userLocation}
+                    updateArtistNameInParent={(value) => setArtistName(value)}
+                    newArtistList={setArtistList}
+                    artistListFromParent={artistList}
+                    followedArtists={followedArtists}
+                    artistWishlist={[...artistWishlist]}
+                    openDialogFromParent={openDialog}
+                    setActiveTab={setActiveTab}
+                    closeDialog={() => {
+                        setOpenDialog(false);
+                    }}
+                    closeRouteDialog={() => {
+                        setOpenRouteDialog(false);
+                    }}
+                    ref={childRef}
+                /></Grid>
+                {!isTourMapChecked && (<Grid display={'flex'} flex={1}>
+                    <PickDate
+                        updateStartDateInParent={setStartDate}
+                        updateEndDateInParent={setEndDate}
+                        artistName={artistName}
+                        newArtistList={setArtistList}
+                        openDialog={setOpenDialog}
+                    /></Grid>)}
+            </Stack>}
+            {!isTourMapChecked && (<Stack sx={{ position: 'relative' }} >
                 <Box sx={{
                     position: 'absolute',
                     width: '100%',
@@ -175,7 +187,7 @@ const TaleSetup = ({ setStartDate,
                         <Tab disabled={isArtistTabDisabled || isScheduleTabDisabled} label="Map Style" />
                     </Tabs>
                 </Box>
-                <Box>
+                <Box mt={8}>
                     <TabPanel value={activeTab} index={0}>
                         <GetSpotifyPlaylistArtistsWithShows
                             setFollowedArtists={setFollowedArtists}
@@ -184,6 +196,9 @@ const TaleSetup = ({ setStartDate,
                             setAllConcerts={setAllConcerts}
                             setTripSuggestions={setTripSuggestions}
                             setOpenRouteDialog={setOpenRouteDialog}
+                            setRoute={handleRoutePick}
+                            setActiveTab={setActiveTab}
+                            setPosterName={setPosterName}
                             followedArtists={followedArtists}
                             startDate={startDate}
                             endDate={endDate}
@@ -194,8 +209,6 @@ const TaleSetup = ({ setStartDate,
                                 setOpenRouteDialog(false);
                             }}
                             trippSuggestions={tripSuggestions}
-                            setRoute={handleRoutePick}
-                            setActiveTab={setActiveTab}
                         />
                     </TabPanel>
                     <TabPanel value={activeTab} index={1}>
@@ -211,10 +224,19 @@ const TaleSetup = ({ setStartDate,
                     </TabPanel>
                     <TabPanel value={activeTab} index={2}>
                         <ConcertList
+                            userLocation={userLocation}
+                            startDate={startDate}
+                            endDate={endDate}
+                            shareId={shareId}
+                            posterNameSuggestions={posterNameSuggestions}
+                            setPosterNameSuggestions={setPosterNameSuggestions}
+                            setShareId={setShareId}
+                            setPosterName={setPosterName}
                             setConcerts={setConcerts}
                             setAllConcerts={setAllConcerts}
-                            artistWishlist={artistWishlist}
                             setArtistWishlist={setArtistWishlist}
+                            posterName={posterName}
+                            artistWishlist={artistWishlist}
                             concerts={concerts}
                             triggerReEvaluation={triggerReEvaluation}
                         />

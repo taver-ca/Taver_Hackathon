@@ -326,16 +326,17 @@ const BaseInput = forwardRef(({
   };
 
   return (
-
     <Stack direction={'column'} spacing={2}>
       <Card sx={{ backgroundColor: "#70afbf" }}>
         <CardHeader
-          sx={{ backgroundColor: "#5e97a5", color: "white" }}
-          title="Who do you want to see?">
+          sx={{ backgroundColor: "#5e97a5", color: "white", p: 1 }}
+          title="Who do you want to see?"
+          titleTypographyProps={{ variant: 'subtitle1' }}>
         </CardHeader>
-        <CardContent>
-          <Stack justifyContent="center" direction={'row'} spacing={2}>
-            <Typography color={"white"}>Tour map mode:</Typography>
+        <CardContent
+          sx={{ p: 1 }}>
+          <Stack sx={{ mb: 1 }} justifyContent="center" alignItems="center" direction={'row'} spacing={1}>
+            <Typography variant="body2" color={"white"}>Tour map mode:</Typography>
             <Switch
               checked={isTourMapChecked}
               onChange={handleSwitchChange}

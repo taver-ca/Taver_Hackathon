@@ -55,55 +55,54 @@ function App() {
           <Route path="/" element={
             <Grid
               className="App-header"
-              container
-              spacing={3}
-              height={"100vh"}
             >
-                <Prologue setStartDate={setStartDate}
-                  setEndDate={setEndDate}
-                  setArtistList={setArtistList}
-                  setOpenDialog={setOpenDialog}
-                  setOpenRouteDialog={setOpenRouteDialog}
-                  setConcerts={setConcerts}
-                  setUserLocation={setUserLocation}
-                  setMapStyle={setMapStyle}
-                  setAllConcerts={setAllConcerts}
-                  setArtistName={setArtistName}
-                  setFollowedArtists={setFollowedArtists}
-                  setArtistWishlist={setArtistWishlist}
-                  setIsArtistRequestTriggered={setIsArtistRequestTriggered}
-                  setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
-                  setTripSuggestions={setTripSuggestions}
-                  setPosterName={setPosterName}                  
-                  startDate={startDate}
-                  endDate={endDate}
-                  concerts={[...concerts]}
-                  artistName={artistName}
-                  allConcerts={allConcerts}
-                  userLocation={userLocation}
-                  artistList={artistList}
-                  followedArtists={followedArtists}
-                  artistWishlist={[...artistWishlist]}
-                  openDialog={openDialog}
-                  openRouteDialog={openRouteDialog}
-                  isArtistRequestTriggered={isArtistRequestTriggered}
-                  isSuggestionRequestTriggered={isSuggestionRequestTriggered}
-                  tripSuggestions={tripSuggestions}
-                  setShareId={setShareId}
-                  mapStyle={mapStyle}
-                  posterName={posterName}
-                  shareId={shareId}
-                  posterNameSuggestions={posterNameSuggestions}
-                  setPosterNameSuggestions={setPosterNameSuggestions}
-                  />
+              <Prologue
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                setArtistList={setArtistList}
+                setOpenDialog={setOpenDialog}
+                setOpenRouteDialog={setOpenRouteDialog}
+                setConcerts={setConcerts}
+                setUserLocation={setUserLocation}
+                setMapStyle={setMapStyle}
+                setAllConcerts={setAllConcerts}
+                setArtistName={setArtistName}
+                setFollowedArtists={setFollowedArtists}
+                setArtistWishlist={setArtistWishlist}
+                setIsArtistRequestTriggered={setIsArtistRequestTriggered}
+                setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
+                setTripSuggestions={setTripSuggestions}
+                setPosterName={setPosterName}
+                setShareId={setShareId}
+                setPosterNameSuggestions={setPosterNameSuggestions}
+                startDate={startDate}
+                endDate={endDate}
+                concerts={[...concerts]}
+                artistName={artistName}
+                allConcerts={allConcerts}
+                userLocation={userLocation}
+                artistList={artistList}
+                followedArtists={followedArtists}
+                artistWishlist={[...artistWishlist]}
+                openDialog={openDialog}
+                openRouteDialog={openRouteDialog}
+                isArtistRequestTriggered={isArtistRequestTriggered}
+                isSuggestionRequestTriggered={isSuggestionRequestTriggered}
+                tripSuggestions={tripSuggestions}
+                mapStyle={mapStyle}
+                posterName={posterName}
+                shareId={shareId}
+                posterNameSuggestions={posterNameSuggestions}
+              />
             </Grid>
           } />
           <Route path="/tales/:guid" element={
             <Grid
               className="Voyage"
               id="sharepage"
-              height={"100vh"}>           
-            <Voyage
+              height={'100vh'}
+            >
+              <Voyage
                 concerts={concerts}
                 mapStyle={mapStyle}
                 userLocation={userLocation}

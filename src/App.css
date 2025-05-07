@@ -15,11 +15,9 @@
 
 .App-header {
   background-color: #7fc9dc;
-  min-height: 105vh;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
-  align-items: flex-start;
   font-size: calc(10px + 2vmin);
   color: white;
 }

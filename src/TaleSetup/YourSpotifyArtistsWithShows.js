@@ -61,7 +61,7 @@ function YourSpotifyArtistsWithShows({
   });
 
   return (
-    <Grid spacing={3} >
+    <Grid>
       <Card sx={{ backgroundColor: "#70afbf" }}
         variant="elevation" elevation={3}>
         <CardHeader
