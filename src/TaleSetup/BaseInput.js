@@ -146,7 +146,7 @@ const BaseInput = forwardRef(({
           setConcerts(incomingConcerts);
         }
         else {
-          GenerateOptimizedConcertRoute(concatenatedConcert, userLocation, artistWishlist);
+          GenerateOptimizedConcertRoute(concatenatedConcert, userLocation, artistWishlist, setArtistWishlist, setConcerts);
         }
 
         setOpen(false);
