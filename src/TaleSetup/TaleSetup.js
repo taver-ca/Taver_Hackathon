@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from "react";
-import { Grid, Box, Stack, Tab, Tabs } from "@mui/material";
+import { Grid, Box, Stack, Tab, Tabs, Fade } from "@mui/material";
 import BaseInput from "./BaseInput.js";
 import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
@@ -44,6 +44,7 @@ const TaleSetup = ({
     posterName,
     shareId,
     posterNameSuggestions,
+    showActiveConcert
 }) => {
     const [isTourMapChecked, setIsTourMapChecked] = useState(false);
     const isArtistTabDisabled = followedArtists.length === 0;
@@ -106,144 +107,153 @@ const TaleSetup = ({
                     sx={{ width: { xs: 200 }, height: "auto" }}
                 />
             </Grid>
-            {!isInputDisabled && <Stack justifyContent="center" spacing={1} direction='row'>
-                <Grid flex={1}><BaseInput
-                    setIsTourMapChecked={setIsTourMapChecked}
-                    setConcerts={setConcerts}
-                    setUserLocation={setUserLocation}
-                    setMapStyle={setMapStyle}
-                    setAllConcerts={setAllConcerts}
-                    setPosterName={setPosterName}
-                    setFollowedArtists={setFollowedArtists}
-                    setArtistWishlist={setArtistWishlist}
-                    setPosterNameSuggestions={setPosterNameSuggestions}
-                    isTourMapChecked={isTourMapChecked}
-                    startDate={startDate}
-                    endDate={endDate}
-                    allConcerts={allConcerts}
-                    concerts={concerts}
-                    userLocation={userLocation}
-                    updateArtistNameInParent={(value) => setArtistName(value)}
-                    newArtistList={setArtistList}
-                    artistListFromParent={artistList}
-                    followedArtists={followedArtists}
-                    artistWishlist={[...artistWishlist]}
-                    openDialogFromParent={openDialog}
-                    setActiveTab={setActiveTab}
-                    closeDialog={() => {
-                        setOpenDialog(false);
-                    }}
-                    closeRouteDialog={() => {
-                        setOpenRouteDialog(false);
-                    }}
-                    ref={childRef}
-                /></Grid>
-                {!isTourMapChecked && (<Grid display={'flex'} flex={1}>
-                    <PickDate
-                        updateStartDateInParent={setStartDate}
-                        updateEndDateInParent={setEndDate}
-                        artistName={artistName}
-                        newArtistList={setArtistList}
-                        openDialog={setOpenDialog}
-                    /></Grid>)}
-            </Stack>}
-            {!isTourMapChecked && (<Stack sx={{ position: 'relative' }} >
-                <Box sx={{
-                    position: 'absolute',
-                    width: '100%',
-                    boxShadow: '0 2px 5px 1px rgba(0,0,0,0.1)',
-                    backgroundColor: '#5e97a5',
-                    borderRadius: '4px'
-                }}>
-                    <Tabs
-                        value={activeTab}
-                        onChange={handleTabChange}
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        sx={{
-                            "& .MuiTabs-scrollButtons": {
-                                "&:hover": {
-                                    backgroundColor: "#bbdefb", // Slightly darker blue on hover
-                                    transform: "scale(1.05)", // Subtle scale effect
-                                },
-                            },
-                            "& .MuiTabs-scrollButtons.Mui-disabled": {
-                                opacity: 0.2, // Disabled buttons appear semi-transparent
-                                cursor: "not-allowed", // Clear disabled state
-                            },
-                            "& .MuiTab-root": {
-                                color: "white", // Make tab text white
-                                "&.Mui-selected": {
-                                    color: "white", // Ensure selected tab text is also white
-                                },
-                            },
-                        }}
-                    >
-                        <Tab label="Import Playlist" />
-                        <Tab disabled={isArtistTabDisabled} label="Artists & Suggestions" />
-                        <Tab disabled={isScheduleTabDisabled} label="Schedule" />
-                        <Tab disabled={isArtistTabDisabled || isScheduleTabDisabled} label="Map Style" />
-                    </Tabs>
-                </Box>
-                <Box mt={8}>
-                    <TabPanel value={activeTab} index={0}>
-                        <GetSpotifyPlaylistArtistsWithShows
-                            setFollowedArtists={setFollowedArtists}
-                            setIsArtistRequestTriggered={setIsArtistRequestTriggered}
-                            setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
+            <Fade in={!isInputDisabled} mountOnEnter unmountOnExit>
+                <Stack justifyContent="center" spacing={1} direction='row'>
+                    <Grid flex={1}>
+                        <BaseInput
+                            setIsTourMapChecked={setIsTourMapChecked}
+                            setConcerts={setConcerts}
+                            setUserLocation={setUserLocation}
+                            setMapStyle={setMapStyle}
                             setAllConcerts={setAllConcerts}
-                            setTripSuggestions={setTripSuggestions}
-                            setOpenRouteDialog={setOpenRouteDialog}
-                            setRoute={handleRoutePick}
-                            setActiveTab={setActiveTab}
                             setPosterName={setPosterName}
-                            followedArtists={followedArtists}
+                            setFollowedArtists={setFollowedArtists}
+                            setArtistWishlist={setArtistWishlist}
+                            setPosterNameSuggestions={setPosterNameSuggestions}
+                            isTourMapChecked={isTourMapChecked}
                             startDate={startDate}
                             endDate={endDate}
                             allConcerts={allConcerts}
-                            openDialog={openDialog}
-                            openRouteDialogFromParent={openRouteDialog}
+                            concerts={concerts}
+                            userLocation={userLocation}
+                            updateArtistNameInParent={(value) => setArtistName(value)}
+                            newArtistList={setArtistList}
+                            artistListFromParent={artistList}
+                            followedArtists={followedArtists}
+                            artistWishlist={[...artistWishlist]}
+                            openDialogFromParent={openDialog}
+                            setActiveTab={setActiveTab}
+                            closeDialog={() => {
+                                setOpenDialog(false);
+                            }}
                             closeRouteDialog={() => {
                                 setOpenRouteDialog(false);
                             }}
-                            trippSuggestions={tripSuggestions}
-                        />
-                    </TabPanel>
-                    <TabPanel value={activeTab} index={1}>
-                        <YourSpotifyArtistsWithShows
-                            artists={followedArtists}
-                            artistWishlist={getArtistWishlist}
-                            tripSuggestions={tripSuggestions}
-                            onArtistClick={handleArtistPick}
-                            onTripSuggestionClick={handleRoutePick}
-                            isArtistRequestTriggered={isArtistRequestTriggered}
-                            isSuggestionRequestTriggered={isSuggestionRequestTriggered}
-                        />
-                    </TabPanel>
-                    <TabPanel value={activeTab} index={2}>
-                        <ConcertList
-                            allConcerts={allConcerts}
-                            userLocation={userLocation}
-                            startDate={startDate}
-                            endDate={endDate}
-                            shareId={shareId}
-                            posterNameSuggestions={posterNameSuggestions}
-                            setPosterNameSuggestions={setPosterNameSuggestions}
-                            setShareId={setShareId}
-                            setPosterName={setPosterName}
-                            setConcerts={setConcerts}
-                            setAllConcerts={setAllConcerts}
-                            setArtistWishlist={setArtistWishlist}
-                            posterName={posterName}
-                            artistWishlist={artistWishlist}
-                            concerts={concerts}
-                        />
-                    </TabPanel>
-                    <TabPanel value={activeTab} index={3}>
-                        <MapStyle setMapStyle={setMapStyle} />
-                    </TabPanel>
-                </Box>
-            </Stack>)}
+                            ref={childRef}
+                        /></Grid>
+                    <Fade in={!isTourMapChecked} mountOnEnter unmountOnExit>
+                        <Grid display={'flex'} flex={1}>
+                            <PickDate
+                                updateStartDateInParent={setStartDate}
+                                updateEndDateInParent={setEndDate}
+                                artistName={artistName}
+                                newArtistList={setArtistList}
+                                openDialog={setOpenDialog}
+                            />
+                        </Grid>
+                    </Fade>
+                </Stack>
+            </Fade>
+            <Fade in={!isTourMapChecked} mountOnEnter unmountOnExit>
+                <Stack sx={{ position: 'relative' }} >
+                    <Box sx={{
+                        position: 'absolute',
+                        width: '100%',
+                        boxShadow: '0 2px 5px 1px rgba(0,0,0,0.1)',
+                        backgroundColor: '#5e97a5',
+                        borderRadius: '4px'
+                    }}>
+                        <Tabs
+                            value={activeTab}
+                            onChange={handleTabChange}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            sx={{
+                                "& .MuiTabs-scrollButtons": {
+                                    "&:hover": {
+                                        backgroundColor: "#bbdefb", // Slightly darker blue on hover
+                                        transform: "scale(1.05)", // Subtle scale effect
+                                    },
+                                },
+                                "& .MuiTabs-scrollButtons.Mui-disabled": {
+                                    opacity: 0.2, // Disabled buttons appear semi-transparent
+                                    cursor: "not-allowed", // Clear disabled state
+                                },
+                                "& .MuiTab-root": {
+                                    color: "white", // Make tab text white
+                                    "&.Mui-selected": {
+                                        color: "white", // Ensure selected tab text is also white
+                                    },
+                                },
+                            }}
+                        >
+                            <Tab label="Import Playlist" />
+                            <Tab disabled={isArtistTabDisabled} label="Artists & Suggestions" />
+                            <Tab disabled={isScheduleTabDisabled} label="Schedule" />
+                            <Tab disabled={isArtistTabDisabled || isScheduleTabDisabled} label="Map Style" />
+                        </Tabs>
+                    </Box>
+                    <Box mt={8}>
+                        <TabPanel value={activeTab} index={0}>
+                            <GetSpotifyPlaylistArtistsWithShows
+                                setFollowedArtists={setFollowedArtists}
+                                setIsArtistRequestTriggered={setIsArtistRequestTriggered}
+                                setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
+                                setAllConcerts={setAllConcerts}
+                                setTripSuggestions={setTripSuggestions}
+                                setOpenRouteDialog={setOpenRouteDialog}
+                                setRoute={handleRoutePick}
+                                setActiveTab={setActiveTab}
+                                setPosterName={setPosterName}
+                                followedArtists={followedArtists}
+                                startDate={startDate}
+                                endDate={endDate}
+                                allConcerts={allConcerts}
+                                openDialog={openDialog}
+                                openRouteDialogFromParent={openRouteDialog}
+                                closeRouteDialog={() => {
+                                    setOpenRouteDialog(false);
+                                }}
+                                trippSuggestions={tripSuggestions}
+                            />
+                        </TabPanel>
+                        <TabPanel value={activeTab} index={1}>
+                            <YourSpotifyArtistsWithShows
+                                artists={followedArtists}
+                                artistWishlist={getArtistWishlist}
+                                tripSuggestions={tripSuggestions}
+                                onArtistClick={handleArtistPick}
+                                onTripSuggestionClick={handleRoutePick}
+                                isArtistRequestTriggered={isArtistRequestTriggered}
+                                isSuggestionRequestTriggered={isSuggestionRequestTriggered}
+                            />
+                        </TabPanel>
+                        <TabPanel value={activeTab} index={2}>
+                            <ConcertList
+                                allConcerts={allConcerts}
+                                userLocation={userLocation}
+                                startDate={startDate}
+                                endDate={endDate}
+                                shareId={shareId}
+                                posterNameSuggestions={posterNameSuggestions}
+                                setPosterNameSuggestions={setPosterNameSuggestions}
+                                setShareId={setShareId}
+                                setPosterName={setPosterName}
+                                setConcerts={setConcerts}
+                                setAllConcerts={setAllConcerts}
+                                setArtistWishlist={setArtistWishlist}
+                                posterName={posterName}
+                                artistWishlist={artistWishlist}
+                                concerts={concerts}
+                                showActiveConcert={showActiveConcert}
+                            />
+                        </TabPanel>
+                        <TabPanel value={activeTab} index={3}>
+                            <MapStyle setMapStyle={setMapStyle} />
+                        </TabPanel>
+                    </Box>
+                </Stack>
+            </Fade>
         </Stack>);
 };
 export default TaleSetup;

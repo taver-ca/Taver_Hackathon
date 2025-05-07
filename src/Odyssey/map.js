@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 
 const screenWidth = window.innerWidth;
 // Offset by a percentage of screen width (e.g., 10%)
-const panAmount = screenWidth > 600 ? -(screenWidth * 0.1): 0; // Moves left by 10% of screen width
+const panAmount = screenWidth > 600 ? -(screenWidth * 0.1) : 0; // Moves left by 10% of screen width
 
 function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path) {
 
@@ -83,7 +83,7 @@ const adjustCoordinates = (markers) => {
   const randomFactor = () => (Math.random() - 0.5) * offsetAmount * 2; // Random value between -offsetAmount and +offsetAmount
 
   return markers.map((marker, index, arr) => {
-    const duplicates = arr.filter((m) => 
+    const duplicates = arr.filter((m) =>
       m.position.lat === marker.position.lat && m.position.lng === marker.position.lng
     );
 
@@ -129,6 +129,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
       ResetMapView(mapRef, mapBoundsRef, markers);
     },
     handleShowActiveConcert: (index) => {
+      console.log(`index is: ${index}`);
       handleActiveMarker(index);
     },
   }));
@@ -218,7 +219,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
           restriction: {
             latLngBounds: {
               west: 180,
-              east:-180,
+              east: -180,
               north: 90,   // North Pole
               south: -90,  // South Pole
             },

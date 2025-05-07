@@ -24,7 +24,8 @@ const ConcertList = ({ allConcerts,
   setAllConcerts,
   setArtistWishlist,
   posterName,
-  artistWishlist }) => {
+  artistWishlist,
+  showActiveConcert }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const renderConcertList = concerts.map((concert, index) => {
@@ -32,65 +33,68 @@ const ConcertList = ({ allConcerts,
       <ListItem
         sx={{ background: "#e2e900", borderRadius: 2, mb: 1, boxShadow: 2, disablePadding: { xs: true, sm: false } }}
         key={index}
-        secondaryAction={<IconButton
-          edge="end"
-          onClick={() => {
-            //alert(`You clicked the button! artist is ${concert.artist}`);
-            //remove concerts of artist from local copy of concert list
-            //console.log(`who we are deleting: ${concert.artist}`);
-            var newConcerts = concerts;
-            //console.log(`concerts length before operation: ${newConcerts.length}`);
-            var filteredConcerts = newConcerts.filter(
-              (concertInQuestion) => {
-                console.log(
-                  `${concertInQuestion.artist} vs ${concert.artist}`
-                );
-                return concertInQuestion.artist !== concert.artist;
-              }
-            );
-            //console.log(`concerts length after operation: ${filteredConcerts.length}`);
-            //set the new concert list
-            setConcerts(filteredConcerts);
-            setAllConcerts((prev) =>
-              prev.filter(
-                (concertInQuestion) =>
-                  concertInQuestion.artist !== concert.artist
-              )
-            );
-            console.log(
-              `before removing artist: ${JSON.stringify(
-                artistWishlist
-              )}`
-            );
-            var updatedArtistWishlist =
-              artistWishlist.filter(
-                (artistWishlistItem) => {
-                  return (
-                    artistWishlistItem.WishlistArtistId !==
-                    concert.artistId
+        secondaryAction=
+        {
+          <IconButton
+            edge="end"
+            onClick={() => {
+              //alert(`You clicked the button! artist is ${concert.artist}`);
+              //remove concerts of artist from local copy of concert list
+              //console.log(`who we are deleting: ${concert.artist}`);
+              var newConcerts = concerts;
+              //console.log(`concerts length before operation: ${newConcerts.length}`);
+              var filteredConcerts = newConcerts.filter(
+                (concertInQuestion) => {
+                  console.log(
+                    `${concertInQuestion.artist} vs ${concert.artist}`
                   );
+                  return concertInQuestion.artist !== concert.artist;
                 }
               );
-            //remove selected artist from wish list
-            setArtistWishlist(updatedArtistWishlist);
-            console.log(
-              `trigger re-evaluation: ${JSON.stringify(
-                updatedArtistWishlist
-              )}`
-            );
-            GenerateOptimizedConcertRoute(
-              allConcerts,
-              userLocation,
-              updatedArtistWishlist,
-              setArtistWishlist,
-              setConcerts);
-          }}
-          aria-label="delete"
-        >
-          <DeleteIcon sx={{ color: "red" }} />
-        </IconButton>}
+              //console.log(`concerts length after operation: ${filteredConcerts.length}`);
+              //set the new concert list
+              setConcerts(filteredConcerts);
+              setAllConcerts((prev) =>
+                prev.filter(
+                  (concertInQuestion) =>
+                    concertInQuestion.artist !== concert.artist
+                )
+              );
+              console.log(
+                `before removing artist: ${JSON.stringify(
+                  artistWishlist
+                )}`
+              );
+              var updatedArtistWishlist =
+                artistWishlist.filter(
+                  (artistWishlistItem) => {
+                    return (
+                      artistWishlistItem.WishlistArtistId !==
+                      concert.artistId
+                    );
+                  }
+                );
+              //remove selected artist from wish list
+              setArtistWishlist(updatedArtistWishlist);
+              console.log(
+                `trigger re-evaluation: ${JSON.stringify(
+                  updatedArtistWishlist
+                )}`
+              );
+              GenerateOptimizedConcertRoute(
+                allConcerts,
+                userLocation,
+                updatedArtistWishlist,
+                setArtistWishlist,
+                setConcerts);
+            }}
+            aria-label="delete"
+          >
+            <DeleteIcon sx={{ color: "red" }} />
+          </IconButton>
+        }
       >
-        <ListItemButton >
+        <ListItemButton onClick={()=>showActiveConcert(index)}>
           <ListItemAvatar>
             <Avatar alt={`${concert.artist}`} src={`${concert.image.url}`} />
           </ListItemAvatar>
@@ -138,14 +142,12 @@ const ConcertList = ({ allConcerts,
   return (
     <Box
       sx={{
-        maxHeight:{xs:'100vh',sm:'100vh',md:'75vh',lg:'70vh',xl:'70vh'},
+        maxHeight: { xs: '100vh', sm: '100vh', md: '75vh', lg: '70vh', xl: '70vh' },
         overflow: 'scroll',
         '&::-webkit-scrollbar': { display: 'none' }, // Hide scrollbar for Chrome, Safari, and Opera
         '-ms-overflow-style': 'none', // Hide scrollbar for IE and Edge
         'scrollbar-width': 'none', // Hide scrollbar for Firefox
       }}
-
-
     >
       <Card sx={{ backgroundColor: "#70afbf" }}
         variant="elevation" elevation={3}>

@@ -1,12 +1,7 @@
 import { Stack, Box, Fab } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
-import { useParams } from 'react-router-dom';
 import { useLoadScript } from "@react-google-maps/api"
-import { useMediaQuery } from "@mui/material";
 import Map from "../Odyssey/map";
-import CircularProgress from '@mui/material/CircularProgress';
-import html2canvas from "html2canvas";
-import canvas2image from "@reglendo/canvas2image";
 import ListIcon from '@mui/icons-material/List';
 import Fade from '@mui/material/Fade';
 import TaleSetup from "../TaleSetup/TaleSetup.js";
@@ -53,23 +48,7 @@ const Prologue = ({ setStartDate,
     });
 
     const mapRef = useRef();
-    const isScreenSmall = useMediaQuery("(max-width:1200px)");
-
-    const [showSchedule, setShowSchedule] = useState(true);
-    const handleDownloadImage = async function () {
-        const element = document.getElementById("sharepage");
-        html2canvas(element, {
-            logging: true,
-            proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
-            ignoreElements: (node) => {
-                return node.nodeName === "IFRAME";
-            },
-            scrollY: window.scrollY * -1,
-        }).then((canvas) => {
-            let finalPosterName = posterName || "poster";
-            canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
-        });
-    };
+    const [showSchedule, setShowSchedule] = useState(true);    
 
     useEffect(() => {
         if (!mapRef) {
@@ -78,11 +57,11 @@ const Prologue = ({ setStartDate,
         // detected rendering
     }, mapRef)
 
-
+    const showActiveConcert = (markerId) => mapRef.current?.handleShowActiveConcert(markerId);
     return (
         <Stack sx={{ width: '100%', position: 'relative' }} backgroundColor="#7fc9dc">
             {/* Background Map */}
-            {isLoaded ? (
+            <Fade in={isLoaded} mountOnEnter unmountOnExit>
                 <Box sx={{
                     position: 'absolute',
                     top: 0,
@@ -92,7 +71,7 @@ const Prologue = ({ setStartDate,
                 }}>
                     <Map ref={mapRef} concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
                 </Box>
-            ) : null}
+            </Fade>
 
             {/* Foreground Content */}
             <Fab sx={{
@@ -159,6 +138,7 @@ const Prologue = ({ setStartDate,
                         shareId={shareId}
                         posterName={posterName}
                         posterNameSuggestions={posterNameSuggestions}
+                        showActiveConcert={(markerId) => mapRef.current?.handleShowActiveConcert(markerId)}
                     />
 
                 </Stack>
