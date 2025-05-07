@@ -73,10 +73,7 @@ const TaleSetup = ({
     const handleRoutePick = (route) => {
         childRef.current.handleRouteChoiceUpdateFromParent(route);
     }
-    const triggerReEvaluation = (updatedArtistWishlist) => {
-        console.log("trigger re-evaluation");
-        childRef.current.handleReEvaluation(updatedArtistWishlist);
-    }
+
 
     const [activeTab, setActiveTab] = useState(0);
     const isInputDisabled = activeTab >= 2;
@@ -224,6 +221,7 @@ const TaleSetup = ({
                     </TabPanel>
                     <TabPanel value={activeTab} index={2}>
                         <ConcertList
+                            allConcerts={allConcerts}
                             userLocation={userLocation}
                             startDate={startDate}
                             endDate={endDate}
@@ -238,7 +236,6 @@ const TaleSetup = ({
                             posterName={posterName}
                             artistWishlist={artistWishlist}
                             concerts={concerts}
-                            triggerReEvaluation={triggerReEvaluation}
                         />
                     </TabPanel>
                     <TabPanel value={activeTab} index={3}>

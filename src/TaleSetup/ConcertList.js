@@ -6,11 +6,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
-import { Stack, TextField, Typography, Button, Box, Card, CardHeader, CardContent } from "@mui/material";
+import { Stack, TextField, Button, Box, Card, CardHeader, CardContent } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
 import { GenerateTripTitle } from "../Odyssey/GenerateTripTitle";
+import { GenerateOptimizedConcertRoute } from './GenerateOptimizedConcertRoute.js'
 
 function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
@@ -22,6 +23,7 @@ class ConcertList extends React.Component {
     super(props);
     this.state = {
       //pass concerts from maps into here
+      allConcerts: this.props.allConcerts,
       concerts: this.props.concerts,
       userLocation: this.props.userLocation,
       startDate: this.props.startDate,
@@ -35,7 +37,6 @@ class ConcertList extends React.Component {
       setArtistWishlist: this.props.setArtistWishlist,
       posterName: this.props.posterName,
       artistWishlist: this.props.artistWishlist,
-      triggerReEvaluation: this.props.triggerReEvaluation
     };
   }
 
@@ -102,7 +103,12 @@ class ConcertList extends React.Component {
                   updatedArtistWishlist
                 )}`
               );
-              this.props.triggerReEvaluation(updatedArtistWishlist);
+              GenerateOptimizedConcertRoute(
+                this.state.allConcerts,
+                this.state.userLocation,
+                updatedArtistWishlist,
+                this.state.setArtistWishlist,
+                this.state.setConcerts);
             }}
             aria-label="delete"
           >
