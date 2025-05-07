@@ -97,7 +97,7 @@ const TaleSetup = ({
     );
 
     return (
-        <Stack sx={{ px: 2, container: true, flexDirection: 'column', overflow: 'auto' }} spacing={2}>
+        <Stack container sx={{ px: 2, flexDirection: 'column', overflow: 'auto' }} spacing={2}>
             <Grid flexDirection="column" sx={{ position: 'relative' }}>
                 <Box
                     component="img"
@@ -116,6 +116,7 @@ const TaleSetup = ({
                     setPosterName={setPosterName}
                     setFollowedArtists={setFollowedArtists}
                     setArtistWishlist={setArtistWishlist}
+                    setPosterNameSuggestions={setPosterNameSuggestions}
                     isTourMapChecked={isTourMapChecked}
                     startDate={startDate}
                     endDate={endDate}

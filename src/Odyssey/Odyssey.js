@@ -100,7 +100,7 @@ const Odyssey = ({
     };
     const [isLoading, setIsLoading] = useState(false);
     return (
-        <Grid sx={{ container: true, mb: 10 }}  >
+        <Grid sx={{ mb: 10 }}  >
             <div id="sharepage">
                 <SharePage
                     concerts={concerts}

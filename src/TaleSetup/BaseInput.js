@@ -20,6 +20,7 @@ const BaseInput = forwardRef(({
   setAllConcerts,
   setArtistWishlist,
   setPosterName,
+  setPosterNameSuggestions,
   startDate,
   isTourMapChecked,
   endDate,
@@ -34,7 +35,7 @@ const BaseInput = forwardRef(({
   newArtistList,
   followedArtists,
   artistWishlist,
-  setActiveTab,
+  setActiveTab
 }, ref) => {
 
   useEffect(() => {
@@ -71,6 +72,7 @@ const BaseInput = forwardRef(({
     });
 
     setPosterName(concerts.posterName);
+    setPosterNameSuggestions(concerts.nameSuggestions);
     setConcerts(concerts);
     setArtistWishlist(artistInfoList);
     closeRouteDialog();

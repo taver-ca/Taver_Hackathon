@@ -1,13 +1,13 @@
 import { FetchName } from "./FetchName";
 
-export const GenerateTripTitle = async function (posterNameSuggestions,
+export const GenerateTripTitle = async function (
+    posterNameSuggestions,
     concerts,
-    posterName,
     setPosterName,
     setPosterNameSuggestions,
     setIsLoading) {
 
-    if (posterNameSuggestions.length < 1 && !posterName) {
+    if (posterNameSuggestions.length < 1 ) {
         // send a request to openAI
         // attach the conerts, but strip the GPS data, that is not very useful for suggesting trip titles
         // New list with only 'title', 'artist', 'venue', 'city' and 'date' fields 
@@ -24,10 +24,8 @@ export const GenerateTripTitle = async function (posterNameSuggestions,
         setIsLoading(false);
     }
     else {
-        if(!posterName)
-        {
-            setPosterName(posterNameSuggestions[0].title);
-            setPosterNameSuggestions(posterNameSuggestions => posterNameSuggestions.slice(1));
-        }       
+        
+        setPosterName(posterNameSuggestions[0].title);
+        setPosterNameSuggestions(posterNameSuggestions => posterNameSuggestions.slice(1));
     }
 };

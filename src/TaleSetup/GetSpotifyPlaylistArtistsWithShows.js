@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, TextField, Button, Typography, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Box, Card, CardHeader, CardContent } from '@mui/material';
+import { Stack, TextField, Button, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Card, CardHeader, CardContent } from '@mui/material';
 import DismissButton from "./../TaleSetup/DismissButton.js";
 import { FetchName } from './../Odyssey/FetchName.js';
 import RouteChoiceList from './RouteChoiceList.js';
-import dayjs, { Dayjs } from 'dayjs';
-
-
-
-
 
 // Helper function: calculate Euclidean distance
 function calculateDistance(a, b) {
@@ -194,6 +189,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                         await FetchName(nameInput).then((suggestions) => {
                             if (suggestions.length >= 1) {
                                 cluster.posterName = suggestions[0].title;
+                                cluster.nameSuggestions = suggestions.slice(1);
                             }
                         });
                     }));
@@ -214,14 +210,14 @@ function GetSpotifyPlaylistArtistsWithShows({
     };
 
     return (
-        <Stack spacing={3} sx={{ container: true, flexDirection: 'column', paddingTop: 0 }}>
+        <Stack container spacing={3} sx={{ flexDirection: 'column', paddingTop: 0 }}>
             <Card sx={{ backgroundColor: "#70afbf", mt: 1 }} variant="elevation" elevation={3}>
                 <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }} title="See who's on tour from your playlist" />
-                <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}><form onSubmit={handlePlaylistSubmit}>
+                <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}>
+                    <form onSubmit={handlePlaylistSubmit}>
                     <Stack
                         direction={'column'}
-                        spacing={2}
-                        container
+                        spacing={2}                        
                         alignItems="center">
                         <TextField
                             sx={{
