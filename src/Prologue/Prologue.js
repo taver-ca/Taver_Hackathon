@@ -54,7 +54,7 @@ const Prologue = ({ setStartDate,
     const [showSchedule, setShowSchedule] = useState(true);
     const [show_ToggleUIFab, setShow_ToggleUIFab] = useState(true);
     const [saveRouteInProgress, setSaveRouteInProgress] = useState(false);
-    const isScreenSmall = useMediaQuery("(max-width:1200px)");
+    const isScreenSmall = useMediaQuery("(max-width:600px)");
     const [activeTab, setActiveTab] = useState(0);
     useEffect(() => {
         if (!mapRef) {
@@ -90,13 +90,16 @@ const Prologue = ({ setStartDate,
                     backgroundColor: '#e2e900', // Slightly darker shade for hover effect
                 },
             }} onClick={() => {
-                var tempActiveTab = activeTab;                
-                if (!showSchedule) {
-                    if (tempActiveTab === 2) {
-                        setShow_ToggleUIFab(false);
+                if (isScreenSmall) {
+                    var tempActiveTab = activeTab;
+                    if (!showSchedule) {
+                        if (tempActiveTab === 2) {
+                            setShow_ToggleUIFab(false);
+                        }
+                        setActiveTab(tempActiveTab);
                     }
-                    setActiveTab(tempActiveTab);
                 }
+
                 setShowSchedule(prevState => !prevState);
             }}>
                 <ListIcon />

@@ -183,7 +183,7 @@ const BaseInput = forwardRef(({
     });
   };
 
-  
+
 
 
   const [open, setOpen] = React.useState(false);
@@ -200,7 +200,7 @@ const BaseInput = forwardRef(({
 
   return (
     <Stack direction={'column'} width="100%" spacing={2}>
-      <Card sx={{ backgroundColor: "#70afbf", height: '100%'}}>
+      <Card sx={{ backgroundColor: "#70afbf", height: '100%' }}>
         <CardHeader
           sx={{ backgroundColor: "#5e97a5", color: "white", p: 1 }}
           title="Who do you want to see?"
@@ -243,6 +243,7 @@ const BaseInput = forwardRef(({
                   }}
                 />
                 <Button
+                  disabled={(artistName.length === 0)}
                   type="submit"
                   variant="contained"
                   color="primary"
