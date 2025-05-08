@@ -7,6 +7,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import Fade from '@mui/material/Fade';
 import TaleSetup from "../TaleSetup/TaleSetup.js";
 import { ShareAsLink } from "../Odyssey/ShareAsLink.js"
+import { useMediaQuery } from "@mui/material";
 
 const Prologue = ({ setStartDate,
     setEndDate,
@@ -53,6 +54,8 @@ const Prologue = ({ setStartDate,
     const [showSchedule, setShowSchedule] = useState(true);
     const [show_ToggleUIFab, setShow_ToggleUIFab] = useState(true);
     const [saveRouteInProgress, setSaveRouteInProgress] = useState(false);
+    const isScreenSmall = useMediaQuery("(max-width:1200px)");
+    const [activeTab, setActiveTab] = useState(0);
     useEffect(() => {
         if (!mapRef) {
             return
@@ -86,7 +89,16 @@ const Prologue = ({ setStartDate,
                 '&:hover': {
                     backgroundColor: '#e2e900', // Slightly darker shade for hover effect
                 },
-            }} onClick={() => setShowSchedule(prevState => !prevState)}>
+            }} onClick={() => {
+                var tempActiveTab = activeTab;                
+                if (!showSchedule) {
+                    if (tempActiveTab === 2) {
+                        setShow_ToggleUIFab(false);
+                    }
+                    setActiveTab(tempActiveTab);
+                }
+                setShowSchedule(prevState => !prevState);
+            }}>
                 <ListIcon />
             </Fab>}
 
@@ -131,47 +143,57 @@ const Prologue = ({ setStartDate,
                             top: { md: 20 }, // Adjust top position for smaller screens
                             borderRadius: 2
                         }}>
-  
-                            <TaleSetup setStartDate={setStartDate}
-                                setEndDate={setEndDate}
-                                setArtistList={setArtistList}
-                                setOpenDialog={setOpenDialog}
-                                setOpenRouteDialog={setOpenRouteDialog}
-                                setConcerts={setConcerts}
-                                setUserLocation={setUserLocation}
-                                setMapStyle={setMapStyle}
-                                setAllConcerts={setAllConcerts}
-                                setArtistName={setArtistName}
-                                setFollowedArtists={setFollowedArtists}
-                                setArtistWishlist={setArtistWishlist}
-                                setIsArtistRequestTriggered={setIsArtistRequestTriggered}
-                                setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
-                                setTripSuggestions={setTripSuggestions}
-                                setPosterName={setPosterName}
-                                setPosterNameSuggestions={setPosterNameSuggestions}
-                                setShareId={setShareId}
-                                saveRouteInProgress={saveRouteInProgress}
-                                startDate={startDate}
-                                endDate={endDate}
-                                concerts={[...concerts]}
-                                artistName={artistName}
-                                allConcerts={allConcerts}
-                                userLocation={userLocation}
-                                artistList={artistList}
-                                followedArtists={followedArtists}
-                                artistWishlist={[...artistWishlist]}
-                                openDialog={openDialog}
-                                openRouteDialog={openRouteDialog}
-                                isArtistRequestTriggered={isArtistRequestTriggered}
-                                isSuggestionRequestTriggered={isSuggestionRequestTriggered}
-                                tripSuggestions={tripSuggestions}
-                                shareId={shareId}
-                                posterName={posterName}
-                                posterNameSuggestions={posterNameSuggestions}
-                                setShow_ToggleUIFab={setShow_ToggleUIFab}
-                                showActiveConcert={(markerId) => mapRef.current?.handleShowActiveConcert(markerId)}
-                            />
-                        </Stack>
+
+                        <TaleSetup setStartDate={setStartDate}
+                            setEndDate={setEndDate}
+                            setArtistList={setArtistList}
+                            setOpenDialog={setOpenDialog}
+                            setOpenRouteDialog={setOpenRouteDialog}
+                            setConcerts={setConcerts}
+                            setUserLocation={setUserLocation}
+                            setMapStyle={setMapStyle}
+                            setAllConcerts={setAllConcerts}
+                            setArtistName={setArtistName}
+                            setFollowedArtists={setFollowedArtists}
+                            setArtistWishlist={setArtistWishlist}
+                            setIsArtistRequestTriggered={setIsArtistRequestTriggered}
+                            setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
+                            setTripSuggestions={setTripSuggestions}
+                            setPosterName={setPosterName}
+                            setPosterNameSuggestions={setPosterNameSuggestions}
+                            setShareId={setShareId}
+                            setActiveTab={setActiveTab}
+                            saveRouteInProgress={saveRouteInProgress}
+                            activeTab={activeTab}
+                            startDate={startDate}
+                            endDate={endDate}
+                            concerts={[...concerts]}
+                            artistName={artistName}
+                            allConcerts={allConcerts}
+                            userLocation={userLocation}
+                            artistList={artistList}
+                            followedArtists={followedArtists}
+                            artistWishlist={[...artistWishlist]}
+                            openDialog={openDialog}
+                            openRouteDialog={openRouteDialog}
+                            isArtistRequestTriggered={isArtistRequestTriggered}
+                            isSuggestionRequestTriggered={isSuggestionRequestTriggered}
+                            tripSuggestions={tripSuggestions}
+                            shareId={shareId}
+                            posterName={posterName}
+                            posterNameSuggestions={posterNameSuggestions}
+                            setShow_ToggleUIFab={setShow_ToggleUIFab}
+                            showActiveConcert={(markerId) => {
+                                //if we are on mobile screen
+                                //hide ui
+                                if (isScreenSmall) {
+                                    setShowSchedule(false);
+                                    setShow_ToggleUIFab(true);
+                                }
+                                mapRef.current?.handleShowActiveConcert(markerId);
+                            }}
+                        />
+                    </Stack>
                 </Box>
             </Fade>
         </Stack>

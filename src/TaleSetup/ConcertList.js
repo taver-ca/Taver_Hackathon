@@ -14,9 +14,6 @@ function formattedDate(incomingDate) {
 const ConcertList = ({ allConcerts,
   concerts,
   userLocation,
-  startDate,
-  endDate,
-  shareId,
   posterNameSuggestions,
   setPosterNameSuggestions,
   setPosterName,
@@ -155,6 +152,7 @@ const ConcertList = ({ allConcerts,
           <CardHeader
             sx={{ backgroundColor: "#5e97a5", color: "white" }}
             title={`Upcoming Concerts ${concerts.length} / 5 :`}
+            titleTypographyProps={{variant:'h6'}}
             action={
               <Button onClick={onClearAllPress} variant="contained" color="warning">
                 Clear All

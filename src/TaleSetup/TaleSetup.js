@@ -28,7 +28,9 @@ const TaleSetup = ({
     setPosterNameSuggestions,
     setShareId,
     setShow_ToggleUIFab,
+    setActiveTab,
     saveRouteInProgress,
+    activeTab,
     startDate,
     endDate,
     concerts,
@@ -82,7 +84,7 @@ const TaleSetup = ({
     }
 
 
-    const [activeTab, setActiveTab] = useState(0);
+
     const isInputDisabled = activeTab >= 2;
     const handleTabChange = (event, newValue) => {
         if (newValue === 2) {
@@ -256,9 +258,6 @@ const TaleSetup = ({
                             {saveRouteInProgress ? <CircularProgress /> : <ConcertList
                                 allConcerts={allConcerts}
                                 userLocation={userLocation}
-                                startDate={startDate}
-                                endDate={endDate}
-                                shareId={shareId}
                                 posterNameSuggestions={posterNameSuggestions}
                                 setPosterNameSuggestions={setPosterNameSuggestions}
                                 setShareId={setShareId}
