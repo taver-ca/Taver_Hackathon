@@ -75,17 +75,6 @@ const ConcertList = ({ allConcerts,
                 );
               //remove selected artist from wish list
               setArtistWishlist(updatedArtistWishlist);
-              console.log(
-                `trigger re-evaluation: ${JSON.stringify(
-                  updatedArtistWishlist
-                )}`
-              );
-              GenerateOptimizedConcertRoute(
-                allConcerts,
-                userLocation,
-                updatedArtistWishlist,
-                setArtistWishlist,
-                setConcerts);
             }}
             aria-label="delete"
           >
@@ -134,6 +123,7 @@ const ConcertList = ({ allConcerts,
     if (window.confirm("Are you sure you want to clear all your events?")) {
       setConcerts([])
       setArtistWishlist([])
+      clearSelectedArtist();
     } else {
       return;
     }

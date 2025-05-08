@@ -16,29 +16,30 @@ function calculateTimeDifference(timeA, timeB) {
 
 // Group events based on proximity, ensuring unique artistId in each cluster
 function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThreshold) {
+    
+    events.sort((a, b) => a.date.localeCompare(b.date)); // Sort by event time first
     const clusters = [];
     const visited = new Set();
-
+    
     events.forEach(event => {
         if (!visited.has(event.id)) {
-            const cluster = [];
-            const artistIdsInCluster = new Set();
+            let cluster = [event];
+            let lastEvent = event;
             visited.add(event.id);
-            artistIdsInCluster.add(event.artistId);
-
+            
             events.forEach(otherEvent => {
-                if (!visited.has(otherEvent.id) && !artistIdsInCluster.has(otherEvent.artistId)) {
-                    const distance = calculateDistance(event, otherEvent);
-                    const timeDifference = calculateTimeDifference(event.date, otherEvent.date);
+                if (!visited.has(otherEvent.id)) {
+                    const distance = calculateDistance(lastEvent, otherEvent);
+                    const timeDifference = calculateTimeDifference(lastEvent.date, otherEvent.date);
+                    
                     if (distance <= distanceThreshold && timeDifference <= timeThreshold) {
                         cluster.push(otherEvent);
                         visited.add(otherEvent.id);
-                        artistIdsInCluster.add(otherEvent.artistId);
+                        lastEvent = otherEvent; // Ensure we prioritize forward movement
                     }
                 }
             });
 
-            cluster.push(event); // Include current event in its cluster
             if (cluster.length > 2 && cluster.length < 7) {
                 clusters.push(cluster);
             }
@@ -47,8 +48,6 @@ function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThresh
 
     return clusters;
 }
-
-
 
 function GetSpotifyPlaylistArtistsWithShows({
     setFollowedArtists,
