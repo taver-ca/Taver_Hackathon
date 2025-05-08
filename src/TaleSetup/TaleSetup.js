@@ -29,6 +29,7 @@ const TaleSetup = ({
     setShareId,
     setShow_ToggleUIFab,
     setActiveTab,
+    clearSelectedArtist,
     saveRouteInProgress,
     activeTab,
     startDate,
@@ -255,21 +256,23 @@ const TaleSetup = ({
                             />
                         </TabPanel>
                         <TabPanel value={activeTab} index={2}>
-                            {saveRouteInProgress ? <CircularProgress /> : <ConcertList
-                                allConcerts={allConcerts}
-                                userLocation={userLocation}
-                                posterNameSuggestions={posterNameSuggestions}
-                                setPosterNameSuggestions={setPosterNameSuggestions}
-                                setShareId={setShareId}
-                                setPosterName={setPosterName}
-                                setConcerts={setConcerts}
-                                setAllConcerts={setAllConcerts}
-                                setArtistWishlist={setArtistWishlist}
-                                posterName={posterName}
-                                artistWishlist={artistWishlist}
-                                concerts={concerts}
-                                showActiveConcert={showActiveConcert}
-                            />}
+                            {saveRouteInProgress ? <Box width='100%' height='100%'><CircularProgress /></Box> :
+                                <ConcertList
+                                    allConcerts={allConcerts}
+                                    userLocation={userLocation}
+                                    posterNameSuggestions={posterNameSuggestions}
+                                    setPosterNameSuggestions={setPosterNameSuggestions}
+                                    setShareId={setShareId}
+                                    setPosterName={setPosterName}
+                                    setConcerts={setConcerts}
+                                    setAllConcerts={setAllConcerts}
+                                    setArtistWishlist={setArtistWishlist}
+                                    posterName={posterName}
+                                    artistWishlist={artistWishlist}
+                                    concerts={concerts}
+                                    showActiveConcert={showActiveConcert}
+                                    clearSelectedArtist={clearSelectedArtist}
+                                />}
                         </TabPanel>
                         <TabPanel value={activeTab} index={3}>
                             <MapStyle setMapStyle={setMapStyle} />

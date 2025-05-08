@@ -30,13 +30,17 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, m
   if (activeMarker === null) {
     console.log("fitBounds");
     mapRef.current.fitBounds(mapBoundsRef.current, 20);
-
   }
   else {
     var index = markers.findIndex(marker => marker.id === activeMarker);
-    var centerMarker = markers[index];
-    mapRef.current.setCenter(centerMarker.position);
-    mapRef.current.setZoom(17);
+    if (index !== -1) {
+      var centerMarker = markers[index];
+      mapRef.current.setCenter(centerMarker.position);
+      mapRef.current.setZoom(17);
+    }
+    else {
+      mapRef.current.fitBounds(mapBoundsRef.current, 20);
+    }
   }
 
   console.log("updating path");
@@ -132,6 +136,9 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
       if (!index) { handleActiveMarker(null); }
       handleActiveMarker(index);
     },
+    handleClearActiveMarker: () => {
+      setActiveMarker(null);
+    }
   }));
 
 

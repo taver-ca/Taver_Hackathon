@@ -184,6 +184,9 @@ const Prologue = ({ setStartDate,
                             posterName={posterName}
                             posterNameSuggestions={posterNameSuggestions}
                             setShow_ToggleUIFab={setShow_ToggleUIFab}
+                            clearSelectedArtist={()=>{
+                                mapRef.current?.handleClearActiveMarker();
+                            }}
                             showActiveConcert={(markerId) => {
                                 //if we are on mobile screen
                                 //hide ui

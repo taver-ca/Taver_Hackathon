@@ -22,7 +22,8 @@ const ConcertList = ({ allConcerts,
   setArtistWishlist,
   posterName,
   artistWishlist,
-  showActiveConcert }) => {
+  showActiveConcert,                                    
+  clearSelectedArtist }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const renderConcertList = concerts.map((concert, index) => {
@@ -50,6 +51,7 @@ const ConcertList = ({ allConcerts,
               );
               //console.log(`concerts length after operation: ${filteredConcerts.length}`);
               //set the new concert list
+              clearSelectedArtist();
               setConcerts(filteredConcerts);
               setAllConcerts((prev) =>
                 prev.filter(
