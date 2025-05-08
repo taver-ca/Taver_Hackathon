@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from "react";
-import { Grid, Box, Stack, Tab, Tabs, Fade, Badge } from "@mui/material";
+import { Grid, Box, Stack, Tab, Tabs, Fade, Badge, CircularProgress } from "@mui/material";
 import BaseInput from "./BaseInput.js";
 import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
@@ -27,6 +27,8 @@ const TaleSetup = ({
     setPosterName,
     setPosterNameSuggestions,
     setShareId,
+    setShow_ToggleUIFab,
+    saveRouteInProgress,
     startDate,
     endDate,
     concerts,
@@ -83,6 +85,12 @@ const TaleSetup = ({
     const [activeTab, setActiveTab] = useState(0);
     const isInputDisabled = activeTab >= 2;
     const handleTabChange = (event, newValue) => {
+        if (newValue === 2) {
+            setShow_ToggleUIFab(false);
+        }
+        else {
+            setShow_ToggleUIFab(true);
+        }
         setActiveTab(newValue);
     };
 
@@ -245,7 +253,7 @@ const TaleSetup = ({
                             />
                         </TabPanel>
                         <TabPanel value={activeTab} index={2}>
-                            <ConcertList
+                            {saveRouteInProgress ? <CircularProgress /> : <ConcertList
                                 allConcerts={allConcerts}
                                 userLocation={userLocation}
                                 startDate={startDate}
@@ -262,7 +270,7 @@ const TaleSetup = ({
                                 artistWishlist={artistWishlist}
                                 concerts={concerts}
                                 showActiveConcert={showActiveConcert}
-                            />
+                            />}
                         </TabPanel>
                         <TabPanel value={activeTab} index={3}>
                             <MapStyle setMapStyle={setMapStyle} />
