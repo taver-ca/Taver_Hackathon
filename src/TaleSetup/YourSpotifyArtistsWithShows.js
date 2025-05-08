@@ -55,13 +55,13 @@ function YourSpotifyArtistsWithShows({
   const commaSeparatedTripSuggestions = tripSuggestions.map((tripSuggestion, index) => {
     return (
       <Grid item key={index}>
-        <Chip sx={{ background: "teal" }} label={tripSuggestion.posterName} color="primary" onClick={() => handleTripSuggestionClick(tripSuggestion)} />
+        <Chip sx={{ color: "white", backgroundColor: "teal" }} label={tripSuggestion.posterName} onClick={() => handleTripSuggestionClick(tripSuggestion)} />
       </Grid>
     );
   });
 
   return (
-    <Grid>
+    <Grid mt={1}>
       <Card sx={{ backgroundColor: "#70afbf" }}
         variant="elevation" elevation={3}>
         <CardHeader

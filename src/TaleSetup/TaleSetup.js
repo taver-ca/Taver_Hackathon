@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from "react";
-import { Grid, Box, Stack, Tab, Tabs, Fade } from "@mui/material";
+import { Grid, Box, Stack, Tab, Tabs, Fade, Badge } from "@mui/material";
 import BaseInput from "./BaseInput.js";
 import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
@@ -47,6 +47,8 @@ const TaleSetup = ({
     showActiveConcert
 }) => {
     const [isTourMapChecked, setIsTourMapChecked] = useState(false);
+    const [showBadge, setShowBadge] = useState(false);
+
     const isArtistTabDisabled = followedArtists.length === 0;
     const isScheduleTabDisabled = concerts.length === 0;
 
@@ -67,11 +69,13 @@ const TaleSetup = ({
             setConcerts(newConcerts);
             setArtistWishlist(newArtistWishlist);
         } else {
+            setShowBadge(true);
             childRef.current.handleArtistChoiceUpdateFromParent(artist);
         }
-
     };
+
     const handleRoutePick = (route) => {
+        setShowBadge(true);
         childRef.current.handleRouteChoiceUpdateFromParent(route);
     }
 
@@ -109,7 +113,7 @@ const TaleSetup = ({
             </Grid>
             <Fade in={!isInputDisabled} mountOnEnter unmountOnExit>
                 <Stack justifyContent="center" spacing={1} direction='row'>
-                    <Grid flex={1}>
+                    <Grid display='flex' flex={1}>
                         <BaseInput
                             setIsTourMapChecked={setIsTourMapChecked}
                             setConcerts={setConcerts}
@@ -139,10 +143,10 @@ const TaleSetup = ({
                             closeRouteDialog={() => {
                                 setOpenRouteDialog(false);
                             }}
-                            ref={childRef}
-                        /></Grid>
+                            ref={childRef} />
+                    </Grid>
                     <Fade in={!isTourMapChecked} mountOnEnter unmountOnExit>
-                        <Grid display={'flex'} flex={1}>
+                        <Grid display='flex' flex={1}>
                             <PickDate
                                 updateStartDateInParent={setStartDate}
                                 updateEndDateInParent={setEndDate}
@@ -189,7 +193,19 @@ const TaleSetup = ({
                         >
                             <Tab label="Import Playlist" />
                             <Tab disabled={isArtistTabDisabled} label="Artists & Suggestions" />
-                            <Tab disabled={isScheduleTabDisabled} label="Schedule" />
+                            <Tab disabled={isScheduleTabDisabled}
+                                label=
+                                {
+                                    <Box padding={1} gap={2} >
+                                        <Badge
+                                            color="error"
+                                            variant="dot"
+                                            invisible={!showBadge}>
+                                            Schedule
+                                        </Badge>
+                                    </Box>
+                                }
+                                onClick={() => setShowBadge(false)} />
                             <Tab disabled={isArtistTabDisabled || isScheduleTabDisabled} label="Map Style" />
                         </Tabs>
                     </Box>

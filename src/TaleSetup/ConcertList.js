@@ -94,7 +94,7 @@ const ConcertList = ({ allConcerts,
           </IconButton>
         }
       >
-        <ListItemButton onClick={()=>showActiveConcert(index)}>
+        <ListItemButton onClick={() => showActiveConcert(index)} >
           <ListItemAvatar>
             <Avatar alt={`${concert.artist}`} src={`${concert.image.url}`} />
           </ListItemAvatar>
@@ -113,7 +113,7 @@ const ConcertList = ({ allConcerts,
                   spacing={1}
                 >
                   <Chip
-                    color="primary"
+                    sx={{ background: '#7fc9dc' }}
                     label={`${concert.location.name}`}
                   />
                   <Chip

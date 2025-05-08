@@ -5,9 +5,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import Voyage from "./Voyage/Voyage.js";
-import TaleSetup from "./TaleSetup/TaleSetup.js";
-import Odyssey from "./Odyssey/Odyssey.js";
 import Prologue from "./Prologue/Prologue.js";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function App() {
   let cachedStartDate = localStorage.getItem("startDate");
@@ -43,6 +42,16 @@ function App() {
   );
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#e2e900",
+      },
+      secondary: {
+        main: "#b1caaa",
+      },
+    },
+  });
 
   useEffect(() => {
     if (artistName) console.log("Artist Name: ", artistName);
@@ -53,66 +62,71 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={
-            <Grid
-              className="App-header"
-            >
-              <Prologue
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
-                setArtistList={setArtistList}
-                setOpenDialog={setOpenDialog}
-                setOpenRouteDialog={setOpenRouteDialog}
-                setConcerts={setConcerts}
-                setUserLocation={setUserLocation}
-                setMapStyle={setMapStyle}
-                setAllConcerts={setAllConcerts}
-                setArtistName={setArtistName}
-                setFollowedArtists={setFollowedArtists}
-                setArtistWishlist={setArtistWishlist}
-                setIsArtistRequestTriggered={setIsArtistRequestTriggered}
-                setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
-                setTripSuggestions={setTripSuggestions}
-                setPosterName={setPosterName}
-                setShareId={setShareId}
-                setPosterNameSuggestions={setPosterNameSuggestions}
-                startDate={startDate}
-                endDate={endDate}
-                concerts={[...concerts]}
-                artistName={artistName}
-                allConcerts={allConcerts}
-                userLocation={userLocation}
-                artistList={artistList}
-                followedArtists={followedArtists}
-                artistWishlist={[...artistWishlist]}
-                openDialog={openDialog}
-                openRouteDialog={openRouteDialog}
-                isArtistRequestTriggered={isArtistRequestTriggered}
-                isSuggestionRequestTriggered={isSuggestionRequestTriggered}
-                tripSuggestions={tripSuggestions}
-                mapStyle={mapStyle}
-                posterName={posterName}
-                shareId={shareId}
-                posterNameSuggestions={posterNameSuggestions}
-              />
-            </Grid>
+            <ThemeProvider theme={theme}>
+              <Grid
+                className="App-header"
+              >
+                <Prologue
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  setArtistList={setArtistList}
+                  setOpenDialog={setOpenDialog}
+                  setOpenRouteDialog={setOpenRouteDialog}
+                  setConcerts={setConcerts}
+                  setUserLocation={setUserLocation}
+                  setMapStyle={setMapStyle}
+                  setAllConcerts={setAllConcerts}
+                  setArtistName={setArtistName}
+                  setFollowedArtists={setFollowedArtists}
+                  setArtistWishlist={setArtistWishlist}
+                  setIsArtistRequestTriggered={setIsArtistRequestTriggered}
+                  setIsSuggestionRequestTriggered={setIsSuggestionRequestTriggered}
+                  setTripSuggestions={setTripSuggestions}
+                  setPosterName={setPosterName}
+                  setShareId={setShareId}
+                  setPosterNameSuggestions={setPosterNameSuggestions}
+                  startDate={startDate}
+                  endDate={endDate}
+                  concerts={[...concerts]}
+                  artistName={artistName}
+                  allConcerts={allConcerts}
+                  userLocation={userLocation}
+                  artistList={artistList}
+                  followedArtists={followedArtists}
+                  artistWishlist={[...artistWishlist]}
+                  openDialog={openDialog}
+                  openRouteDialog={openRouteDialog}
+                  isArtistRequestTriggered={isArtistRequestTriggered}
+                  isSuggestionRequestTriggered={isSuggestionRequestTriggered}
+                  tripSuggestions={tripSuggestions}
+                  mapStyle={mapStyle}
+                  posterName={posterName}
+                  shareId={shareId}
+                  posterNameSuggestions={posterNameSuggestions}
+                />
+              </Grid>
+            </ThemeProvider>
           } />
           <Route path="/tales/:guid" element={
-            <Grid
-              className="Voyage"
-              id="sharepage"
-              height={'100vh'}
-            >
-              <Voyage
-                concerts={concerts}
-                mapStyle={mapStyle}
-                userLocation={userLocation}
-                posterName={posterName}
-                setPosterName={setPosterName}
-                setMapStyle={setMapStyle}
-                setConcerts={setConcerts}
-                setUserLocation={setUserLocation}
-              />
-            </Grid>} />
+            <ThemeProvider theme={theme}>
+              <Grid
+                className="Voyage"
+                id="sharepage"
+                height={'100vh'}
+              >
+                <Voyage
+                  concerts={concerts}
+                  mapStyle={mapStyle}
+                  userLocation={userLocation}
+                  posterName={posterName}
+                  setPosterName={setPosterName}
+                  setMapStyle={setMapStyle}
+                  setConcerts={setConcerts}
+                  setUserLocation={setUserLocation}
+                />
+              </Grid>
+            </ThemeProvider>
+          } />
         </Routes>
       </Router>
     </div >

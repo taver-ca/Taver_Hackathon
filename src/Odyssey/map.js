@@ -54,7 +54,7 @@ const concertToMarker = (concert, index) => {
   return {
     id: index,
     name: concert.title,
-    artistImageUrl: concert.image.url,
+    artistImageUrl: concert.image != null ? concert.image.url : window.location.origin + "/Taver.png",
     address: concert.location.name,
     position: {
       lat: concert.location.gpsCoordinate.coords.latitude,

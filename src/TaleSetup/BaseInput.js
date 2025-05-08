@@ -199,8 +199,8 @@ const BaseInput = forwardRef(({
   };
 
   return (
-    <Stack direction={'column'} spacing={2}>
-      <Card sx={{ backgroundColor: "#70afbf" }}>
+    <Stack direction={'column'} width="100%" spacing={2}>
+      <Card sx={{ backgroundColor: "#70afbf", height: '100%'}}>
         <CardHeader
           sx={{ backgroundColor: "#5e97a5", color: "white", p: 1 }}
           title="Who do you want to see?"
