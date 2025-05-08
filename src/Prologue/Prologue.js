@@ -129,10 +129,8 @@ const Prologue = ({ setStartDate,
                 <SaveIcon />
             </Fab>}
 
-            <Fade in={showSchedule} mountOnEnter unmountOnExit>
-                <Box position="relative">
-                    {/* Circular Progress Overlay */}
-                    <Stack
+            <Fade b in={showSchedule} mountOnEnter unmountOnExit>
+            <Stack
                         spacing={1}
                         sx={{
                             backgroundColor: 'rgba(94, 151, 165, 0.8)', // Semi-transparent background
@@ -197,7 +195,6 @@ const Prologue = ({ setStartDate,
                             }}
                         />
                     </Stack>
-                </Box>
             </Fade>
         </Stack>
     );
