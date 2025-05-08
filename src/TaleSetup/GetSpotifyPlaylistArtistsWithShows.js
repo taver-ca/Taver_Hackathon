@@ -105,9 +105,9 @@ function GetSpotifyPlaylistArtistsWithShows({
             setErrorMessage("Please enter a valid Spotify playlist URL.");
         }
 
-        const startIndex = url.lastIndexOf("/") + 1; // Find the index of the last slash and add 1
-        const endIndex = url.indexOf("?"); // Find the index of the question mark
-
+        const startIndex = url.lastIndexOf("/") + 1; 
+        const endIndex = url.indexOf("?") !== -1 ? url.indexOf("?") : url.length; 
+        
         const extractedPlaylistId = url.substring(startIndex, endIndex);
         setIsArtistRequestTriggered(true);
         setActiveTab(1); // Switch to the second tab in the TaleSetup component 
