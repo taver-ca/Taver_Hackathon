@@ -77,7 +77,7 @@ function YourSpotifyArtistsWithShows({
           {isArtistLoading && <CircularProgress sx={{ mt: 5 }} />}</CardContent>
       </Card>
 
-      <Card sx={{ backgroundColor: "#70afbf", mt: 2 }}
+      {(tripSuggestions.length > 0 || isSuggestionLoading) && <Card sx={{ backgroundColor: "#70afbf", mt: 2 }}
         variant="elevation" elevation={3}>
         <CardHeader
           sx={{ backgroundColor: "#5e97a5", color: "white" }}
@@ -89,7 +89,7 @@ function YourSpotifyArtistsWithShows({
           </Grid>
           {isSuggestionLoading && <CircularProgress sx={{ mt: 5 }} />}
         </CardContent>
-      </Card>
+      </Card>}
     </Grid>
   );
 }
