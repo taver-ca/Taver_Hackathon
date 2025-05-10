@@ -13,5 +13,9 @@ export const FetchName = async (concerts) => {
         let resJson = await response.json();    
         return resJson;    
       }
+      else if(response.status == 500)
+      {
+        return [];
+      }
       return;
 };

@@ -40,7 +40,7 @@ function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThresh
                 }
             });
 
-            if (cluster.length > 2 && cluster.length < 7) {
+            if (cluster.length > 2 && cluster.length < 6) {
                 clusters.push(cluster);
             }
         }
@@ -174,21 +174,23 @@ function GetSpotifyPlaylistArtistsWithShows({
                     cluster.sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date in ascending order
                 );
 
-                // Filter clusters and sort by length
                 clusters = clusters
-                    .filter(cluster => cluster.length > 1) // Remove clusters with length of 1
                     .sort((a, b) => b.length - a.length); // Sort clusters by length (descending)
                 clusters = clusters.slice(0, 3); // Keep only the top 3 clusters
 
                 //console.table(clusters);
                 //give each cluster a name, wait until we get the name from the backend
                 await Promise.all(
-                    clusters.map(async cluster => {
-                        const nameInput = cluster.map(({ title, artist, location, date }) => ({ title, artist, date, venue: location.name, city: location.address }));
+                    clusters.map(async (cluster, index) => {
+                        const nameInput = cluster.map(({ title, artist, location, date }) => ({ title: title.substring(0, 250), artist, date, venue: location.name, city: location.address }));
                         await FetchName(nameInput).then((suggestions) => {
                             if (suggestions.length >= 1) {
                                 cluster.posterName = suggestions[0].title;
                                 cluster.nameSuggestions = suggestions.slice(1);
+                            }
+                            else {
+                                cluster.posterName = `suggestion ${index + 1}`;
+                                cluster.nameSuggestions = [];
                             }
                         });
                     }));
