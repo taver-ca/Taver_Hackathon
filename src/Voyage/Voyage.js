@@ -199,7 +199,7 @@ const Voyage = ({
                             }} variant="contained">
                             Reset Map View
                         </Button>
-                        {(concerts.length === 0 || isScreenSmall) &&
+                        {(concerts.length > 0 && !isScreenSmall) &&
                             <Button id="sharebutton" color="primary"
                                 onClick={async () => {
                                     await handleDownloadImage();
