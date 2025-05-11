@@ -32,7 +32,6 @@ const Voyage = ({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
     });
     const isScreenSmall = useMediaQuery("(max-width:1200px)");
-
     const [showSchedule, setShowSchedule] = useState(true);
     const handleDownloadImage = async function () {
         const element = document.getElementById("sharepage");
@@ -45,7 +44,7 @@ const Voyage = ({
             scrollY: window.scrollY * -1,
         }).then((canvas) => {
             let finalPosterName = posterName || "poster";
-            canvas2image.saveAsPNG(canvas, finalPosterName, canvas.width, canvas.height);
+            canvas2image.saveAsJPEG(canvas, finalPosterName, canvas.width, canvas.height);
         });
     };
 

@@ -113,7 +113,7 @@ const TaleSetup = ({
     );
 
     return (
-        <Stack container sx={{ px: 2, flexDirection: 'column', overflow: 'auto' }} spacing={2}>
+        <Stack container sx={{ px: 2, flexDirection: 'column' }} spacing={2}>
             <Grid flexDirection="column" sx={{ position: 'relative' }}>
                 <Box
                     component="img"
