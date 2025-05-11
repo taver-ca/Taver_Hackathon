@@ -33,8 +33,31 @@ const Voyage = ({
     });
     const isScreenSmall = useMediaQuery("(max-width:1200px)");
     const [showSchedule, setShowSchedule] = useState(true);
+
     const handleDownloadImage = async function () {
+
+        const UIControlsContainer = document.getElementById("UIControlsContainer");
+        const UIControls = document.getElementById("UIControls");
+        // Store the reference before removing
+        var savedUIControls = null;
+        if (UIControlsContainer && UIControls) {
+            savedUIControls = UIControls.cloneNode(true);
+            UIControlsContainer.removeChild(UIControls);
+        }
+
+        const showScheduleFabContainer = document.getElementById("showScheduleFabContainer");
+        const showScheduleFab = document.getElementById("showScheduleFab");
+        var savedShowScheduleFab  = null;
+
+        if (showScheduleFabContainer && showScheduleFab) {
+            savedShowScheduleFab = showScheduleFab.cloneNode(true);
+            showScheduleFabContainer.removeChild(showScheduleFab);
+        }
+
+
+
         const element = document.getElementById("sharepage");
+
         html2canvas(element, {
             logging: true,
             proxy: `${process.env.REACT_APP_BACKEND}/GetImage`,
@@ -45,6 +68,8 @@ const Voyage = ({
         }).then((canvas) => {
             let finalPosterName = posterName || "poster";
             canvas2image.saveAsJPEG(canvas, finalPosterName, canvas.width, canvas.height);
+            UIControlsContainer.appendChild(savedUIControls);
+            showScheduleFabContainer.appendChild(savedShowScheduleFab)
         });
     };
 
@@ -111,7 +136,7 @@ const Voyage = ({
     }
 
     return (
-        <Stack sx={{ width: '100%', position: 'relative' }} backgroundColor="#7fc9dc">
+        <Stack sx={{ width: '100%', position: 'relative' }} backgroundColor="#7fc9dc" id="showScheduleFabContainer">
             {/* Background Map */}
             {isLoaded ? (
                 <Box sx={{
@@ -126,7 +151,9 @@ const Voyage = ({
             ) : null}
 
             {/* Foreground Content */}
-            <Fab sx={{
+            <Fab 
+            id="showScheduleFab"
+            sx={{
                 backgroundColor: '#70afbf',
                 color: 'white',
                 position: 'absolute',
@@ -142,6 +169,7 @@ const Voyage = ({
 
             <Fade in={showSchedule} mountOnEnter unmountOnExit>
                 <Stack
+                id="UIControlsContainer"
                     spacing={1}
                     sx={{
                         backgroundColor: 'rgba(94, 151, 165, 0.8)', // Semi-transparent background
@@ -169,7 +197,7 @@ const Voyage = ({
                         <SharePageList concerts={concerts} showActiveConcert={(markerId) => mapRef.current?.handleShowActiveConcert(markerId)} />
                     </Stack>
                     {/* Share Button */}
-                    <Stack container spacing={2} direction="row" alignItems="center" justifyContent="center">
+                    <Stack container spacing={2} direction="row" alignItems="center" justifyContent="center" Id="UIControls">
                         <Button id="resetButton" color="primary" disabled={concerts.length === 0}
                             onClick={() => {
                                 mapRef.current?.handleResetMapView();
