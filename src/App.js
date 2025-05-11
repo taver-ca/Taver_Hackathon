@@ -6,6 +6,7 @@ import Voyage from "./Voyage/Voyage.js";
 import Prologue from "./Prologue/Prologue.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { QRCodeCanvas } from "qrcode.react";
+import { useMediaQuery } from "@mui/material";
 
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
     cachedEndDate === null ? futureDate : new Date(cachedEndDate)
   );
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
-
+  const isScreenSmall = useMediaQuery("(max-width:1200px)");
   const theme = createTheme({
     palette: {
       primary: {
@@ -131,7 +132,7 @@ function App() {
                     bottom: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
                     zIndex: 2,
                   }}>
-                  <QRCodeCanvas
+                  {!isScreenSmall && <QRCodeCanvas
                     id="QRCode"
                     value={window.location.href}
                     alt={window.location.href}
@@ -139,7 +140,7 @@ function App() {
 
                     bgColor="#e2e900"
                     level="H"
-                  />
+                  />}
                 </Grid>
               </Grid>
             </ThemeProvider>

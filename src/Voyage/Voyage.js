@@ -23,7 +23,6 @@ const Voyage = ({
     setConcerts,
     setUserLocation,
     setMapStyle
-
 }) => {
     const mapRef = useRef();
     const { guid } = useParams();
@@ -47,7 +46,7 @@ const Voyage = ({
 
         const showScheduleFabContainer = document.getElementById("showScheduleFabContainer");
         const showScheduleFab = document.getElementById("showScheduleFab");
-        var savedShowScheduleFab  = null;
+        var savedShowScheduleFab = null;
 
         if (showScheduleFabContainer && showScheduleFab) {
             savedShowScheduleFab = showScheduleFab.cloneNode(true);
@@ -147,25 +146,25 @@ const Voyage = ({
             ) : null}
 
             {/* Foreground Content */}
-            <Fab 
-            id="showScheduleFab"
-            sx={{
-                backgroundColor: '#70afbf',
-                color: 'white',
-                position: 'absolute',
-                top: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
-                left: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
-                zIndex: 2,
-                '&:hover': {
-                    backgroundColor: '#e2e900', // Slightly darker shade for hover effect
-                },
-            }} onClick={() => setShowSchedule(prevState => !prevState)}>
+            <Fab
+                id="showScheduleFab"
+                sx={{
+                    backgroundColor: '#70afbf',
+                    color: 'white',
+                    position: 'absolute',
+                    top: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
+                    left: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
+                    zIndex: 2,
+                    '&:hover': {
+                        backgroundColor: '#e2e900', // Slightly darker shade for hover effect
+                    },
+                }} onClick={() => setShowSchedule(prevState => !prevState)}>
                 <ListIcon />
             </Fab>
 
             <Fade in={showSchedule} mountOnEnter unmountOnExit>
                 <Stack
-                id="UIControlsContainer"
+                    id="UIControlsContainer"
                     spacing={1}
                     sx={{
                         backgroundColor: 'rgba(94, 151, 165, 0.8)', // Semi-transparent background
@@ -200,12 +199,13 @@ const Voyage = ({
                             }} variant="contained">
                             Reset Map View
                         </Button>
-                        <Button id="sharebutton" color="primary" disabled={concerts.length === 0 || isScreenSmall}
-                            onClick={async () => {
-                                await handleDownloadImage();
-                            }} variant="contained">
-                            Share As Image
-                        </Button>
+                        {(concerts.length === 0 || isScreenSmall) &&
+                            <Button id="sharebutton" color="primary"
+                                onClick={async () => {
+                                    await handleDownloadImage();
+                                }} variant="contained">
+                                Share As Image
+                            </Button>}
                     </Stack>
                 </Stack>
             </Fade>
