@@ -53,9 +53,6 @@ const Voyage = ({
             savedShowScheduleFab = showScheduleFab.cloneNode(true);
             showScheduleFabContainer.removeChild(showScheduleFab);
         }
-
-
-
         const element = document.getElementById("sharepage");
 
         html2canvas(element, {
@@ -68,8 +65,7 @@ const Voyage = ({
         }).then((canvas) => {
             let finalPosterName = posterName || "poster";
             canvas2image.saveAsJPEG(canvas, finalPosterName, canvas.width, canvas.height);
-            UIControlsContainer.appendChild(savedUIControls);
-            showScheduleFabContainer.appendChild(savedShowScheduleFab)
+            window.location.reload(false);
         });
     };
 

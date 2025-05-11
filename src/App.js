@@ -1,12 +1,12 @@
-/*import logo from './logo.svg';*/
 import "./App.css";
-
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import Voyage from "./Voyage/Voyage.js";
 import Prologue from "./Prologue/Prologue.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { QRCodeCanvas } from "qrcode.react";
+
 
 function App() {
   let cachedStartDate = localStorage.getItem("startDate");
@@ -124,6 +124,23 @@ function App() {
                   setConcerts={setConcerts}
                   setUserLocation={setUserLocation}
                 />
+                <Grid
+                  sx={{
+                    position: 'absolute',
+                    right: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
+                    bottom: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
+                    zIndex: 2,
+                  }}>
+                  <QRCodeCanvas
+                    id="QRCode"
+                    value={window.location.href}
+                    alt={window.location.href}
+                    size={125}
+
+                    bgColor="#e2e900"
+                    level="H"
+                  />
+                </Grid>
               </Grid>
             </ThemeProvider>
           } />
