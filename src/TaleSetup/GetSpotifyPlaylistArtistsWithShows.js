@@ -16,22 +16,22 @@ function calculateTimeDifference(timeA, timeB) {
 
 // Group events based on proximity, ensuring unique artistId in each cluster
 function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThreshold) {
-    
+
     events.sort((a, b) => a.date.localeCompare(b.date)); // Sort by event time first
     const clusters = [];
     const visited = new Set();
-    
+
     events.forEach(event => {
         if (!visited.has(event.id)) {
             let cluster = [event];
             let lastEvent = event;
             visited.add(event.id);
-            
+
             events.forEach(otherEvent => {
                 if (!visited.has(otherEvent.id)) {
                     const distance = calculateDistance(lastEvent, otherEvent);
                     const timeDifference = calculateTimeDifference(lastEvent.date, otherEvent.date);
-                    
+
                     if (distance <= distanceThreshold && timeDifference <= timeThreshold) {
                         cluster.push(otherEvent);
                         visited.add(otherEvent.id);
@@ -66,10 +66,8 @@ function GetSpotifyPlaylistArtistsWithShows({
     closeRouteDialog }
 ) {
 
-    const initialSpotifyURL = "https://open.spotify.com/playlist/";
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const [calculatedRoutes, setCalculatedRoutes] = useState([]);
-    const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
     // Time threshold (in milliseconds)
     const [timeThreshold, setTimeThreshold] = useState(7 * 24 * 60 * 60 * 1000);
@@ -94,20 +92,24 @@ function GetSpotifyPlaylistArtistsWithShows({
         }
     }, [calculatedRoutes]);
 
-    let handlePlaylistSubmit = async (e) => {
-        e.preventDefault();
+
+    useEffect(() => {
+        if (spotifyPlayList && spotifyPlayList !== "") {
+            handlePlaylistSubmit();
+        }
+    }, [spotifyPlayList]);
+
+    let handlePlaylistSubmit = async () => {
         const url = spotifyPlayList;
         const urlValidate = new RegExp("^https://open\\.spotify\\.com/playlist/[a-zA-Z0-9]{22}(\\?si=.*)?$");
-        if (urlValidate.test(spotifyPlayList)) {
-            setErrorMessage("");
-        }
-        else {
-            setErrorMessage("Please enter a valid Spotify playlist URL.");
+        if (!urlValidate.test(spotifyPlayList)) {
+            alert("Please enter a valid Spotify playlist URL.");
+            return;
         }
 
-        const startIndex = url.lastIndexOf("/") + 1; 
-        const endIndex = url.indexOf("?") !== -1 ? url.indexOf("?") : url.length; 
-        
+        const startIndex = url.lastIndexOf("/") + 1;
+        const endIndex = url.indexOf("?") !== -1 ? url.indexOf("?") : url.length;
+
         const extractedPlaylistId = url.substring(startIndex, endIndex);
         setIsArtistRequestTriggered(true);
         setActiveTab(1); // Switch to the second tab in the TaleSetup component 
@@ -215,37 +217,25 @@ function GetSpotifyPlaylistArtistsWithShows({
             <Card sx={{ backgroundColor: "#70afbf", mt: 1 }} variant="elevation" elevation={3}>
                 <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }} title="See who's on tour from your playlist" />
                 <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}>
-                    <form onSubmit={handlePlaylistSubmit}>
-                    <Stack
-                        direction={'column'}
-                        spacing={2}                        
-                        alignItems="center">
-                        <TextField
-                            sx={{
-                                "& input": {
-                                    color: "white",
-                                },
-                                "& label": {
-                                    color: "white",
-                                },
-                                width: { xs: '100%' }
-                            }}
-                            label="Spotify Playlist URL:"
-                            placeholder='https://open.spotify.com/playlist/37i9dQZF1DWXT8uSSn6PRy'
-                            InputLabelProps={{ shrink: true }}
-                            value={spotifyPlayList} onChange={(e) => setSpotifyPlaylist(e.target.value)}
-                            helperText={errorMessage}
-                            error={errorMessage}
-                        />
-                        <Button
-                            disabled={(spotifyPlayList.length === 0 || !spotifyPlayList.includes(initialSpotifyURL)) ? true : false}
-                            type="submit"
-                            variant="contained"
-                            color="primary">
-                            Submit
-                        </Button>
-                    </Stack>
-                </form>
+                    <form onSubmit={async (e) => {
+                        e.preventDefault();
+                        if (!spotifyPlayList) {
+                            const text = await navigator.clipboard.readText();
+                            setSpotifyPlaylist(text);
+                        }
+                    }}>
+                        <Stack
+                            direction={'column'}
+                            spacing={2}
+                            alignItems="center">
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary">
+                                Paste from clipboard
+                            </Button>
+                        </Stack>
+                    </form>
                 </CardContent>
             </Card>
 
