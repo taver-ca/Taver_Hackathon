@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Grid, Chip, Box, CircularProgress, Typography, Card, CardContent, CardHeader } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Grid, Chip, CircularProgress, Card, CardContent, CardHeader } from '@mui/material';
 import SwipeableTextMobileStepper from './ArtistsCarrousel'
 
 function YourSpotifyArtistsWithShows({
@@ -41,8 +41,11 @@ function YourSpotifyArtistsWithShows({
     onArtistClick(artistName);
   };
 
-  const handleTripSuggestionClick = (tripSuggestion) => {
-    onTripSuggestionClick(tripSuggestion);
+  const handleTripSuggestionClick = (targetId) => {
+    console.log(`trip Id is:${targetId}`);
+    let trip = tripSuggestions.find(trip => trip.id === targetId);
+    console.log(`trip name is: ${trip.posterName}`);
+    onTripSuggestionClick(trip.gigs);
   }
 
   const commaSeparatedfollowedArtists = artists.map((artist, index) => {
@@ -55,7 +58,7 @@ function YourSpotifyArtistsWithShows({
   const commaSeparatedTripSuggestions = tripSuggestions.map((tripSuggestion, index) => {
     return (
       <Grid item key={index}>
-        <Chip sx={{ color: "white", backgroundColor: "teal" }} label={tripSuggestion.posterName} onClick={() => handleTripSuggestionClick(tripSuggestion)} />
+        <Chip sx={{ color: "white", backgroundColor: "teal" }} label={tripSuggestion.posterName} onClick={() => handleTripSuggestionClick(tripSuggestion.id)} />
       </Grid>
     );
   });

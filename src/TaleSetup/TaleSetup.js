@@ -124,7 +124,7 @@ const TaleSetup = ({
             </Grid>
             <Fade in={!isInputDisabled} mountOnEnter unmountOnExit>
                 <Stack justifyContent="center" spacing={1} direction='row'>
-                    <Grid display='flex' flex={1}>
+                    <Grid display='flex' flex={1} minWidth={'200px'}>
                         <BaseInput
                             setIsTourMapChecked={setIsTourMapChecked}
                             setConcerts={setConcerts}
@@ -157,7 +157,7 @@ const TaleSetup = ({
                             ref={childRef} />
                     </Grid>
                     <Fade in={!isTourMapChecked} mountOnEnter unmountOnExit>
-                        <Grid display='flex' flex={1}>
+                        <Grid display='flex' flex={1} minWidth={'200px'}>
                             <PickDate
                                 updateStartDateInParent={setStartDate}
                                 updateEndDateInParent={setEndDate}
