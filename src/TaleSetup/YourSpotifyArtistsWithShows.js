@@ -45,7 +45,7 @@ function YourSpotifyArtistsWithShows({
     console.log(`trip Id is:${targetId}`);
     let trip = tripSuggestions.find(trip => trip.id === targetId);
     console.log(`trip name is: ${trip.posterName}`);
-    onTripSuggestionClick(trip.gigs);
+    onTripSuggestionClick(trip);
   }
 
   const commaSeparatedfollowedArtists = artists.map((artist, index) => {
@@ -57,8 +57,8 @@ function YourSpotifyArtistsWithShows({
   });
   const commaSeparatedTripSuggestions = tripSuggestions.map((tripSuggestion, index) => {
     return (
-      <Grid item key={index}>
-        <Chip sx={{ color: "white", backgroundColor: "teal" }} label={tripSuggestion.posterName} onClick={() => handleTripSuggestionClick(tripSuggestion.id)} />
+      <Grid sx={{ width: '100%', display: 'flex', flexWrap: 'wrap' }} item key={index}>
+        <Chip sx={{ width: '100%', color: "white", backgroundColor: "teal" }} label={`${tripSuggestion.posterName} (${new Date(tripSuggestion.gigs[0].date).toDateString()} - ${new Date(tripSuggestion.gigs[tripSuggestion.gigs.length - 1].date).toDateString()})`} onClick={() => handleTripSuggestionClick(tripSuggestion.id)} />
       </Grid>
     );
   });
@@ -87,7 +87,7 @@ function YourSpotifyArtistsWithShows({
           title="Trip Suggestions">
         </CardHeader>
         <CardContent>
-          <Grid container spacing={1} direction="row" justifyContent="center">
+          <Grid display={"flex"} container spacing={1} direction="row" justifyContent="center">
             {commaSeparatedTripSuggestions}
           </Grid>
           {isSuggestionLoading && <CircularProgress sx={{ mt: 5 }} />}

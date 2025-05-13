@@ -35,7 +35,7 @@ function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThresh
                 }
             });
 
-            if (cluster.length > 2) {
+            if (cluster.length > 2 && cluster.length < 6) {
                 clusters.push(cluster);
             }
         }
@@ -150,7 +150,7 @@ export async function ClusterArtists(res,
             try {
                 const suggestions = await FetchName(nameInput);
                 if (suggestions && suggestions.length >= 1) {
-                    fetchedPosterName = suggestions[0].title;
+                    fetchedPosterName = `${suggestions[0].title}`;
                     fetchedNameSuggestions = suggestions.slice(1);
                 }
             } catch (error) {

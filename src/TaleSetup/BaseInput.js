@@ -67,13 +67,13 @@ const BaseInput = forwardRef(({
     setConcerts([]);
     setArtistWishlist([]);
     //update artist wishlist to include the artist from the concerts
-    const artistInfoList = concerts.map(concert => {
+    const artistInfoList = concerts.gigs.map(concert => {
       return { WishlistArtistName: concert.artist, WishlistArtistId: concert.artistId }
     });
 
     setPosterName(concerts.posterName);
     setPosterNameSuggestions(concerts.nameSuggestions);
-    setConcerts(concerts);
+    setConcerts(concerts.gigs);
     setArtistWishlist(artistInfoList);
     closeRouteDialog();
   }
