@@ -35,7 +35,7 @@ function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThresh
                 }
             });
 
-            if (cluster.length > 2 && cluster.length < 6) {
+            if (cluster.length > 2) {
                 clusters.push(cluster);
             }
         }
@@ -109,6 +109,7 @@ export async function ClusterArtists(res,
         });
     });
 
+    clusters = clusters.filter(cluster => cluster.length > 1);
     // Sort each cluster by date
     clusters = clusters.map(cluster =>
         cluster.sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date in ascending order
@@ -120,9 +121,10 @@ export async function ClusterArtists(res,
     // --- NEW STEP 1: Set trip suggestions with default names ---
     // Add default posterName and nameSuggestions to clusters immediately
     const clustersWithDefaultNames = clusters.map((cluster, index) => ({
-        ...cluster, // Keep all existing cluster properties (the array of gigs)
+        gigs: cluster,
         posterName: `suggestion ${index + 1}`,
         nameSuggestions: [],
+        id: index
     }));
 
     // Set the state with clusters having default names
@@ -158,9 +160,10 @@ export async function ClusterArtists(res,
 
             // Return a new cluster object with fetched (or default) names
             return {
-                ...cluster, // Keep existing cluster properties (the array of gigs)
+                gigs: cluster,
                 posterName: fetchedPosterName,
                 nameSuggestions: fetchedNameSuggestions,
+                id: index
             };
         })
     );
