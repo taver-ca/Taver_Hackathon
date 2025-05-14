@@ -1,19 +1,16 @@
-import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import { List, ListItem, ListItemButton, ListItemText, ListItemAvatar, Avatar, Chip, Stack, TextField, Button, Box, Card, CardHeader, CardContent, CircularProgress, IconButton } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { GenerateTripTitle } from "../Odyssey/GenerateTripTitle.js";
-import { GenerateOptimizedConcertRoute } from "./GenerateOptimizedConcertRoute.js";
 
 function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
   return moment(date).format("YYYY/MM/DD hh:mm A");
 }
 
-const ConcertList = ({ allConcerts,
+const ConcertList = ({
   concerts,
-  userLocation,
   posterNameSuggestions,
   setPosterNameSuggestions,
   setPosterName,
@@ -22,10 +19,20 @@ const ConcertList = ({ allConcerts,
   setArtistWishlist,
   posterName,
   artistWishlist,
-  showActiveConcert,                                    
+  showActiveConcert,
   clearSelectedArtist }) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [tempPosterName, setTempPosterName] = useState(posterName);
+
+  const handlePosterNameChange = (event) => {
+    setTempPosterName(event.target.value);
+  };
+
+  useEffect(()=>{
+    setTempPosterName(posterName);
+  },[posterName])
+
   const renderConcertList = concerts.map((concert, index) => {
     return (
       <ListItem
@@ -144,7 +151,7 @@ const ConcertList = ({ allConcerts,
           <CardHeader
             sx={{ backgroundColor: "#5e97a5", color: "white" }}
             title={`Upcoming Concerts ${concerts.length} / 5 :`}
-            titleTypographyProps={{variant:'h6'}}
+            titleTypographyProps={{ variant: 'h6' }}
             action={
               <Button onClick={onClearAllPress} variant="contained" color="warning">
                 Clear All
@@ -159,8 +166,9 @@ const ConcertList = ({ allConcerts,
                 variant="standard"
                 placeholder="Write a cool name for your trip here"
                 InputProps={{ sx: { 'input': { textAlign: 'center', color: 'white' } } }}
-                value={posterName}
-                onChange={(e) => setPosterName(e.target.value)}
+                value={tempPosterName}
+                onBlur={() => setPosterName(tempPosterName)}
+                onChange={(e) => handlePosterNameChange(e)}
                 sx={{ flex: 1 }} />}
             <Button
               color="primary"
