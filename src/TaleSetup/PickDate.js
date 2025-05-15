@@ -3,8 +3,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Card, CardHeader, CardContent, Stack, Grid } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 import { FetchArtist } from "./FetchArtist";
+import dayjs from "dayjs";
+
 
 function PickDate({
   updateStartDateInParent,
@@ -21,26 +22,54 @@ function PickDate({
   oneYearFromNow.setFullYear(today.getFullYear() + 1);
 
   const [startDate, setStartDate] = useState(
-    cachedStartDate === null ? new Date() : new Date(cachedStartDate)
+    cachedStartDate ? new Date(Date.parse(cachedStartDate)) : new Date()
   );
   const [endDate, setEndDate] = useState(
-    cachedEndDate === null ? oneYearFromNow : new Date(cachedEndDate)
+    cachedEndDate ? new Date(Date.parse(cachedEndDate)) : oneYearFromNow
   );
 
+  const updateStartDate = useCallback((date) => {
+    if (date > endDate) {
+      alert("Start date must be before the end date!");
+      return;
+    }
+    setStartDate(date);
+    window.localStorage.setItem("startDate", date.toISOString());
+    updateStartDateInParent(date);
+    if (artistName) {
+      FetchArtist(artistName, date, endDate).then((resJson) => {
+        newArtistList(resJson);
+        openDialog(true);
+      });
+    }
+  }, [artistName, endDate]);
+
+
+
   const updateEndDate = useCallback((date) => {
+    if (date < startDate) {
+      alert("End date must be after the start date!");
+      return;
+    }
+
     setEndDate(date);
-    window.localStorage.setItem("endDate", date);
+    window.localStorage.setItem("endDate", date.toISOString());
     updateEndDateInParent(date);
-    FetchArtist(artistName, startDate, date).then((resJson) => {
-      newArtistList(resJson);
-      openDialog(true);
-    });
-  }, [artistName]);
+    if (artistName) {
+      FetchArtist(artistName, startDate, date).then((resJson) => {
+        newArtistList(resJson);
+        openDialog(true);
+      });
+    }
+  }, [artistName, startDate]);
+
+
+
 
   useEffect(() => {
-    updateStartDateInParent(startDate);
-    updateEndDateInParent(endDate);
-  }, []);
+    if (startDate) updateStartDateInParent(startDate);
+    if (endDate) updateEndDateInParent(endDate);
+  }, [startDate, endDate]);
   // Display spotify token
   return (
     <Grid width="100%">
@@ -66,13 +95,8 @@ function PickDate({
                   },
                 }}
                 label="StartDate: "
-                defaultValue={dayjs(startDate)}
-                selected={startDate}
-                onChange={(date) => {
-                  setStartDate(date);
-                  window.localStorage.setItem("startDate", date);
-                  updateStartDateInParent(date);
-                }}
+                value={dayjs(startDate)}
+                onChange={updateStartDate}
               />
               <DatePicker
                 sx={{
@@ -87,9 +111,9 @@ function PickDate({
                   },
                 }}
                 label="EndDate: "
-                defaultValue={dayjs(endDate)}
-                selected={endDate}
+                value={dayjs(endDate)}
                 onChange={updateEndDate}
+                minDate={dayjs(startDate)} // Prevents selecting dates before startDate
               />
             </LocalizationProvider>
           </Stack>
