@@ -70,6 +70,10 @@ function GetSpotifyPlaylistArtistsWithShows({
             return;
         }
 
+        if (startDate === endDate) {
+            alert("Your trip start date and end date is on the same day, spread them out");
+            return;
+        }
         const startIndex = url.lastIndexOf("/") + 1;
         const endIndex = url.indexOf("?") !== -1 ? url.indexOf("?") : url.length;
 

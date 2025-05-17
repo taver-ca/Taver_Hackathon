@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Grid, Button, Stack, CircularProgress } from "@mui/material";
 // Import other components
 import SharePage from "./SharePage.js";
@@ -46,6 +46,11 @@ const Odyssey = ({
 }) => {
     const handleShareAsLink = async function () {
         setIsLoading(true);
+
+        if (startDate === endDate) {
+            alert("Your trip start date and end date is on the same day, spread them out");
+        }
+
         //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date
         try {
 
@@ -60,13 +65,14 @@ const Odyssey = ({
                 },
                 body: JSON.stringify({
                     shareId: shareId,
-                    ownerUsername: "",
+                    ownerId: NULL,
                     startingPoint: userLocation,
                     gigs: processedConcerts,
                     tripName: posterName,
                     startDate: startDate,
                     mapStyleId: mapStyle,
-                    endDate: endDate
+                    endDate: endDate,
+                    createdAt: new Date()
                 })
             });
 

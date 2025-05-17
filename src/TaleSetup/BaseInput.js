@@ -79,11 +79,17 @@ const BaseInput = forwardRef(({
   }
 
   const submitArtistInfo = async (incomingArtistInfo) => {
-    setActiveTab(1); // Switch to the second tab in the TaleSetup component 
+    if (startDate === endDate) {
+      alert("Your trip start date and end date is on the same day, spread them out");
+      return;
+    }
     if (artistWishlist.length >= 5) {
       alert(`You can have only 5 artists at a time.`)
-      return
+      return;
     }
+
+    setActiveTab(1); // Switch to the second tab in the TaleSetup component 
+
     let incomingArtistName = incomingArtistInfo.name;
     let incomingArtistId = incomingArtistInfo.id
     try {

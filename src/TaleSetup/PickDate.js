@@ -44,8 +44,6 @@ function PickDate({
     }
   }, [artistName, endDate]);
 
-
-
   const updateEndDate = useCallback((date) => {
     if (date < startDate) {
       alert("End date must be after the start date!");
@@ -63,13 +61,11 @@ function PickDate({
     }
   }, [artistName, startDate]);
 
-
-
-
   useEffect(() => {
     if (startDate) updateStartDateInParent(startDate);
     if (endDate) updateEndDateInParent(endDate);
   }, [startDate, endDate]);
+
   // Display spotify token
   return (
     <Grid width="100%">

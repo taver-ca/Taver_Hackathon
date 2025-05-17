@@ -39,6 +39,11 @@ export const ShareAsLink = async function
     //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date
     try {
 
+        if (startDate === endDate) {
+            alert("Your trip start date and end date is on the same day, spread them out");
+            return;
+        }
+
         //I have encountered problems parsing image property in the gig list
         //converting all child property name to start with upper case letter in the image property in the gig list
         //not a great solution but this will work for now.
