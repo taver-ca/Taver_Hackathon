@@ -6,7 +6,7 @@ import { GenerateTripTitle } from "../Odyssey/GenerateTripTitle.js";
 
 function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
-  return moment(date).format("YYYY/MM/DD hh:mm A");
+  return moment(date).format("YYYY/MM/DD");
 }
 
 const ConcertList = ({

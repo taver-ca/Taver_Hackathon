@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
-import { Card, Avatar, CardHeader } from "@mui/material";
+import { Card, Avatar, CardHeader, CardContent, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
+import moment from "moment";
 
 const screenWidth = window.innerWidth;
 // Offset by a percentage of screen width (e.g., 10%)
 const panAmount = screenWidth > 600 ? -(screenWidth * 0.1) : 0; // Moves left by 10% of screen width
+
+function formattedDate(incomingDate) {
+  var date = new Date(incomingDate);
+  return moment(date).format("YYYY/MM/DD hh:mm A");
+}
 
 function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path) {
 
@@ -60,6 +66,7 @@ const concertToMarker = (concert, index) => {
     name: concert.title,
     artistImageUrl: concert.image != null ? concert.image.url : window.location.origin + "/Taver.png",
     address: concert.location.name,
+    time: formattedDate(concert.date),
     position: {
       lat: concert.location.gpsCoordinate.coords.latitude,
       lng: concert.location.gpsCoordinate.coords.longitude,
@@ -287,7 +294,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
           {(clusterer) => (
             <div>
               {markers &&
-                markers.map(({ id, name, position, artistImageUrl, address }) => (
+                markers.map(({ id, name, position, artistImageUrl, address, time }) => (
                   <MarkerF
                     key={id}
                     position={position}
@@ -300,13 +307,14 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
                   >
                     {activeMarker === id ? (
                       <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
-                        <Card sx={{ display: "flex", alignItems: "center", maxWidth: 345, position: "relative" }}>
+                        <Card sx={{ alignItems: "center", alignContent: "center", maxWidth: 345, position: "relative" }}>
                           <CardHeader
                             avatar={<Avatar src={artistImageUrl} alt={name} sx={{ width: 45, height: 45 }} />}
                             title={name}
                             subheader={address}
                           >
                           </CardHeader>
+                          <CardContent><Typography variant="body1" sx={{ color: 'text.secondary' }}>{time}</Typography></CardContent>
                         </Card>
                       </InfoWindowF>
                     ) : null}
