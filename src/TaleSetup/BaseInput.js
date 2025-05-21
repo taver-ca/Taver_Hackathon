@@ -75,7 +75,7 @@ const BaseInput = forwardRef(({
     const nameInput = concerts.gigs.map(({ title, artist, location, date }) => ({ title: title.substring(0, 250), artist, date, venue: location.name, city: location.address }));
     
     // check if we already have a name suggestion
-    if (concerts.nameSuggestions < 1 || concerts.posterName.includes("suggestion")) {
+    if (concerts.nameSuggestions < 1 || concerts.posterName.includes("Click to Reveal")) {
       try {
         FetchName(nameInput).then((suggestions) => {
           if (suggestions && suggestions.length >= 1) {
