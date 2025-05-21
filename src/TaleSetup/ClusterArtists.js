@@ -147,7 +147,7 @@ export async function ClusterArtists(res,
             let fetchedPosterName = `suggestion ${index + 1}`; // Default if fetch fails
             let fetchedNameSuggestions = [];
 
-            try {
+           /* try {
                 const suggestions = await FetchName(nameInput);
                 if (suggestions && suggestions.length >= 1) {
                     fetchedPosterName = `${suggestions[0].title}`;
@@ -156,7 +156,7 @@ export async function ClusterArtists(res,
             } catch (error) {
                 console.error(`Error fetching name for suggestion ${index + 1}:`, error);
                 // Keep default name on error
-            }
+            }*/
 
             // Return a new cluster object with fetched (or default) names
             return {
