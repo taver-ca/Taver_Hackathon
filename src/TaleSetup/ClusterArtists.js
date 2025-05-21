@@ -75,7 +75,7 @@ export async function ClusterArtists(res,
         (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
     );
 
-    if (updatedArtists.length < 1) {
+    if (incomingArtists.length < 1) {
         alert(`Oof, nobody from this playlist is on tour...`);
     }
 
