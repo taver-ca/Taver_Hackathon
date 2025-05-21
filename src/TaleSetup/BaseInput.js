@@ -31,7 +31,6 @@ const BaseInput = forwardRef(({
   userLocation,
   updateArtistNameInParent,
   artistListFromParent,
-  posterNameSuggestions,
   openDialogFromParent,
   closeDialog,
   closeRouteDialog,
@@ -74,9 +73,9 @@ const BaseInput = forwardRef(({
       return { WishlistArtistName: concert.artist, WishlistArtistId: concert.artistId }
     });
     const nameInput = concerts.gigs.map(({ title, artist, location, date }) => ({ title: title.substring(0, 250), artist, date, venue: location.name, city: location.address }));
-
+    
     // check if we already have a name suggestion
-    if (posterNameSuggestions.length < 1) {
+    if (concerts.nameSuggestions < 1 || concerts.posterName.contains("suggestion")) {
       try {
         FetchName(nameInput).then((suggestions) => {
           if (suggestions && suggestions.length >= 1) {
@@ -91,7 +90,7 @@ const BaseInput = forwardRef(({
         // Keep default name on error
       }
     }
-    
+
     setConcerts(concerts.gigs);
     setArtistWishlist(artistInfoList);
     closeRouteDialog();
