@@ -1,5 +1,3 @@
-import { FetchName } from './../Odyssey/FetchName.js';
-
 // Helper function: calculate Euclidean distance
 function calculateDistance(a, b) {
     return Math.sqrt(Math.pow(a.location.gpsCoordinate.coords.latitude - b.location.gpsCoordinate.coords.latitude, 2) + Math.pow(a.location.gpsCoordinate.coords.longitude - b.location.gpsCoordinate.coords.longitude, 2));
@@ -136,7 +134,7 @@ export async function ClusterArtists(res,
 
             // Classic 'Sell this as a feature' moment
             let fetchedPosterName = `Click to Reveal`;
-            let fetchedNameSuggestions = [];           
+            let fetchedNameSuggestions = [{'title':`Suggestion ${index}`}];           
 
             // Return a new cluster object with default names
             return {

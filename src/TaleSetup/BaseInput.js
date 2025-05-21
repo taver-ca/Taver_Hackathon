@@ -75,7 +75,7 @@ const BaseInput = forwardRef(({
     const nameInput = concerts.gigs.map(({ title, artist, location, date }) => ({ title: title.substring(0, 250), artist, date, venue: location.name, city: location.address }));
     
     // check if we already have a name suggestion
-    if (concerts.nameSuggestions < 1 || concerts.posterName.contains("suggestion")) {
+    if (concerts.nameSuggestions < 1 || concerts.posterName.includes("suggestion")) {
       try {
         FetchName(nameInput).then((suggestions) => {
           if (suggestions && suggestions.length >= 1) {
@@ -83,6 +83,10 @@ const BaseInput = forwardRef(({
             concerts.nameSuggestions = suggestions.slice(1);
             setPosterName(concerts.posterName);
             setPosterNameSuggestions(concerts.nameSuggestions);
+          }
+          else {
+            setPosterName(concerts.nameSuggestions[0].title);
+            setPosterNameSuggestions([]);
           }
         });
       } catch (error) {

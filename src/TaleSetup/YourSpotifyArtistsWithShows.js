@@ -56,9 +56,14 @@ function YourSpotifyArtistsWithShows({
     );
   });
   const commaSeparatedTripSuggestions = tripSuggestions.map((tripSuggestion, index) => {
+    const posterNameIsDefault = tripSuggestion.posterName.includes("Click to Reveal");
     return (
       <Grid sx={{ width: '100%', display: 'flex', flexWrap: 'wrap' }} item key={index}>
-        <Chip sx={{ width: '100%', color: "white", backgroundColor: "teal" }} label={`${tripSuggestion.posterName} (${new Date(tripSuggestion.gigs[0].date).toDateString()} - ${new Date(tripSuggestion.gigs[tripSuggestion.gigs.length - 1].date).toDateString()})`} onClick={() => handleTripSuggestionClick(tripSuggestion.id)} />
+        <Chip sx={{ width: '100%', color: "white", backgroundColor: "teal" }} label={
+          posterNameIsDefault
+            ? `${tripSuggestion.posterName}`
+            : `${tripSuggestion.posterName} (${new Date(tripSuggestion.gigs[0].date).toDateString()} - ${new Date(tripSuggestion.gigs[tripSuggestion.gigs.length - 1].date).toDateString()})`
+        } onClick={() => handleTripSuggestionClick(tripSuggestion.id)} />
       </Grid>
     );
   });
