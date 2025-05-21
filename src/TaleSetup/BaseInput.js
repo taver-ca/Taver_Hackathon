@@ -31,6 +31,7 @@ const BaseInput = forwardRef(({
   userLocation,
   updateArtistNameInParent,
   artistListFromParent,
+  posterNameSuggestions,
   openDialogFromParent,
   closeDialog,
   closeRouteDialog,
@@ -73,21 +74,24 @@ const BaseInput = forwardRef(({
       return { WishlistArtistName: concert.artist, WishlistArtistId: concert.artistId }
     });
     const nameInput = concerts.gigs.map(({ title, artist, location, date }) => ({ title: title.substring(0, 250), artist, date, venue: location.name, city: location.address }));
-    
-    try {
-      FetchName(nameInput).then((suggestions) => {
-        if (suggestions && suggestions.length >= 1) {
-          concerts.posterName = `${suggestions[0].title}`;
-          concerts.nameSuggestions = suggestions.slice(1);
-          setPosterName(concerts.posterName);
-          setPosterNameSuggestions(concerts.nameSuggestions);
-        }
-      });
-    } catch (error) {
-      console.error(`Error fetching name for selected suggestion:`, error);
-      // Keep default name on error
-    }
 
+    // check if we already have a name suggestion
+    if (posterNameSuggestions.length < 1) {
+      try {
+        FetchName(nameInput).then((suggestions) => {
+          if (suggestions && suggestions.length >= 1) {
+            concerts.posterName = `${suggestions[0].title}`;
+            concerts.nameSuggestions = suggestions.slice(1);
+            setPosterName(concerts.posterName);
+            setPosterNameSuggestions(concerts.nameSuggestions);
+          }
+        });
+      } catch (error) {
+        console.error(`Error fetching name for selected suggestion:`, error);
+        // Keep default name on error
+      }
+    }
+    
     setConcerts(concerts.gigs);
     setArtistWishlist(artistInfoList);
     closeRouteDialog();

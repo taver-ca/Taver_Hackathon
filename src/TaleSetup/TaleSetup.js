@@ -146,6 +146,7 @@ const TaleSetup = ({
                             artistListFromParent={artistList}
                             followedArtists={followedArtists}
                             artistWishlist={[...artistWishlist]}
+                            posterNameSuggestions={posterNameSuggestions}
                             openDialogFromParent={openDialog}
                             setActiveTab={setActiveTab}
                             closeDialog={() => {
