@@ -35,7 +35,7 @@ function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThresh
                 }
             });
 
-            if (cluster.length > 2 && cluster.length < 6) {
+            if (cluster.length > 2 && cluster.length < 11) {
                 clusters.push(cluster);
             }
         }
@@ -130,35 +130,15 @@ export async function ClusterArtists(res,
     // Set the state with clusters having default names
     // This provides immediate feedback to the user
     setTripSuggestions(clustersWithDefaultNames);
-    // Note: We don't setCalculatedRoutes here yet, as it likely needs the fetched names
 
-    // --- NEW STEP 2: Fetch names asynchronously for each cluster ---
-    // Map over the clusters to asynchronously fetch names
     const clustersWithFetchedNames = await Promise.all(
         clusters.map(async (cluster, index) => {
-            const nameInput = cluster.map(({ title, artist, location, date }) => ({
-                title: title.substring(0, 250),
-                artist,
-                date,
-                venue: location.name,
-                city: location.address
-            }));
 
-            let fetchedPosterName = `suggestion ${index + 1}`; // Default if fetch fails
-            let fetchedNameSuggestions = [];
+            // Classic 'Sell this as a feature' moment
+            let fetchedPosterName = `Click to Reveal`;
+            let fetchedNameSuggestions = [];           
 
-            try {
-                const suggestions = await FetchName(nameInput);
-                if (suggestions && suggestions.length >= 1) {
-                    fetchedPosterName = `${suggestions[0].title}`;
-                    fetchedNameSuggestions = suggestions.slice(1);
-                }
-            } catch (error) {
-                console.error(`Error fetching name for suggestion ${index + 1}:`, error);
-                // Keep default name on error
-            }
-
-            // Return a new cluster object with fetched (or default) names
+            // Return a new cluster object with default names
             return {
                 gigs: cluster,
                 posterName: fetchedPosterName,

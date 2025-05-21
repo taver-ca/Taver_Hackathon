@@ -150,7 +150,7 @@ const ConcertList = ({
         {hasConcerts && (
           <CardHeader
             sx={{ backgroundColor: "#5e97a5", color: "white" }}
-            title={`Upcoming Concerts ${concerts.length} :`}
+            title={`Upcoming Concerts (${concerts.length}) :`}
             titleTypographyProps={{ variant: 'h6' }}
             action={
               <Button onClick={onClearAllPress} variant="contained" color="warning">

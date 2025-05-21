@@ -6,6 +6,8 @@ import ArtistChoiceList from "./ArtistChoiceList";
 import { FetchArtist } from "./FetchArtist";
 import moment from "moment";
 import { GenerateOptimizedConcertRoute } from './GenerateOptimizedConcertRoute.js'
+import { FetchName } from "../Odyssey/FetchName.js";
+
 
 function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
@@ -70,9 +72,22 @@ const BaseInput = forwardRef(({
     const artistInfoList = concerts.gigs.map(concert => {
       return { WishlistArtistName: concert.artist, WishlistArtistId: concert.artistId }
     });
+    const nameInput = concerts.gigs.map(({ title, artist, location, date }) => ({ title: title.substring(0, 250), artist, date, venue: location.name, city: location.address }));
+    
+    try {
+      FetchName(nameInput).then((suggestions) => {
+        if (suggestions && suggestions.length >= 1) {
+          concerts.posterName = `${suggestions[0].title}`;
+          concerts.nameSuggestions = suggestions.slice(1);
+          setPosterName(concerts.posterName);
+          setPosterNameSuggestions(concerts.nameSuggestions);
+        }
+      });
+    } catch (error) {
+      console.error(`Error fetching name for selected suggestion:`, error);
+      // Keep default name on error
+    }
 
-    setPosterName(concerts.posterName);
-    setPosterNameSuggestions(concerts.nameSuggestions);
     setConcerts(concerts.gigs);
     setArtistWishlist(artistInfoList);
     closeRouteDialog();
