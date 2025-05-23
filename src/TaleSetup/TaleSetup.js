@@ -157,7 +157,7 @@ const TaleSetup = ({
                             ref={childRef} />
                     </Grid>
                     <Fade in={!isTourMapChecked} mountOnEnter unmountOnExit>
-                        <Grid display='flex' flex={1} minWidth={'200px'}>
+                        <Grid display='flex' flex={1} minWidth={'150px'}>
                             <PickDate
                                 updateStartDateInParent={setStartDate}
                                 updateEndDateInParent={setEndDate}
