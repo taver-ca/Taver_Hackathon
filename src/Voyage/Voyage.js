@@ -143,9 +143,9 @@ const Voyage = ({
     }
 
     return (
-        <Stack sx={{ width: '100%', position: 'relative' }} 
-        backgroundColor="#7fc9dc" 
-        id="showScheduleFabContainer">
+        <Stack sx={{ width: '100%', position: 'relative' }}
+            backgroundColor="#7fc9dc"
+            id="showScheduleFabContainer">
             {/* Background Map */}
             {isLoaded ? (
                 <Box sx={{
@@ -186,8 +186,9 @@ const Voyage = ({
                         py: { xs: 3 },
                         position: 'relative',
                         zIndex: 1,
+                        minWidth: '375px',
                         width: { xs: '100%', sm: '100%', md: '40%', lg: '30%', xl: '25%' }, // Make it take up only a portion at xl
-                        height: '100%', // Full height for smaller screens
+                        height: { xs: '100vh', md: '90vh' }, // Full height for smaller screens
                         left: { md: 20 }, // Push left at md
                         top: { md: 20 }, // Adjust top position for smaller screens
                         borderRadius: 2

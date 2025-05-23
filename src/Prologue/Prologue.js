@@ -105,8 +105,6 @@ const Prologue = ({ setStartDate,
                 <ListIcon />
             </Fab>}
 
-
-
             {!show_ToggleUIFab && <Fab sx={{
                 backgroundColor: '#70afbf',
                 color: 'white',
@@ -138,9 +136,9 @@ const Prologue = ({ setStartDate,
                         py: { xs: 3 },
                         position: 'relative',
                         zIndex: 1,
-                        minWidth:'420px',
+                        minWidth: '375px',
                         width: { xs: '100%', sm: '100%', md: '40%', lg: '30%', xl: '25%' }, // Make it take up only a portion at xl
-                        height: '100%', // Full height for smaller screens
+                        height: {xs: '100vh', md:'90vh'}, // Full height for smaller screens
                         left: { md: 20 }, // Push left at md
                         top: { md: 20 }, // Adjust top position for smaller screens
                         borderRadius: 2
