@@ -120,18 +120,29 @@ const Voyage = ({
     if (loading) {
         //do a throbber here
         return (
-            <Box sx={{
+            <Stack sx={{
+                backgroundColor: '#7fc9dc',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                width: '100vw',
                 height: '100vh',
+                direction: 'column'
             }} >
+                <Box
+                    component="img"
+                    src={window.location.origin + "/Taver.png"}
+                    alt="Taver"
+                    sx={{ width: "auto", height: "auto" }}
+                />
                 <CircularProgress />
-            </Box>);
+            </Stack>);
     }
 
     return (
-        <Stack sx={{ width: '100%', position: 'relative' }} backgroundColor="#7fc9dc" id="showScheduleFabContainer">
+        <Stack sx={{ width: '100%', position: 'relative' }} 
+        backgroundColor="#7fc9dc" 
+        id="showScheduleFabContainer">
             {/* Background Map */}
             {isLoaded ? (
                 <Box sx={{
