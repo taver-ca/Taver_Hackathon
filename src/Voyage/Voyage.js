@@ -10,6 +10,7 @@ import canvas2image from "@reglendo/canvas2image";
 import ListIcon from '@mui/icons-material/List';
 import Fade from '@mui/material/Fade';
 import { useMediaQuery } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 
 function toLowerCaseKeys(obj) { if (Array.isArray(obj)) { return obj.map(toLowerCaseKeys); } else if (obj !== null && obj.constructor === Object) { return Object.keys(obj).reduce((acc, key) => { const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); acc[lowerCaseKey] = toLowerCaseKeys(obj[key]); return acc; }, {}); } return obj; }
 
@@ -25,6 +26,7 @@ const Voyage = ({
     setMapStyle
 }) => {
     const mapRef = useRef();
+    const navigate = useNavigate();
     const { guid } = useParams();
     const [loading, setLoading] = useState(true);
     const { isLoaded } = useLoadScript({
@@ -102,6 +104,7 @@ const Voyage = ({
             } catch (error) {
                 alert("An error occurred while loading the trip data. Please try again later.");
                 console.error("Error fetching trip data:", error);
+                navigate('/');
             }
             setLoading(false);
         };
