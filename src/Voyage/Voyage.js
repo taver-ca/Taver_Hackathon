@@ -15,6 +15,17 @@ import { useNavigate } from 'react-router-dom';
 function toLowerCaseKeys(obj) { if (Array.isArray(obj)) { return obj.map(toLowerCaseKeys); } else if (obj !== null && obj.constructor === Object) { return Object.keys(obj).reduce((acc, key) => { const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); acc[lowerCaseKey] = toLowerCaseKeys(obj[key]); return acc; }, {}); } return obj; }
 
 
+function removeElement(containerId, elementId) {
+    const container = document.getElementById(containerId);
+    const element = document.getElementById(elementId);
+    if (container && element) {
+        const savedElement = element.cloneNode(true);
+        container.removeChild(element);
+        return savedElement;
+    }
+    return null;
+}
+
 const Voyage = ({
     concerts,
     userLocation,
@@ -28,32 +39,18 @@ const Voyage = ({
     const mapRef = useRef();
     const navigate = useNavigate();
     const { guid } = useParams();
-    const [loading, setLoading] = useState(true);
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
     });
-    const isScreenSmall = useMediaQuery("(max-width:1200px)");
+    const [loading, setLoading] = useState(true);
     const [showSchedule, setShowSchedule] = useState(true);
+    const isScreenSmall = useMediaQuery("(max-width:1200px)");
 
     const handleDownloadImage = async function () {
 
-        const UIControlsContainer = document.getElementById("UIControlsContainer");
-        const UIControls = document.getElementById("UIControls");
-        // Store the reference before removing
-        var savedUIControls = null;
-        if (UIControlsContainer && UIControls) {
-            savedUIControls = UIControls.cloneNode(true);
-            UIControlsContainer.removeChild(UIControls);
-        }
+        removeElement("UIControlsContainer", "UIControls");
+        removeElement("showScheduleFabContainer", "showScheduleFab");
 
-        const showScheduleFabContainer = document.getElementById("showScheduleFabContainer");
-        const showScheduleFab = document.getElementById("showScheduleFab");
-        var savedShowScheduleFab = null;
-
-        if (showScheduleFabContainer && showScheduleFab) {
-            savedShowScheduleFab = showScheduleFab.cloneNode(true);
-            showScheduleFabContainer.removeChild(showScheduleFab);
-        }
         const element = document.getElementById("sharepage");
 
         html2canvas(element, {
@@ -66,7 +63,7 @@ const Voyage = ({
         }).then((canvas) => {
             let finalPosterName = posterName || "poster";
             canvas2image.saveAsJPEG(canvas, finalPosterName, canvas.width, canvas.height);
-            window.location.reload(false);
+            window.location.reload(true);
         });
     };
 
@@ -201,6 +198,7 @@ const Voyage = ({
                             alt="Taver"
                             sx={{ width: { xs: 200 }, height: "auto" }}
                         />
+
                     </Grid>
                     <Typography variant="h3">{posterName}</Typography>
                     <Stack justifyContent="space-evenly" container sx={{ flexDirection: "column" }}>
@@ -213,7 +211,8 @@ const Voyage = ({
                                 mapRef.current?.handleResetMapView();
                             }} variant="contained">
                             Reset Map View
-                        </Button>
+                        </Button>                       
+
                         {(concerts.length > 0 && !isScreenSmall) &&
                             <Button id="sharebutton" color="primary"
                                 onClick={async () => {
