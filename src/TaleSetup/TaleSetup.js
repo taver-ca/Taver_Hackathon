@@ -123,13 +123,13 @@ const TaleSetup = ({
                     sx={{ width: { xs: 200 }, height: "auto" }}
                 />
                 <Stack sx={{
-                    height: '50%',
+                    width: '12.5%',
                     position: 'absolute',
                     right: 0, // Stick to the right edge
-                    top: '50%', // Center vertically
+                    bottom: 0, // Center vertically
                     transform: 'translateY(-50%)',
                     paddingRight: 2, // Adds spacing from the edge
-                }} flexDirection="column" justifyContent="space-between" alignItems="center">
+                }} flexDirection="row" justifyContent="space-between" alignItems="center">
                     <Link href="https://www.instagram.com/projecttaver/" target="_blank" rel="noopener" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <InstagramIcon />
                     </Link>
