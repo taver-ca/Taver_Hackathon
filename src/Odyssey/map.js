@@ -227,7 +227,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
         options={{
           mapId: mapStyle,
           minZoom: 0,
-          maxZoom: 17,
+          maxZoom: 16,
           disableDefaultUI: true,
           gestureHandling: "greedy",
           restriction: {

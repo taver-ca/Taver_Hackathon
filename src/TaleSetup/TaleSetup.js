@@ -1,12 +1,13 @@
 import { useRef, useState, useMemo } from "react";
-import { Grid, Box, Stack, Tab, Tabs, Fade, Badge, CircularProgress } from "@mui/material";
+import { Grid, Box, Stack, Tab, Tabs, Fade, Badge, CircularProgress, Link } from "@mui/material";
 import BaseInput from "./BaseInput.js";
 import GetSpotifyPlaylistArtistsWithShows from "./GetSpotifyPlaylistArtistsWithShows.js";
 import YourSpotifyArtistsWithShows from "./YourSpotifyArtistsWithShows.js";
 import PickDate from "./PickDate.js";
 import ConcertList from "./ConcertList.js";
 import MapStyle from "./MapStyle.js";
-
+import InstagramIcon from '@mui/icons-material/Instagram';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 const TaleSetup = ({
     setStartDate,
@@ -114,13 +115,28 @@ const TaleSetup = ({
 
     return (
         <Stack container sx={{ px: 2, flexDirection: 'column' }} spacing={2}>
-            <Grid flexDirection="column" sx={{ position: 'relative' }}>
+            <Grid container flexDirection="row" alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
                 <Box
                     component="img"
                     src={window.location.origin + "/Taver.png"}
                     alt="Taver"
                     sx={{ width: { xs: 200 }, height: "auto" }}
                 />
+                <Stack sx={{
+                    height: '50%',
+                    position: 'absolute',
+                    right: 0, // Stick to the right edge
+                    top: '50%', // Center vertically
+                    transform: 'translateY(-50%)',
+                    paddingRight: 2, // Adds spacing from the edge
+                }} flexDirection="column" justifyContent="space-between" alignItems="center">
+                    <Link href="https://www.instagram.com/projecttaver/" target="_blank" rel="noopener" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <InstagramIcon />
+                    </Link>
+                    <Link href="https://github.com/orgs/taver-ca/discussions" target="_blank" rel="noopener" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <GitHubIcon />
+                    </Link>
+                </Stack>
             </Grid>
             <Fade in={!isInputDisabled} mountOnEnter unmountOnExit>
                 <Stack justifyContent="center" spacing={1} direction='row'>
