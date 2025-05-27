@@ -109,7 +109,7 @@ const ConcertList = ({
                 >
                   <Chip
                     sx={{ background: '#7fc9dc' }}
-                    label={`${concert.location.name}`}
+                    label={`${concert.location.address}`}
                   />
                   <Chip
                     color="secondary"
