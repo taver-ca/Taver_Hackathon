@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import * as React from 'react';
 import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
 import DismissButton from "./DismissButton";
@@ -7,7 +7,6 @@ import { FetchArtist } from "./FetchArtist";
 import moment from "moment";
 import { GenerateOptimizedConcertRoute } from './GenerateOptimizedConcertRoute.js'
 import { FetchName } from "../Odyssey/FetchName.js";
-
 
 function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
@@ -40,18 +39,7 @@ const BaseInput = forwardRef(({
   setActiveTab
 }, ref) => {
 
-  useEffect(() => {
-    function showPosition(position) {
-      setUserLocation(position);
-      //console.log("home position: " + position.coords.latitude + "," + position.coords.longitude);
-    }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      console.log("failed");
-    }
-  }, []);
 
   useImperativeHandle(ref, () => ({
     handleArtistChoiceUpdateFromParent: (artist) => {
@@ -73,7 +61,7 @@ const BaseInput = forwardRef(({
       return { WishlistArtistName: concert.artist, WishlistArtistId: concert.artistId }
     });
     const nameInput = concerts.gigs.map(({ title, artist, location, date }) => ({ title: title.substring(0, 250), artist, date, venue: location.name, city: location.address }));
-    
+
     // check if we already have a name suggestion
     if (concerts.nameSuggestions < 1 || concerts.posterName.includes("Click to Reveal")) {
       try {
@@ -101,6 +89,7 @@ const BaseInput = forwardRef(({
   }
 
   const submitArtistInfo = async (incomingArtistInfo) => {
+
     if (startDate === endDate) {
       alert("Your trip start date and end date is on the same day, spread them out");
       return;
@@ -199,12 +188,25 @@ const BaseInput = forwardRef(({
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    FetchArtist(artistName, startDate, endDate).then((resJson) => {
-      newArtistList(resJson);
-      setIsLoading(false);
-      setOpen(true);
-    });
+    if (!userLocation) {
+      alert("we will need your location to find concerts closest to you, please enable location services");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => { setUserLocation(position); }, (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            alert("You can't look for concerts without your location, please enable location services in your browser");
+            return;
+          }
+        });
+      }
+    }
+    else {
+      setIsLoading(true);
+      FetchArtist(artistName, startDate, endDate).then((resJson) => {
+        newArtistList(resJson);
+        setIsLoading(false);
+        setOpen(true);
+      });
+    }
   };
 
 
