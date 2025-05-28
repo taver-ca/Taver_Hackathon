@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Stack, Button, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Card, CardHeader, CardContent } from '@mui/material';
+import { Stack, Button, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Card, CardHeader, CardContent, Typography } from '@mui/material';
 import DismissButton from "./../TaleSetup/DismissButton.js";
 import RouteChoiceList from './RouteChoiceList.js';
 import { ClusterArtists } from './ClusterArtists.js';
-
+import Carousel from 'react-material-ui-carousel';
+import { QuestionMark as QuestionMark } from "@mui/icons-material";
 
 
 function GetSpotifyPlaylistArtistsWithShows({
@@ -25,7 +26,8 @@ function GetSpotifyPlaylistArtistsWithShows({
 
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
     const [calculatedRoutes, setCalculatedRoutes] = useState([]);
-    const [open, setOpen] = useState(false);
+    const [openRouteDialog, setOpenRouteDialog] = useState(false);
+    const [openShareInstructionDialog, setOpenShareInstructionDialog] = useState(false);
     // Time threshold (in milliseconds)
     const [timeThreshold, setTimeThreshold] = useState(7 * 24 * 60 * 60 * 1000);
     // Distance threshold (in degrees, you can adjust this)
@@ -44,14 +46,14 @@ function GetSpotifyPlaylistArtistsWithShows({
     }, [startDate, endDate]);
 
     const handleClose = () => {
-        setOpen(false);
+        setOpenRouteDialog(false);
         closeRouteDialog();
     };
 
     useEffect(() => {
         console.log("opening route dialog");
         if (calculatedRoutes && calculatedRoutes.length > 0) {
-            setOpen(true);
+            setOpenRouteDialog(true);
         }
     }, [calculatedRoutes]);
 
@@ -115,21 +117,63 @@ function GetSpotifyPlaylistArtistsWithShows({
                         }
                     }}>
                         <Stack
-                            direction={'column'}
+                            direction={'row'}
                             spacing={2}
-                            alignItems="center">
+                            alignItems="center"
+                            justifyContent={'space-between'}>
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary">
-                                Paste from clipboard
+                                Share your Spotify playlist link
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="info"
+                                sx={{ minWidth: 0, padding: '6px', borderRadius: '50%', alignSelf: 'flex-end' }}
+                                onClick={() => { setOpenShareInstructionDialog(true); }}>
+                                <QuestionMark />
                             </Button>
                         </Stack>
                     </form>
                 </CardContent>
             </Card>
+            <Dialog open={openShareInstructionDialog} width="100%">
+                <DialogTitle>
+                    <Typography variant="subtitle">How to get a Spotify playlist link</Typography>
+                </DialogTitle>
 
-            <Dialog open={open || openRouteDialogFromParent} onClose={closeRouteDialog}>
+                <DialogContent>
+                    <Carousel
+                        autoPlay={false}
+                        navButtonsAlwaysVisible={true}
+                        indicators={false}
+
+                        sx={{ minWidth: 300, minHeight: 600, mb: 2 }}
+                    >
+                        <img
+                            src={window.location.origin + "/ShareInstruction0.jpg"}
+                            alt="Share Instruction 1"
+                            style={{ width: '100%', borderRadius: 8 }}
+                        />
+                        <img
+                            src={window.location.origin + "/ShareInstruction1.jpg"}
+                            alt="Share Instruction 1"
+                            style={{ width: '100%', borderRadius: 8 }}
+                        />
+                        <img
+                            src={window.location.origin + "/ShareInstruction2.jpg"}
+                            alt="Share Instruction 2"
+                            style={{ width: '100%', borderRadius: 8 }}
+                        />
+                    </Carousel>
+                </DialogContent>
+                <DialogActions>
+                    <DismissButton onClick={() => { setOpenShareInstructionDialog(false) }} />
+                </DialogActions>
+            </Dialog>
+
+            <Dialog open={openRouteDialog || openRouteDialogFromParent} onClose={closeRouteDialog}>
                 <DialogTitle>{"Choices Choices Choices..."}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
