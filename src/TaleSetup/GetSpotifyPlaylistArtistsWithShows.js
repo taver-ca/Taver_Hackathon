@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Stack, Button, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Card, CardHeader, CardContent, Typography } from '@mui/material';
 import DismissButton from "./../TaleSetup/DismissButton.js";
 import RouteChoiceList from './RouteChoiceList.js';
-import { ClusterArtists } from './ClusterArtists.js';
 import Carousel from 'react-material-ui-carousel';
+import { useState, useEffect } from 'react';
+import { Stack, Button, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Card, CardHeader, CardContent, Typography } from '@mui/material';
+import { ClusterArtists } from './ClusterArtists.js';
 import { QuestionMark as QuestionMark } from "@mui/icons-material";
 
 
@@ -142,7 +142,6 @@ function GetSpotifyPlaylistArtistsWithShows({
                 <DialogTitle>
                     <Typography variant="subtitle">How to get a Spotify playlist link</Typography>
                 </DialogTitle>
-
                 <DialogContent>
                     <Carousel
                         autoPlay={false}

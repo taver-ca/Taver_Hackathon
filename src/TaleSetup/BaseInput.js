@@ -1,12 +1,14 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
-import * as React from 'react';
-import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
 import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
-import { FetchArtist } from "./FetchArtist";
 import moment from "moment";
+import * as React from 'react';
+import { useState, forwardRef, useImperativeHandle } from "react";
+import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
+import { FetchArtist } from "./FetchArtist";
 import { GenerateOptimizedConcertRoute } from './GenerateOptimizedConcertRoute.js'
 import { FetchName } from "../Odyssey/FetchName.js";
+
+
 
 function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
@@ -38,8 +40,6 @@ const BaseInput = forwardRef(({
   artistWishlist,
   setActiveTab
 }, ref) => {
-
-
 
   useImperativeHandle(ref, () => ({
     handleArtistChoiceUpdateFromParent: (artist) => {
@@ -89,6 +89,20 @@ const BaseInput = forwardRef(({
   }
 
   const submitArtistInfo = async (incomingArtistInfo) => {
+
+    if (!userLocation) {
+      alert("we will need your location to find concerts closest to you, please give location permission");
+      closeDialog();
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => { setUserLocation(position); }, (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            alert("You can't look for concerts without providing your location, please enable location services in your browser");
+            closeDialog();
+            return;
+          }
+        });
+      }
+    }
 
     if (startDate === endDate) {
       alert("Your trip start date and end date is on the same day, spread them out");
