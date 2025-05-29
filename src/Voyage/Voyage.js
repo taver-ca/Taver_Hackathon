@@ -84,19 +84,23 @@ const Voyage = ({
 
                 const data = await response.json();
 
-                if (!data.concertJson || !data.startingLocation) {
+                if (!data.concertJson) {
                     throw new Error("Invalid data structure received from server.");
                 }
 
                 // Deserialization
                 var parsedConcerts = JSON.parse(data.concertJson);
                 var transformedConcerts = toLowerCaseKeys(parsedConcerts);
-                var coords = data.startingLocation;
-                var result = { coords: { longitude: coords.Longitude, latitude: coords.Latitude } };
+
+                if (data.startingLocation) {
+                    var coords = data.startingLocation;
+                    var result = { coords: { longitude: coords.Longitude, latitude: coords.Latitude } };
+                    setUserLocation(result);
+                }
 
                 setPosterName(data.tripName);
                 setConcerts(transformedConcerts);
-                setUserLocation(result);
+
                 setMapStyle(data.mapStyleId);
             } catch (error) {
                 alert("An error occurred while loading the trip data. Please try again later.");
@@ -211,7 +215,7 @@ const Voyage = ({
                                 mapRef.current?.handleResetMapView();
                             }} variant="contained">
                             Reset Map View
-                        </Button>                       
+                        </Button>
 
                         {(concerts.length > 0 && !isScreenSmall) &&
                             <Button id="sharebutton" color="primary"
