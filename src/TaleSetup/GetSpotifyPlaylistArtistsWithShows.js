@@ -29,21 +29,10 @@ function GetSpotifyPlaylistArtistsWithShows({
     const [openRouteDialog, setOpenRouteDialog] = useState(false);
     const [openShareInstructionDialog, setOpenShareInstructionDialog] = useState(false);
     // Time threshold (in milliseconds)
-    const [timeThreshold, setTimeThreshold] = useState(7 * 24 * 60 * 60 * 1000);
+    const [timeThreshold, setTimeThreshold] = useState(4 * 60 * 60 * 1000);
     // Distance threshold (in degrees, you can adjust this)
     const distanceThreshold = 4;
 
-    useEffect(() => {
-        let filteredEndDate = endDate instanceof Date ? endDate.getTime() : new Date(endDate).getTime();
-        let filteredStartDate = startDate instanceof Date ? startDate.getTime() : new Date(startDate).getTime();
-        let timeDifference = filteredEndDate - filteredStartDate;
-        // I am not going to allow a timeDifference of over a month for now.... 
-        // The events are too far apart time wise compared to distance to justify the trip
-        if (timeDifference < 31 * 24 * 60 * 60 * 1000) {
-            setTimeThreshold(timeDifference);
-        }
-
-    }, [startDate, endDate]);
 
     const handleClose = () => {
         setOpenRouteDialog(false);

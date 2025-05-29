@@ -3,17 +3,20 @@ function calculateDistance(a, b) {
     return Math.sqrt(Math.pow(a.location.gpsCoordinate.coords.latitude - b.location.gpsCoordinate.coords.latitude, 2) + Math.pow(a.location.gpsCoordinate.coords.longitude - b.location.gpsCoordinate.coords.longitude, 2));
 }
 
-// Helper function: calculate time difference
 function calculateTimeDifference(timeA, timeB) {
-    return Math.abs(new Date(timeA).getTime() - new Date(timeB).getTime());
+    const millisecondsDiff = Math.abs(new Date(timeA).getTime() - new Date(timeB).getTime());
+    return millisecondsDiff / (1000 * 60 * 60); // Convert to hours
 }
-// Group events based on proximity, ensuring unique artistId in each cluster
-function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThreshold) {
 
+const EVENT_DURATION = 24; // Duration in hours (1 days)
+const MIN_TIME_GAP = 24; // Minimum travel time allocation (1 day)
+const MAX_TIME_GAP = 96; // Maximum travel time allocation (4 days)
+
+function groupEfficiently(events, baseDistance, baseTime) {
     events.sort((a, b) => a.date.localeCompare(b.date)); // Sort by event time first
     const clusters = [];
     const visited = new Set();
-
+    
     events.forEach(event => {
         if (!visited.has(event.id)) {
             let cluster = [event];
@@ -25,15 +28,23 @@ function groupByProximityWithUniqueArtists(events, distanceThreshold, timeThresh
                     const distance = calculateDistance(lastEvent, otherEvent);
                     const timeDifference = calculateTimeDifference(lastEvent.date, otherEvent.date);
 
-                    if (distance <= distanceThreshold && timeDifference <= timeThreshold) {
+                    // Adjust travel time dynamically
+                    const adjustedTimeGap = timeDifference - EVENT_DURATION;
+                    const scaledTimeThreshold = Math.min(
+                        MAX_TIME_GAP, 
+                        Math.max(MIN_TIME_GAP, baseTime * (distance / baseDistance))
+                    );
+
+                    // Ensure time difference is within limits
+                    if (distance <= baseDistance && adjustedTimeGap >= MIN_TIME_GAP && adjustedTimeGap <= scaledTimeThreshold) {
                         cluster.push(otherEvent);
                         visited.add(otherEvent.id);
-                        lastEvent = otherEvent; // Ensure we prioritize forward movement
+                        lastEvent = otherEvent; // Maintain logical sequence
                     }
                 }
             });
 
-            if (cluster.length > 2 && cluster.length < 11) {
+            if (cluster.length > 2 && cluster.length < 7) {
                 clusters.push(cluster);
             }
         }
@@ -91,7 +102,7 @@ export async function ClusterArtists(res,
     setIsSuggestionRequestTriggered(true);
 
     // Clustering step
-    let clusters = groupByProximityWithUniqueArtists(updatedGigs, distanceThreshold, timeThreshold);
+    let clusters = groupEfficiently(updatedGigs, distanceThreshold, timeThreshold);
 
     // Process clusters: remove duplicates and sort
     clusters = clusters.map(cluster => {
@@ -107,7 +118,7 @@ export async function ClusterArtists(res,
         });
     });
 
-    clusters = clusters.filter(cluster => cluster.length > 1);
+    clusters = clusters.filter(cluster => cluster.length > 2);
     // Sort each cluster by date
     clusters = clusters.map(cluster =>
         cluster.sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date in ascending order
