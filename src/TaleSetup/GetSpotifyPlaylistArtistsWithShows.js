@@ -120,7 +120,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                             direction={'row'}
                             spacing={2}
                             alignItems="center"
-                            justifyContent={'space-between'}>
+                            justifyContent={'center'}>
                             <Button
                                 type="submit"
                                 variant="contained"
