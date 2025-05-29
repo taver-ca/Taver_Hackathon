@@ -1,6 +1,6 @@
 // Helper function: calculate Euclidean distance
 function calculateDistance(a, b) {
-    return Math.sqrt(Math.pow(a.location.gpsCoordinate.coords.latitude - b.location.gpsCoordinate.coords.latitude, 2) + Math.pow(a.location.gpsCoordinate.coords.longitude - b.location.gpsCoordinate.coords.longitude, 2));
+    return Math.sqrt(Math.pow(a.latitude - b.latitude, 2) + Math.pow(a.longitude - b.longitude, 2));
 }
 
 function calculateTimeDifference(timeA, timeB) {
@@ -12,8 +12,10 @@ const EVENT_DURATION = 24; // Duration in hours (1 days)
 const MIN_TIME_GAP = 24; // Minimum travel time allocation (1 day)
 const MAX_TIME_GAP = 96; // Maximum travel time allocation (4 days)
 
-function groupEfficiently(events, baseDistance, baseTime) {
-    events.sort((a, b) => a.date.localeCompare(b.date)); // Sort by event time first
+function groupEfficiently(events, startLocation, baseDistance, baseTime) {
+    // Sort events by proximity to the starting location first
+    events.sort((a, b) => calculateDistance(startLocation, a.location.gpsCoordinate.coords) - calculateDistance(startLocation, b.location.gpsCoordinate.coords));
+
     const clusters = [];
     const visited = new Set();
     
@@ -25,21 +27,19 @@ function groupEfficiently(events, baseDistance, baseTime) {
 
             events.forEach(otherEvent => {
                 if (!visited.has(otherEvent.id)) {
-                    const distance = calculateDistance(lastEvent, otherEvent);
+                    const distance = calculateDistance(lastEvent.location.gpsCoordinate.coords, otherEvent.location.gpsCoordinate.coords);
                     const timeDifference = calculateTimeDifference(lastEvent.date, otherEvent.date);
-
-                    // Adjust travel time dynamically
+                    
                     const adjustedTimeGap = timeDifference - EVENT_DURATION;
                     const scaledTimeThreshold = Math.min(
                         MAX_TIME_GAP, 
                         Math.max(MIN_TIME_GAP, baseTime * (distance / baseDistance))
                     );
 
-                    // Ensure time difference is within limits
                     if (distance <= baseDistance && adjustedTimeGap >= MIN_TIME_GAP && adjustedTimeGap <= scaledTimeThreshold) {
                         cluster.push(otherEvent);
                         visited.add(otherEvent.id);
-                        lastEvent = otherEvent; // Maintain logical sequence
+                        lastEvent = otherEvent; // Maintain forward movement
                     }
                 }
             });
@@ -53,11 +53,13 @@ function groupEfficiently(events, baseDistance, baseTime) {
     return clusters;
 }
 
+
 export async function ClusterArtists(res,
     followedArtists,
     allConcerts,
     timeThreshold,
     distanceThreshold,
+    startLocation,
     setPosterName,
     setFollowedArtists,
     setAllConcerts,
@@ -102,7 +104,7 @@ export async function ClusterArtists(res,
     setIsSuggestionRequestTriggered(true);
 
     // Clustering step
-    let clusters = groupEfficiently(updatedGigs, distanceThreshold, timeThreshold);
+    let clusters = groupEfficiently(updatedGigs, startLocation, distanceThreshold, timeThreshold);
 
     // Process clusters: remove duplicates and sort
     clusters = clusters.map(cluster => {

@@ -248,6 +248,7 @@ const TaleSetup = ({
                                 setRoute={handleRoutePick}
                                 setActiveTab={setActiveTab}
                                 setPosterName={setPosterName}
+                                setUserLocation={setUserLocation}
                                 followedArtists={followedArtists}
                                 startDate={startDate}
                                 endDate={endDate}
@@ -258,6 +259,7 @@ const TaleSetup = ({
                                     setOpenRouteDialog(false);
                                 }}
                                 trippSuggestions={tripSuggestions}
+                                userLocation={userLocation}
                             />
                         </TabPanel>
                         <TabPanel value={activeTab} index={1}>

@@ -16,12 +16,14 @@ function GetSpotifyPlaylistArtistsWithShows({
     setRoute,
     setActiveTab,
     setPosterName,
+    setUserLocation,
     allConcerts,
     followedArtists,
     startDate,
     endDate,
     openRouteDialogFromParent,
-    closeRouteDialog }
+    closeRouteDialog,
+    userLocation }
 ) {
 
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
@@ -54,6 +56,20 @@ function GetSpotifyPlaylistArtistsWithShows({
     }, [spotifyPlayList]);
 
     let handlePlaylistSubmit = async () => {
+
+        if (!userLocation) {
+            alert("we will need your location to find concerts closest to you, please give location permission");
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => { setUserLocation(position); }, (error) => {
+                    if (error.code === error.PERMISSION_DENIED) {
+                        alert("You can't look for concerts without providing your location, please enable location services in your browser");
+                        return;
+                    }
+                });
+            }
+        }
+
+
         const url = spotifyPlayList;
         const urlValidate = new RegExp("^https://open\\.spotify\\.com/playlist/[a-zA-Z0-9]{22}(\\?si=.*)?$");
         if (!urlValidate.test(spotifyPlayList)) {
@@ -84,7 +100,7 @@ function GetSpotifyPlaylistArtistsWithShows({
         }).then(async (res) => {
             console.log(`response status code: ${res.status}`);
             if (res.status === 200) {
-                ClusterArtists(res, followedArtists, allConcerts, timeThreshold, distanceThreshold, setPosterName, setFollowedArtists, setAllConcerts, setIsArtistRequestTriggered, setIsSuggestionRequestTriggered, setTripSuggestions, setCalculatedRoutes);
+                ClusterArtists(res, followedArtists, allConcerts, timeThreshold, distanceThreshold, userLocation, setPosterName, setFollowedArtists, setAllConcerts, setIsArtistRequestTriggered, setIsSuggestionRequestTriggered, setTripSuggestions, setCalculatedRoutes);
             }
             return;
         }).catch((err) => {
