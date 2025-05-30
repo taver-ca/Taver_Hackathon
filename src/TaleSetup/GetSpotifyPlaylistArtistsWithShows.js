@@ -50,26 +50,12 @@ function GetSpotifyPlaylistArtistsWithShows({
 
 
     useEffect(() => {
-        if (spotifyPlayList && spotifyPlayList !== "") {
+        if (userLocation && spotifyPlayList && spotifyPlayList !== "") {
             handlePlaylistSubmit();
         }
-    }, [spotifyPlayList]);
+    }, [spotifyPlayList, userLocation]);
 
     let handlePlaylistSubmit = async () => {
-
-        if (!userLocation) {
-            alert("we will need your location to find concerts closest to you, please give location permission");
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => { setUserLocation(position); }, (error) => {
-                    if (error.code === error.PERMISSION_DENIED) {
-                        alert("You can't look for concerts without providing your location, please enable location services in your browser");
-                        return;
-                    }
-                });
-            }
-        }
-
-
         const url = spotifyPlayList;
         const urlValidate = new RegExp("^https://open\\.spotify\\.com/playlist/[a-zA-Z0-9]{22}(\\?si=.*)?$");
         if (!urlValidate.test(spotifyPlayList)) {
@@ -115,7 +101,8 @@ function GetSpotifyPlaylistArtistsWithShows({
                 <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }} title="See who's on tour from your playlist" />
                 <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}>
                     <form onSubmit={async (e) => {
-                        e.preventDefault();
+                        e.preventDefault();                    
+
                         if (!spotifyPlayList) {
                             const text = await navigator.clipboard.readText();
                             setSpotifyPlaylist(text);

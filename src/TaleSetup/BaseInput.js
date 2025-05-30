@@ -2,7 +2,7 @@ import DismissButton from "./DismissButton";
 import ArtistChoiceList from "./ArtistChoiceList";
 import moment from "moment";
 import * as React from 'react';
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import { TextField, Button, Stack, Switch, DialogContent, DialogContentText, DialogActions, Dialog, DialogTitle, List, Typography, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
 import { FetchArtist } from "./FetchArtist";
 import { GenerateOptimizedConcertRoute } from './GenerateOptimizedConcertRoute.js'
@@ -40,6 +40,22 @@ const BaseInput = forwardRef(({
   artistWishlist,
   setActiveTab
 }, ref) => {
+
+  useEffect(() => {
+    function showPosition(position) {
+      setUserLocation(position);
+      localStorage.setItem("locationGranted", "true"); // Store permission flag  
+    }
+    const locationGranted = localStorage.getItem("locationGranted");
+    if (!userLocation && !locationGranted) {
+      alert("we will need your location to find concerts closest to you, please allow location permission in the next prompt");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        alert("We cannot look for concerts for you without knowing your location, please enable location services in your browser");
+      }
+    }
+  }, []);
 
   useImperativeHandle(ref, () => ({
     handleArtistChoiceUpdateFromParent: (artist) => {
@@ -89,20 +105,6 @@ const BaseInput = forwardRef(({
   }
 
   const submitArtistInfo = async (incomingArtistInfo) => {
-
-    if (!userLocation) {
-      alert("we will need your location to find concerts closest to you, please give location permission");
-      closeDialog();
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => { setUserLocation(position); }, (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            alert("You can't look for concerts without providing your location, please enable location services in your browser");
-            closeDialog();
-            return;
-          }
-        });
-      }
-    }
 
     if (startDate === endDate) {
       alert("Your trip start date and end date is on the same day, spread them out");
@@ -202,25 +204,12 @@ const BaseInput = forwardRef(({
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userLocation) {
-      alert("we will need your location to find concerts closest to you, please enable location services");
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => { setUserLocation(position); }, (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            alert("You can't look for concerts without your location, please enable location services in your browser");
-            return;
-          }
-        });
-      }
-    }
-    else {
-      setIsLoading(true);
-      FetchArtist(artistName, startDate, endDate).then((resJson) => {
-        newArtistList(resJson);
-        setIsLoading(false);
-        setOpen(true);
-      });
-    }
+    setIsLoading(true);
+    FetchArtist(artistName, startDate, endDate).then((resJson) => {
+      newArtistList(resJson);
+      setIsLoading(false);
+      setOpen(true);
+    });
   };
 
 

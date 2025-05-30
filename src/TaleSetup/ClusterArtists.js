@@ -9,7 +9,7 @@ function calculateTimeDifference(timeA, timeB) {
 }
 
 const EVENT_DURATION = 24; // Duration in hours (1 days)
-const MIN_TIME_GAP = 24; // Minimum travel time allocation (1 day)
+const MIN_TIME_GAP = 48; // Minimum travel time allocation (2 day)
 const MAX_TIME_GAP = 96; // Maximum travel time allocation (4 days)
 
 function groupEfficiently(events, startLocation, baseDistance, baseTime) {
