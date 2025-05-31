@@ -7,7 +7,7 @@ import Prologue from "./Prologue/Prologue.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { QRCodeCanvas } from "qrcode.react";
 import { useMediaQuery } from "@mui/material";
-
+import PlaylistSource from "./Voyage/PlaylistSource.js";
 
 function App() {
   let cachedStartDate = localStorage.getItem("startDate");
@@ -130,7 +130,17 @@ function App() {
                   setMapStyle={setMapStyle}
                   setConcerts={setConcerts}
                   setUserLocation={setUserLocation}
+                  setSelectedPlaylist={setSelectedPlaylist}
                 />
+                <Grid
+                  sx={{
+                    position: 'absolute',
+                    right: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
+                    top: { xs: 5, sm: 5, md: 30, lg: 30, xl: 30 },
+                    zIndex: 2,
+                  }}>
+                  {!isScreenSmall && <PlaylistSource playlistId={selectedPlaylist.id}></PlaylistSource>}
+                </Grid>
                 <Grid
                   sx={{
                     position: 'absolute',

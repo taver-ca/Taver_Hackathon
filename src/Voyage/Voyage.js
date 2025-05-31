@@ -34,7 +34,8 @@ const Voyage = ({
     setPosterName,
     setConcerts,
     setUserLocation,
-    setMapStyle
+    setMapStyle,
+    setSelectedPlaylist
 }) => {
     const mapRef = useRef();
     const navigate = useNavigate();
@@ -92,6 +93,7 @@ const Voyage = ({
                 var parsedConcerts = JSON.parse(data.concertJson);
                 var transformedConcerts = toLowerCaseKeys(parsedConcerts);
 
+
                 if (data.startingLocation) {
                     var coords = data.startingLocation;
                     var result = { coords: { longitude: coords.Longitude, latitude: coords.Latitude } };
@@ -100,7 +102,7 @@ const Voyage = ({
 
                 setPosterName(data.tripName);
                 setConcerts(transformedConcerts);
-
+                setSelectedPlaylist({ id: data.playlistId, name: data.posterName });
                 setMapStyle(data.mapStyleId);
             } catch (error) {
                 alert("An error occurred while loading the trip data. Please try again later.");
