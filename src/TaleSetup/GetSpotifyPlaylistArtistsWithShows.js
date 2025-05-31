@@ -103,10 +103,8 @@ function GetSpotifyPlaylistArtistsWithShows({
                     <form onSubmit={async (e) => {
                         e.preventDefault();                    
 
-                        if (!spotifyPlayList) {
-                            const text = await navigator.clipboard.readText();
-                            setSpotifyPlaylist(text);
-                        }
+                        const text = await navigator.clipboard.readText();
+                        setSpotifyPlaylist(text);
                     }}>
                         <Stack
                             direction={'row'}
