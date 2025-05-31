@@ -82,6 +82,7 @@ const TaleSetup = ({
 
     const handleRoutePick = (route) => {
         setShowBadge(true);
+        setPosterName(route.posterName) // The "route" argument is a trip object with gigs, name suggestions and a poster name
         childRef.current.handleRouteChoiceUpdateFromParent(route);
     }
 
