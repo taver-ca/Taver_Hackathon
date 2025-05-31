@@ -50,7 +50,11 @@ const TaleSetup = ({
     posterName,
     shareId,
     posterNameSuggestions,
-    showActiveConcert
+    showActiveConcert,
+    selectedPlaylist,
+    setSelectedPlaylist,
+    storedPlaylists,
+    setStoredPlaylists,
 }) => {
     const [isTourMapChecked, setIsTourMapChecked] = useState(false);
     const [showBadge, setShowBadge] = useState(false);
@@ -261,6 +265,10 @@ const TaleSetup = ({
                                 }}
                                 trippSuggestions={tripSuggestions}
                                 userLocation={userLocation}
+                                selectedPlaylist={selectedPlaylist}
+                                setSelectedPlaylist={setSelectedPlaylist}
+                                storedPlaylists={storedPlaylists}
+                                setStoredPlaylists={setStoredPlaylists}
                             />
                         </TabPanel>
                         <TabPanel value={activeTab} index={1}>

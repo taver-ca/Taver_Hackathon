@@ -16,14 +16,17 @@ function GetSpotifyPlaylistArtistsWithShows({
     setRoute,
     setActiveTab,
     setPosterName,
-    setUserLocation,
     allConcerts,
     followedArtists,
     startDate,
     endDate,
     openRouteDialogFromParent,
     closeRouteDialog,
-    userLocation }
+    userLocation,
+    selectedPlaylist,
+    setSelectedPlaylist,
+    storedPlaylists,
+    setStoredPlaylists, }
 ) {
 
     const [spotifyPlayList, setSpotifyPlaylist] = useState("");
@@ -73,6 +76,7 @@ function GetSpotifyPlaylistArtistsWithShows({
         const extractedPlaylistId = url.substring(startIndex, endIndex);
         setIsArtistRequestTriggered(true);
         setActiveTab(1); // Switch to the second tab in the TaleSetup component 
+
         await fetch(`${process.env.REACT_APP_BACKEND}/GetSpotifyPlaylistArtistsWithGigs`, {
             method: 'POST',
             headers: {
@@ -85,8 +89,12 @@ function GetSpotifyPlaylistArtistsWithShows({
             }),
         }).then(async (res) => {
             console.log(`response status code: ${res.status}`);
+            
             if (res.status === 200) {
-                ClusterArtists(res, followedArtists, allConcerts, timeThreshold, distanceThreshold, userLocation, setPosterName, setFollowedArtists, setAllConcerts, setIsArtistRequestTriggered, setIsSuggestionRequestTriggered, setTripSuggestions, setCalculatedRoutes);
+                const resJson = await res.json();
+                setSelectedPlaylist({ id: extractedPlaylistId, name: resJson.PlaylistName });
+                setStoredPlaylists([...storedPlaylists, { id: extractedPlaylistId, name: resJson.PlaylistName }]);
+                ClusterArtists(resJson, followedArtists, allConcerts, timeThreshold, distanceThreshold, userLocation, setPosterName, setFollowedArtists, setAllConcerts, setIsArtistRequestTriggered, setIsSuggestionRequestTriggered, setTripSuggestions, setCalculatedRoutes);
             }
             return;
         }).catch((err) => {
@@ -101,7 +109,7 @@ function GetSpotifyPlaylistArtistsWithShows({
                 <CardHeader sx={{ backgroundColor: "#5e97a5", color: "white" }} title="See who's on tour from your playlist" />
                 <CardContent sx={{ backgroundColor: "#70afbf", color: "white" }}>
                     <form onSubmit={async (e) => {
-                        e.preventDefault();                    
+                        e.preventDefault();
 
                         const text = await navigator.clipboard.readText();
                         setSpotifyPlaylist(text);

@@ -54,7 +54,7 @@ function groupEfficiently(events, startLocation, baseDistance, baseTime) {
 }
 
 
-export async function ClusterArtists(res,
+export async function ClusterArtists(resJson,
     followedArtists,
     allConcerts,
     timeThreshold,
@@ -68,7 +68,6 @@ export async function ClusterArtists(res,
     setTripSuggestions,
     setCalculatedRoutes) {
 
-    let resJson = await res.json();
     //console.table(resJson);
     const existingArtists = followedArtists;
     const incomingArtists = resJson.artistList;

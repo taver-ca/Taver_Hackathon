@@ -41,6 +41,8 @@ function App() {
   const [endDate, setEndDate] = useState(
     cachedEndDate === null ? futureDate : new Date(cachedEndDate)
   );
+  const [selectedPlaylist, setSelectedPlaylist] = useState("");
+  const [storedPlaylists, setStoredPlaylists] = useState([]);
   const [mapStyle, setMapStyle] = useState("1fc21c527f198d4e");
   const isScreenSmall = useMediaQuery("(max-width:1200px)");
   const theme = createTheme({
@@ -104,6 +106,10 @@ function App() {
                   posterName={posterName}
                   shareId={shareId}
                   posterNameSuggestions={posterNameSuggestions}
+                  selectedPlaylist={selectedPlaylist}
+                  setSelectedPlaylist={setSelectedPlaylist}
+                  storedPlaylists={storedPlaylists}
+                  setStoredPlaylists={setStoredPlaylists}
                 />
               </Grid>
             </ThemeProvider>

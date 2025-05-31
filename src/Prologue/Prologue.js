@@ -44,7 +44,11 @@ const Prologue = ({ setStartDate,
     mapStyle,
     posterName,
     shareId,
-    posterNameSuggestions
+    posterNameSuggestions,
+    selectedPlaylist,
+    setSelectedPlaylist,
+    storedPlaylists,
+    setStoredPlaylists,
 }) => {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GCP_KEY, // Add your API key
@@ -123,6 +127,7 @@ const Prologue = ({ setStartDate,
                 endDate,
                 shareId,
                 setShareId,
+                selectedPlaylist,
                 setSaveRouteInProgress)}>
                 <SaveIcon />
             </Fab>}
@@ -138,7 +143,7 @@ const Prologue = ({ setStartDate,
                         zIndex: 1,
                         minWidth: '375px',
                         width: { xs: '100%', sm: '100%', md: '40%', lg: '30%', xl: '25%' }, // Make it take up only a portion at xl
-                        height: {xs: '100vh', md:'90vh'}, // Full height for smaller screens
+                        height: { xs: '100vh', md: '90vh' }, // Full height for smaller screens
                         left: { md: 20 }, // Push left at md
                         top: { md: 20 }, // Adjust top position for smaller screens
                         borderRadius: 2
@@ -186,6 +191,10 @@ const Prologue = ({ setStartDate,
                         clearSelectedArtist={() => {
                             mapRef.current?.handleClearActiveMarker();
                         }}
+                        selectedPlaylist={selectedPlaylist}
+                        setSelectedPlaylist={setSelectedPlaylist}
+                        storedPlaylists={storedPlaylists}
+                        setStoredPlaylists={setStoredPlaylists}
                         showActiveConcert={(markerId) => {
                             //if we are on mobile screen
                             //hide ui

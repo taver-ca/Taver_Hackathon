@@ -34,6 +34,7 @@ export const ShareAsLink = async function
         endDate,
         shareId,
         setShareId,
+        selectedPlaylist,
         setIsLoading) {
     setIsLoading(true);
     //gather json for artists, map coordinates, share page schedules, concert list, trip name, map style id, start date, end date
@@ -61,7 +62,8 @@ export const ShareAsLink = async function
                 tripName: posterName,
                 startDate: startDate,
                 mapStyleId: mapStyle,
-                endDate: endDate
+                endDate: endDate,
+                playlistId: selectedPlaylist.id
             })
         });
 
