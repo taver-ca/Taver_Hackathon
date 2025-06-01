@@ -105,7 +105,7 @@ const Voyage = ({
                 setSelectedPlaylist({ id: data.playlistId, name: data.posterName });
                 setMapStyle(data.mapStyleId);
             } catch (error) {
-                alert("An error occurred while loading the trip data. Please try again later.");
+                alert("An error occurred while loading the trip data. Redirecting to home page.");
                 console.error("Error fetching trip data:", error);
                 navigate('/');
             }
