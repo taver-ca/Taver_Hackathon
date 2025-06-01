@@ -44,7 +44,7 @@ function groupEfficiently(events, startLocation, baseDistance, baseTime) {
                 }
             });
 
-            if (cluster.length > 2 && cluster.length < 7) {
+            if (cluster.length > 2) {
                 clusters.push(cluster);
             }
         }
