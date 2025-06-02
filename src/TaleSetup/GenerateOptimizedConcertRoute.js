@@ -117,7 +117,7 @@ export const GenerateOptimizedConcertRoute = (
     alert(`Unable to schedule a plan for the artists you want to see, their schedules conflict with each other`);
     //remove the last attempted artist that was causing problem and run the optimization again
     setArtistWishlist(artistWishlist.slice(0, -1));
-    GenerateOptimizedConcertRoute(allConcerts, userLocation, artistWishlist.slice(0, -1));
+    return;
   }
 
   //now sort the remaining by max distance traveled

@@ -170,16 +170,17 @@ const BaseInput = forwardRef(({
         //this list size might be concerning.....
         var concatenatedConcert = allConcerts.concat(incomingConcerts);
         setAllConcerts(concatenatedConcert);
+        
+        //create a backup of the current concerts incase we need to revert back
+        var oldConcerts = concerts;
 
-        var emptyConcert = [];
-        //clear the displayed concert, we will have to re-generate everything from scratch to maintain consistency (and by consistency I mean the order you pick artist should have no effect on how the route should be planned out)
-        setConcerts(emptyConcert);
         //now.. are we rendering a route for multiple artist or just simply showing route of one single artist
+
         if (isTourMapChecked) {
           setConcerts(incomingConcerts);
         }
         else {
-          GenerateOptimizedConcertRoute(concatenatedConcert, userLocation, artistWishlist, setArtistWishlist, setConcerts);
+          GenerateOptimizedConcertRoute(concatenatedConcert, userLocation, artistWishlist, setArtistWishlist, setConcerts, oldConcerts);
         }
 
         setOpen(false);
