@@ -70,25 +70,29 @@ const PlaylistSource = ({ playlistId }) => {
 
 
     return (
-         <Stack spacing={2} alignItems="center">
-             {playlistId && (
-            <>
-                {playlistImageUrl && (
-                    <img
-                        width="150px"
-                        src={playlistImageUrl}
-                        alt="Playlist Cover"
-                        style={{ borderRadius: '8px' }}
-                    />
-                )}
-                <img
-                    width="150px"
-                    src={`https://scannables.scdn.co/uri/plain/jpeg/e2e900/black/640/spotify:user:spotify:playlist:${playlistId}`}
-                    alt="Spotify Code"
-                    style={{ borderRadius: '8px' }}
-                />
-            </>
-        )}
+        <Stack spacing={2} alignItems="center">
+            {playlistId && (
+                <>
+                    {playlistImageUrl && (
+                        <a href={`https://open.spotify.com/playlist/${playlistId}`} target="_blank" rel="noopener noreferrer">
+                            <img
+                                width="150px"
+                                src={playlistImageUrl}
+                                alt="Playlist Cover"
+                                style={{ borderRadius: '8px' }}
+                            />
+                        </a>
+                    )}
+                    <a href={`https://open.spotify.com/playlist/${playlistId}`} target="_blank" rel="noopener noreferrer">
+                        <img
+                            width="150px"
+                            src={`https://scannables.scdn.co/uri/plain/jpeg/e2e900/black/640/spotify:user:spotify:playlist:${playlistId}`}
+                            alt="Spotify Code"
+                            style={{ borderRadius: '8px' }}
+                        />
+                    </a>
+                </>
+            )}
         </Stack>
     );
 }
