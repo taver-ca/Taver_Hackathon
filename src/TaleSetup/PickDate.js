@@ -30,7 +30,7 @@ function PickDate({
 
   const updateStartDate = useCallback((date) => {
     if (date > endDate) {
-      setEndDate(date);     
+      setEndDate(date);
     }
     setStartDate(date);
     window.localStorage.setItem("startDate", date.toISOString());
@@ -45,8 +45,7 @@ function PickDate({
 
   const updateEndDate = useCallback((date) => {
     if (date < startDate) {
-      alert("End date must be after the start date!");
-      return;
+      setStartDate(date);
     }
 
     setEndDate(date);
