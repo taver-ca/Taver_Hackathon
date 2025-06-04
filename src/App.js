@@ -61,23 +61,27 @@ function App() {
   }, [artistName]);
 
 
-    useEffect(() => {
-      function showPosition(position) {
-        setUserLocation(position);
-        localStorage.setItem("locationGranted", "true"); // Store permission flag  
-      }
-      const locationGranted = localStorage.getItem("locationGranted");
-      if (!locationGranted) {
-        alert("we will need your location to find concerts closest to you, please allow location permission in the next prompt");
-      }
-  
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-      } else {
-        alert("We cannot look for concerts for you without knowing your location, please enable location services in your browser");
-      }
-  
-    }, []);
+  useEffect(() => {
+    function showPosition(position) {
+      setUserLocation(position);
+      localStorage.setItem("locationGranted", "true"); // Store permission flag  
+    }
+    const locationGranted = localStorage.getItem("locationGranted");
+    if (!locationGranted) {
+      alert("we will need your location to find concerts closest to you, please allow location permission in the next prompt");
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, () => { alert("Oh no, it looks like we failed to acquire your location, we can't recommend concerts without knowing where you are. Try refreshing the page."); }, {
+        enableHighAccuracy: false, // Ensures approximate location rather than precise
+        timeout: 10000, // Limits how long it waits for location retrieval
+        maximumAge: 600000 // Allows cached location use up to 1 minute old
+      });
+    } else {
+      alert("We cannot look for concerts for you without knowing your location, please enable location services in your browser");
+    }
+
+  }, []);
 
   return (
     <div className="App">

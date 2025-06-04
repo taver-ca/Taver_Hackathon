@@ -64,7 +64,7 @@ const concertToMarker = (concert, index) => {
   return {
     id: index,
     name: concert.title,
-    artistImageUrl: concert.image != null ? concert.image.url : window.location.origin + "/Taver.png",
+    artistImageUrl: concert.image !== null ? concert.image.url : window.location.origin + "/Taver.png",
     address: concert.location.name,
     time: formattedDate(concert.date),
     position: {
