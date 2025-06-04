@@ -81,7 +81,7 @@ export const ShareAsLink = async function
                 });
             } else {
                 console.error('Document is not focused');
-                alert('huh? Document is not focused?');
+                alert('Oh no, it looks like you have switched to another tab, please try again!');
             }
 
         } else {
