@@ -85,7 +85,7 @@ const Prologue = ({ setStartDate,
                 },
                 {
                     enableHighAccuracy: false,
-                    timeout: 10000,
+                    timeout: 30000,
                     maximumAge: 600000
                 }
             );
