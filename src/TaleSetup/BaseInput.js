@@ -150,9 +150,14 @@ const BaseInput = forwardRef(({
 
         //add the new concerts
         //this list size might be concerning.....
-        var concatenatedConcert = allConcerts.concat(incomingConcerts);
+
+        // Merge existing and incoming gigs, removing duplicates by id
+        const concatenatedConcert = [...allConcerts, ...incomingConcerts].filter(
+          (value, index, self) => self.findIndex(otherItem => otherItem.id === value.id) === index
+        );
+
         setAllConcerts(concatenatedConcert);
-        
+
         //create a backup of the current concerts incase we need to revert back
         var oldConcerts = concerts;
 

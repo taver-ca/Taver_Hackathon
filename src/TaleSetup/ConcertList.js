@@ -1,6 +1,23 @@
 import { useEffect, useState } from "react";
 import moment from "moment";
-import { List, ListItem, ListItemButton, ListItemText, ListItemAvatar, Avatar, Chip, Stack, TextField, Button, Box, Card, CardHeader, CardContent, CircularProgress, IconButton } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Chip,
+  Stack,
+  TextField,
+  Button,
+  Box,
+  Card,
+  CardHeader,
+  CardContent,
+  CircularProgress,
+  IconButton, Dialog, DialogTitle, Typography, DialogContent
+} from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { GenerateTripTitle } from "../Odyssey/GenerateTripTitle.js";
 
@@ -8,6 +25,11 @@ function formattedDate(incomingDate) {
   var date = new Date(incomingDate);
   return moment(date).format("YYYY/MM/DD");
 }
+function formattedDateDetailed(incomingDate) {
+  var date = new Date(incomingDate);
+  return moment(date).format("YYYY/MM/DD hh:mm A");
+}
+
 
 const ConcertList = ({
   concerts,
@@ -17,6 +39,7 @@ const ConcertList = ({
   setConcerts,
   setAllConcerts,
   setArtistWishlist,
+  allConcerts,
   posterName,
   artistWishlist,
   showActiveConcert,
@@ -24,14 +47,15 @@ const ConcertList = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [tempPosterName, setTempPosterName] = useState(posterName);
-
+  const [openSwapDialog, setOpenSwapDialog] = useState(false);
+  const [activeConcertIndex, setActiveConcertIndex] = useState(null);
   const handlePosterNameChange = (event) => {
     setTempPosterName(event.target.value);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setTempPosterName(posterName);
-  },[posterName])
+  }, [posterName])
 
   const renderConcertList = concerts.map((concert, index) => {
     return (
@@ -89,7 +113,7 @@ const ConcertList = ({
           </IconButton>
         }
       >
-        <ListItemButton onClick={() => showActiveConcert(index)} >
+        <ListItemButton onClick={() => { showActiveConcert(index); setActiveConcertIndex(index); }} >
           <ListItemAvatar>
             <Avatar alt={`${concert.artist}`} src={`${concert.image.url}`} />
           </ListItemAvatar>
@@ -115,6 +139,14 @@ const ConcertList = ({
                     color="secondary"
                     label={`${formattedDate(concert.date)}`}
                   />
+                  {allConcerts.filter((concert) => concert.artistId === concerts[index].artistId && concert.location.name === concerts[index].location.name).length > 1 && <Chip
+                    color="success"
+                    label="Swap for another showtime"
+                    onClick={() => {
+                      showActiveConcert(index);
+                      setActiveConcertIndex(index);
+                      setOpenSwapDialog(true);
+                    }} />}
                 </Stack>
 
               </Stack>
@@ -195,8 +227,65 @@ const ConcertList = ({
             {renderConcertList}
           </List>
         </CardContent>
-
       </Card>
+
+      <Dialog open={openSwapDialog} onClose={() => setOpenSwapDialog(false)} maxWidth="md" fullWidth>
+        {/*Show different showtimes of the same artist at the same location*/}
+        <DialogTitle>
+          <Typography variant="subtitle">Swap ShowTimes</Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={2}>
+            {/* Show a list of other shows performed by the artist of the ActiveConcertIndex at the same location */}
+            {activeConcertIndex !== null && concerts[activeConcertIndex] && concerts[activeConcertIndex].artistId &&
+              allConcerts.filter((concert) => concert.artistId === concerts[activeConcertIndex].artistId && concert.location.name === concerts[activeConcertIndex].location.name).map((concert, index) => (
+                <ListItem
+                  key={index}
+                  sx={{ background: "#e2e900", borderRadius: 2, mb: 1, boxShadow: 2, disablePadding: { xs: true, sm: false } }}                                                    >
+                  <ListItemButton onClick={() => {
+                    // Swap the active concert with the selected concert
+                    const updatedConcerts = [...concerts];
+                    updatedConcerts[activeConcertIndex] = concert;
+                    setConcerts(updatedConcerts);
+                    setActiveConcertIndex(index);
+                    showActiveConcert(index);
+                    setOpenSwapDialog(false);
+                  }}>
+                    <ListItemAvatar>
+                      <Avatar alt={`${concert.artist}`} src={`${concert.image.url}`} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      sx={{ color: "black" }}
+                      primary={`${concert.title}`}
+                      secondary={
+                        <Stack
+                          direction="row"
+                          justifyContent={"space-between"}
+                          display={"flex"}
+                        >
+                          <Stack
+                            width={'100%'}
+                            direction="column"
+                            spacing={1}
+                          >
+                            <Chip
+                              sx={{ background: '#7fc9dc' }}
+                              label={`${concert.location.address}`}
+                            />
+                            <Chip
+                              color="secondary"
+                              label={`${formattedDateDetailed(concert.date)}`}
+                            />
+                          </Stack>
+                        </Stack>
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+          </Stack>
+        </DialogContent>
+      </Dialog>
     </Box>)
 }
 
