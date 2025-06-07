@@ -48,7 +48,7 @@ const ConcertList = ({
   const [isLoading, setIsLoading] = useState(false);
   const [tempPosterName, setTempPosterName] = useState(posterName);
   const [openSwapDialog, setOpenSwapDialog] = useState(false);
-  const [activeConcertIndex, setActiveConcertIndex] = useState(null);
+  const [swapRequestedConcertIndex, setSwapRequestedConcertIndex] = useState(null);
   const handlePosterNameChange = (event) => {
     setTempPosterName(event.target.value);
   };
@@ -113,7 +113,7 @@ const ConcertList = ({
           </IconButton>
         }
       >
-        <ListItemButton onClick={() => { showActiveConcert(index); setActiveConcertIndex(index); }} >
+        <ListItemButton onClick={() => { showActiveConcert(index); }} >
           <ListItemAvatar>
             <Avatar alt={`${concert.artist}`} src={`${concert.image.url}`} />
           </ListItemAvatar>
@@ -142,13 +142,13 @@ const ConcertList = ({
                   {allConcerts.filter((concert) => concert.artistId === concerts[index].artistId && concert.location.name === concerts[index].location.name).length > 1 && <Chip
                     color="success"
                     label="Swap for another showtime"
-                    onClick={() => {
-                      showActiveConcert(index);
-                      setActiveConcertIndex(index);
+                    z-index={3}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setSwapRequestedConcertIndex(index);
                       setOpenSwapDialog(true);
                     }} />}
                 </Stack>
-
               </Stack>
             }
           />
@@ -230,25 +230,32 @@ const ConcertList = ({
       </Card>
 
       <Dialog open={openSwapDialog} onClose={() => setOpenSwapDialog(false)} maxWidth="md" fullWidth>
-        {/*Show different showtimes of the same artist at the same location*/}
         <DialogTitle>
           <Typography variant="subtitle">Swap ShowTimes</Typography>
         </DialogTitle>
-        <DialogContent>
-          <Stack spacing={2}>
+        <DialogContent >
+          <Stack spacing={2}   sx={{          
+            maxWidth: {
+              xs: 320,   // extra-small screens
+              sm: 480,   // small screens
+              md: 600,   // medium screens
+              lg: 800,   // large screens
+              xl: 1000,  // extra-large screens
+            },
+            margin: "0 auto",
+          }}>
             {/* Show a list of other shows performed by the artist of the ActiveConcertIndex at the same location */}
-            {activeConcertIndex !== null && concerts[activeConcertIndex] && concerts[activeConcertIndex].artistId &&
-              allConcerts.filter((concert) => concert.artistId === concerts[activeConcertIndex].artistId && concert.location.name === concerts[activeConcertIndex].location.name).map((concert, index) => (
+            {swapRequestedConcertIndex !== null && concerts[swapRequestedConcertIndex] && concerts[swapRequestedConcertIndex].artistId &&
+              allConcerts.filter((concert) => concert.artistId === concerts[swapRequestedConcertIndex].artistId && concert.location.name === concerts[swapRequestedConcertIndex].location.name).map((concert, index) => (
                 <ListItem
                   key={index}
                   sx={{ background: "#e2e900", borderRadius: 2, mb: 1, boxShadow: 2, disablePadding: { xs: true, sm: false } }}                                                    >
                   <ListItemButton onClick={() => {
                     // Swap the active concert with the selected concert
                     const updatedConcerts = [...concerts];
-                    updatedConcerts[activeConcertIndex] = concert;
+                    updatedConcerts[swapRequestedConcertIndex] = concert;
                     setConcerts(updatedConcerts);
-                    setActiveConcertIndex(index);
-                    showActiveConcert(index);
+                    setSwapRequestedConcertIndex(null);
                     setOpenSwapDialog(false);
                   }}>
                     <ListItemAvatar>
