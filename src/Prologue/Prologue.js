@@ -97,7 +97,7 @@ const Prologue = ({ setStartDate,
 
     return (
         <Stack sx={{ width: '100%', position: 'relative' }} backgroundColor="#7fc9dc">
-            <Backdrop open={loading} sx={{ color: "#fff", zIndex: 999 }} direction="column" alignItems="center" justifyContent="center">
+            <Backdrop open={loading} sx={{ color: '#e2e900', zIndex: 999 }} direction="column" alignItems="center" justifyContent="center">
                 <Stack sx={{
                     backgroundColor: '#7fc9dc',
                     display: 'flex',
