@@ -118,9 +118,10 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
   const mapRef = useRef(null);
   const mapBoundsRef = useRef(null);
   const polylineRef = useRef(null);
+
   const rawMarkers = concerts.map(concertToMarker);
   //filter out duplicate shows 
-  let markers = rawMarkers.filter((item, index, self) => index === self.findIndex((t) => (t.name === item.name && t.address === item.address)));
+  let markers = rawMarkers; 
 
   //artifically adjust coordinates to avoid marker overlap
   markers = adjustCoordinates(markers);
