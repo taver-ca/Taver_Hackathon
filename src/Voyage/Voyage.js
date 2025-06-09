@@ -219,7 +219,7 @@ const Voyage = ({
                             Reset Map View
                         </Button>
 
-                        {(concerts.length > 0 && !isScreenSmall) &&
+                        {(concerts.length > 0) &&
                             <Button id="sharebutton" color="primary"
                                 onClick={async () => {
                                     await handleDownloadImage();
