@@ -90,7 +90,7 @@ const Odyssey = ({
                     });
                 } else {
                     console.error('Document is not focused');
-                    alert('huh? Document is not focused?');
+                    alert('huh? You left this tab didn\'t you?');
                 }
 
             } else {

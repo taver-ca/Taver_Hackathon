@@ -280,6 +280,7 @@ const TaleSetup = ({
                                 onTripSuggestionClick={handleRoutePick}
                                 isArtistRequestTriggered={isArtistRequestTriggered}
                                 isSuggestionRequestTriggered={isSuggestionRequestTriggered}
+                                setActiveTab={setActiveTab}
                             />
                         </TabPanel>
                         <TabPanel value={activeTab} index={2}>

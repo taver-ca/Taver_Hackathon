@@ -9,7 +9,8 @@ function YourSpotifyArtistsWithShows({
   onArtistClick,
   onTripSuggestionClick,
   isArtistRequestTriggered,
-  isSuggestionRequestTriggered
+  isSuggestionRequestTriggered,
+  setActiveTab
 }) {
   const [groupedNames, setGroupedNames] = useState({});
   const [isArtistLoading, setIsArtistLoading] = useState(false);
@@ -42,10 +43,9 @@ function YourSpotifyArtistsWithShows({
   };
 
   const handleTripSuggestionClick = (targetId) => {
-    console.log(`trip Id is:${targetId}`);
     let trip = tripSuggestions.find(trip => trip.id === targetId);
-    console.log(`trip name is: ${trip.posterName}`);
     onTripSuggestionClick(trip);
+    setActiveTab(2); //direct user to the schedule tab
   }
 
   const commaSeparatedfollowedArtists = artists.map((artist, index) => {
