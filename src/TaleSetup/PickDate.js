@@ -90,6 +90,7 @@ function PickDate({
                 }}
                 label="StartDate: "
                 value={dayjs(startDate)}
+                minDate={dayjs(new Date())}
                 onChange={updateStartDate}
               />
               <DatePicker

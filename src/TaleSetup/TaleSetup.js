@@ -94,12 +94,6 @@ const TaleSetup = ({
 
     const isInputDisabled = activeTab >= 2;
     const handleTabChange = (event, newValue) => {
-        if (newValue === 2) {
-            setShow_ToggleUIFab(false);
-        }
-        else {
-            setShow_ToggleUIFab(true);
-        }
         setActiveTab(newValue);
     };
 

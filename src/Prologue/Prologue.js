@@ -9,6 +9,7 @@ import TaleSetup from "../TaleSetup/TaleSetup.js";
 import { ShareAsLink } from "../Odyssey/ShareAsLink.js"
 import { useMediaQuery } from "@mui/material";
 import { Backdrop, CircularProgress } from "@mui/material"
+import { act } from "react";
 
 const Prologue = ({ setStartDate,
     setEndDate,
@@ -70,6 +71,15 @@ const Prologue = ({ setStartDate,
         }
         // detected rendering
     }, mapRef)
+
+    useEffect(() => {
+        if(activeTab === 2) {
+            setShow_ToggleUIFab(false);
+        }
+        else {
+            setShow_ToggleUIFab(true);
+        }
+    }, [activeTab]);
 
     useEffect(() => {
         function showPosition(position) {
@@ -146,10 +156,7 @@ const Prologue = ({ setStartDate,
                 }} onClick={() => {
                     if (isScreenSmall) {
                         var tempActiveTab = activeTab;
-                        if (!showSchedule) {
-                            if (tempActiveTab === 2) {
-                                setShow_ToggleUIFab(false);
-                            }
+                        if (!showSchedule) {                           
                             setActiveTab(tempActiveTab);
                         }
                     }
