@@ -150,10 +150,9 @@ function App() {
                   }}>
                   {!isScreenSmall && <QRCodeCanvas
                     id="QRCode"
-                    value={window.location.href}
-                    alt={window.location.href}
+                    value={window.location.href.replace(`localhost:3000`, "taver.ca")}
+                    alt={window.location.href.replace(`localhost:3000`, "taver.ca")}
                     size={125}
-
                     bgColor="#e2e900"
                     level="H"
                   />}
