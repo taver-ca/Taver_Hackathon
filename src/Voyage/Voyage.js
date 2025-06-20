@@ -221,7 +221,7 @@ const Voyage = ({
                         <Button variant="contained" color="primary"
                             onClick={() => {
                                 setUseDirections(prev => !prev);
-                                mapRef.current?.handleSetUseDirection(useDirections);
+                                mapRef.current?.handleSetUseDirections(useDirections);
                             }}>
                             {useDirections ? 'Hide Directions' : 'Show Directions'}
                         </Button>

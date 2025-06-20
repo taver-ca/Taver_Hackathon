@@ -29,6 +29,7 @@ const TaleSetup = ({
     setPosterNameSuggestions,
     setShareId,
     setShow_ToggleUIFab,
+    setUseDirections,
     setActiveTab,
     clearSelectedArtist,
     saveRouteInProgress,
@@ -297,7 +298,7 @@ const TaleSetup = ({
                                 />}
                         </TabPanel>
                         <TabPanel value={activeTab} index={3}>
-                            <MapStyle setMapStyle={setMapStyle} />
+                            <MapStyle setUseDirections={setUseDirections} setMapStyle={setMapStyle} />
                         </TabPanel>
                     </Box>
                 </Stack>

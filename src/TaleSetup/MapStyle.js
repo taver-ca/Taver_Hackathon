@@ -1,15 +1,16 @@
-import * as React from 'react';
-import { FormControl, InputLabel, NativeSelect } from '@mui/material';
+import { useState } from 'react';
+import { Button, FormControl, InputLabel, NativeSelect } from '@mui/material';
 
 const mapStyles = [
   { mapId: "1fc21c527f198d4e", displayName: "Default Theme", buttonColorCss: "0070d2" },
   { mapId: "53a5c2c14f51f10b", displayName: "Dark Theme", buttonColorCss: "#404040" },
 ];
 
-const MapStyle = ({ setMapStyle }) => {
+const MapStyle = ({ setMapStyle, setUseDirections }) => {
+  const [useDirectionsLocal, setUseDirectionsLocal] = useState(false);
 
   return (
-    <FormControl sx={{ mt: 3, mb: 3 }} fullWidth>
+    <FormControl sx={{ mt: 3, mb: 3 }} fullWidth>      
       <InputLabel
         sx={{
           color: 'white'
@@ -39,6 +40,13 @@ const MapStyle = ({ setMapStyle }) => {
           </option >
         ))}
       </NativeSelect>
+      <Button variant="contained" color="primary"
+        onClick={() => {
+          setUseDirectionsLocal(useDirectionsLocal => !useDirectionsLocal);
+          setUseDirections(useDirectionsLocal => !useDirectionsLocal);
+        }}>
+        {useDirectionsLocal ? 'Hide Directions' : 'Show Directions'}
+      </Button>
     </FormControl>
   );
 }

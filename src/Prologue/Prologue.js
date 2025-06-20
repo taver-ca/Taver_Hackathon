@@ -9,7 +9,6 @@ import TaleSetup from "../TaleSetup/TaleSetup.js";
 import { ShareAsLink } from "../Odyssey/ShareAsLink.js"
 import { useMediaQuery } from "@mui/material";
 import { Backdrop, CircularProgress } from "@mui/material"
-import { act } from "react";
 
 const Prologue = ({ setStartDate,
     setEndDate,
@@ -245,6 +244,9 @@ const Prologue = ({ setStartDate,
                             posterName={posterName}
                             posterNameSuggestions={posterNameSuggestions}
                             setShow_ToggleUIFab={setShow_ToggleUIFab}
+                            setUseDirections = {(setUseDirections) => {
+                                mapRef.current?.handleSetUseDirections(setUseDirections);
+                            }}
                             clearSelectedArtist={() => {
                                 mapRef.current?.handleClearActiveMarker();
                             }}

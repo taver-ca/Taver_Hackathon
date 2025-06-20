@@ -206,7 +206,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
     handleClearActiveMarker: () => {
       setActiveMarker(null);
     },
-    handleSetUseDirection: (useDirections) => {
+    handleSetUseDirections: (useDirections) => {
       setRequest(concertToDirections(path));
       setUseDirections(useDirections);
 
