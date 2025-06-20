@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer } from "@react-google-maps/api";
-import { Card, Avatar, CardHeader, CardContent, Typography } from "@mui/material";
+import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
+import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer, DirectionsService } from "@react-google-maps/api";
+import { Card, Avatar, CardHeader, CardContent, Typography, Button } from "@mui/material";
 import Box from '@mui/material/Box';
 import moment from "moment";
 
@@ -13,8 +13,7 @@ function formattedDate(incomingDate) {
   return moment(date).format("YYYY/MM/DD hh:mm A");
 }
 
-function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path) {
-
+function UpdateMapMarkersAndZoom(mapRef, mapBoundsRef, userLocation, markers, mapStyleId, activeMarker) {
   console.log(`map styleId: ${mapStyleId}`);
   mapBoundsRef.current = new window.google.maps.LatLngBounds();
   markers.forEach(({ position }) => {
@@ -48,10 +47,12 @@ function UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, m
       mapRef.current.fitBounds(mapBoundsRef.current, 20);
     }
   }
+}
 
-  console.log("updating path");
-  polylineRef.current.setPath(path);
-  polylineRef.current.setMap(mapRef.current);
+function UpdateMapPath(mapRef, polylineRef, path) {
+  if (polylineRef.current&& mapRef.current && path) {
+      polylineRef.current.setPath(path);
+  }
 }
 
 function ResetMapView(mapRef, mapBoundsRef) {
@@ -73,6 +74,18 @@ const concertToMarker = (concert, index) => {
     },
   };
 };
+
+const concertToDirections = (path) => {
+  return {
+    origin: path[0],
+    destination: path[path.length - 1],
+    waypoints: path.slice(1, -1).map((point) => ({
+      location: point,
+      stopover: true,
+    })),
+    travelMode: 'DRIVING',
+  };
+}
 
 const containerStyle = {
   width: "100vw",  // Full width of screen
@@ -115,16 +128,71 @@ const adjustCoordinates = (markers) => {
 const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
 
   const [activeMarker, setActiveMarker] = useState(null);
+  const [useDirections, setUseDirections] = useState(false);
   const mapRef = useRef(null);
   const mapBoundsRef = useRef(null);
   const polylineRef = useRef(null);
 
   const rawMarkers = concerts.map(concertToMarker);
-  //filter out duplicate shows 
-  let markers = rawMarkers; 
+  const [request, setRequest] = useState(null);
+  const [directionsResponse, setDirectionsResponse] = useState(null);
+  const [cachedDirections, setCachedDirections] = useState(null);
+  const directionsCallback = useCallback((response) => {
+    if (useDirections === true) {
+      if (response !== null && response.status === 'OK') {
+        setDirectionsResponse(response);
+      } else {
+        console.error('Directions request failed due to', response?.status);
+      }
+    }
+  }, [request, useDirections]);
 
+
+  var path = userLocation !== null
+    ? [
+      {
+        lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
+        lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
+      },
+      ...concerts.map((concert) => ({
+        lat: concert.location.gpsCoordinate.coords.latitude,
+        lng: concert.location.gpsCoordinate.coords.longitude,
+      })),
+    ]
+    : concerts.map((concert) => ({
+      lat: concert.location.gpsCoordinate.coords.latitude,
+      lng: concert.location.gpsCoordinate.coords.longitude,
+    }));
+
+
+
+
+
+
+
+
+  /* Example request object for DirectionsService
+  {
+  origin: { lat: 51.0447, lng: -114.0719 }, // Calgary
+  destination: { lat: 51.1784, lng: -115.5708 }, // Banff
+  waypoints: [
+    {
+      location: { lat: 51.0890, lng: -115.3522 }, // Canmore
+      stopover: true,
+    },
+    {
+      location: { lat: 51.4254, lng: -116.1773 }, // Lake Louise
+      stopover: true,
+    },
+  ],
+  travelMode: 'DRIVING',
+  }    */
+
+
+
+  console.log("updating markers");
   //artifically adjust coordinates to avoid marker overlap
-  markers = adjustCoordinates(markers);
+  const markers = adjustCoordinates(rawMarkers);
 
 
   const handleActiveMarker = (marker) => {
@@ -141,17 +209,20 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
       ResetMapView(mapRef, mapBoundsRef, markers);
     },
     handleShowActiveConcert: (index) => {
-      if (!index) { handleActiveMarker(null); }
-      handleActiveMarker(index);
+      if (index === null || index === undefined) {
+        handleActiveMarker(null);
+      }
+      else {
+        handleActiveMarker(index);
+      }
     },
     handleClearActiveMarker: () => {
       setActiveMarker(null);
     }
   }));
 
-
-
   const mapStyleId = mapStyle;
+
   const handleOnLoad = (map) => {
     const bounds = new google.maps.LatLngBounds(); // eslint-disable-line
     if (userLocation) {
@@ -191,32 +262,26 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
     mapBoundsRef.current = bounds;
     mapRef.current = map;
     polylineRef.current = new google.maps.Polyline(pathOptions); // eslint-disable-line
-    UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path);
+    polylineRef.current.setMap(map);
+    UpdateMapMarkersAndZoom(mapRef, mapBoundsRef, userLocation, markers, mapStyleId, activeMarker);
   };
 
-  var path =
-    userLocation !== null
-      ? [
-        {
-          lat: Number(parseFloat(userLocation.coords.latitude).toFixed(4)),
-          lng: Number(parseFloat(userLocation.coords.longitude).toFixed(4)),
-        },
-        ...concerts.map((concert) => ({
-          lat: concert.location.gpsCoordinate.coords.latitude,
-          lng: concert.location.gpsCoordinate.coords.longitude,
-        })),
-      ]
-      : concerts.map((concert) => ({
-        lat: concert.location.gpsCoordinate.coords.latitude,
-        lng: concert.location.gpsCoordinate.coords.longitude,
-      }));
+
+  useEffect(() => {
+    if (directionsResponse) {
+      setCachedDirections(directionsResponse);
+    }
+  }, [directionsResponse])
+
+
+
 
 
   useEffect(() => {
     console.log("condition check");
-    if (mapRef.current !== null && mapBoundsRef.current !== null && polylineRef.current !== null) {
-      UpdateMapZoomAndPath(mapRef, mapBoundsRef, polylineRef, userLocation, markers, mapStyleId, activeMarker, path);
-    }
+    if (mapRef.current !== null && mapBoundsRef.current !== null) {
+      UpdateMapMarkersAndZoom(mapRef, mapBoundsRef, userLocation, markers, mapStyleId, activeMarker);
+    }    
   }, [markers, mapStyleId]);
 
   return (
@@ -233,8 +298,8 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
           gestureHandling: "greedy",
           restriction: {
             latLngBounds: {
-              west: 180,
-              east: -180,
+              west: -180,
+              east: 180,
               north: 90,   // North Pole
               south: -90,  // South Pole
             },
@@ -243,6 +308,13 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
         }}
         mapContainerStyle={mapContainerStyle}
       >
+        {request && (
+          <DirectionsService
+            options={request}
+            callback={directionsCallback}
+          />
+        )}
+
         {userLocation && (
           <MarkerF
             position={{
@@ -288,7 +360,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
                 });
               });
             });
-
+            console.log("pathCopy after clustering: ", pathCopy);
             polylineRef.current.setPath(pathCopy);
           }}
         >
@@ -325,6 +397,23 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
           )}
         </MarkerClusterer>
       </GoogleMap>
+
+
+      <Button zIndex={1000} variant="contained" color="primary" sx={{ position: "absolute", bottom: 20, right: 20 }}
+        onClick={() => {
+          setRequest(concertToDirections(path));
+          setUseDirections(prev => !prev);
+
+          if (useDirections) {
+            console.log("using google directions");
+            UpdateMapPath(mapRef, polylineRef, cachedDirections.routes[0].overview_path);
+          } else {
+            console.log("using simple directions");
+            UpdateMapPath(mapRef, polylineRef, path);
+          }
+        }}>
+        {useDirections ? 'Hide Directions' : 'Show Directions'}
+      </Button>
     </Box>);
 });
 
