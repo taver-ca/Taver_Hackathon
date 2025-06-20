@@ -34,7 +34,7 @@ function UpdateMapMarkersAndZoom(mapRef, mapBoundsRef, userLocation, markers, ma
 
   if (activeMarker === null) {
     console.log("fitBounds");
-    mapRef.current.fitBounds(mapBoundsRef.current, 20);
+    mapRef.current.fitBounds(mapBoundsRef.current,200);
   }
   else {
     var index = markers.findIndex(marker => marker.id === activeMarker);
@@ -44,14 +44,8 @@ function UpdateMapMarkersAndZoom(mapRef, mapBoundsRef, userLocation, markers, ma
       mapRef.current.setZoom(17);
     }
     else {
-      mapRef.current.fitBounds(mapBoundsRef.current, 20);
+      mapRef.current.fitBounds(mapBoundsRef.current, 200);
     }
-  }
-}
-
-function UpdateMapPath(mapRef, polylineRef, path) {
-  if (polylineRef.current&& mapRef.current && path) {
-      polylineRef.current.setPath(path);
   }
 }
 
@@ -136,7 +130,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
   const rawMarkers = concerts.map(concertToMarker);
   const [request, setRequest] = useState(null);
   const [directionsResponse, setDirectionsResponse] = useState(null);
-  const [cachedDirections, setCachedDirections] = useState(null);
+
   const directionsCallback = useCallback((response) => {
     if (useDirections === true) {
       if (response !== null && response.status === 'OK') {
@@ -267,13 +261,6 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
   };
 
 
-  useEffect(() => {
-    if (directionsResponse) {
-      setCachedDirections(directionsResponse);
-    }
-  }, [directionsResponse])
-
-
 
 
 
@@ -281,7 +268,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
     console.log("condition check");
     if (mapRef.current !== null && mapBoundsRef.current !== null) {
       UpdateMapMarkersAndZoom(mapRef, mapBoundsRef, userLocation, markers, mapStyleId, activeMarker);
-    }    
+    }
   }, [markers, mapStyleId]);
 
   return (
@@ -361,7 +348,14 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
               });
             });
             console.log("pathCopy after clustering: ", pathCopy);
-            polylineRef.current.setPath(pathCopy);
+            if (!useDirections) {
+              polylineRef.current.setPath(pathCopy);
+            }
+            else {
+              if (directionsResponse && directionsResponse.routes && directionsResponse.routes.length > 0) {
+                polylineRef.current.setPath(directionsResponse.routes[0].overview_path);
+              }
+            }
           }}
         >
           {(clusterer) => (
@@ -406,10 +400,11 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
 
           if (useDirections) {
             console.log("using google directions");
-            UpdateMapPath(mapRef, polylineRef, cachedDirections.routes[0].overview_path);
+            polylineRef.current.setPath(directionsResponse.routes[0].overview_path);
+
           } else {
             console.log("using simple directions");
-            UpdateMapPath(mapRef, polylineRef, path);
+            polylineRef.current.setPath(path);
           }
         }}>
         {useDirections ? 'Hide Directions' : 'Show Directions'}
