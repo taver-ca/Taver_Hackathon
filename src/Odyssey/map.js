@@ -34,7 +34,7 @@ function UpdateMapMarkersAndZoom(mapRef, mapBoundsRef, userLocation, markers, ma
 
   if (activeMarker === null) {
     console.log("fitBounds");
-    mapRef.current.fitBounds(mapBoundsRef.current,200);
+    mapRef.current.fitBounds(mapBoundsRef.current, 200);
   }
   else {
     var index = markers.findIndex(marker => marker.id === activeMarker);
@@ -158,13 +158,6 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
       lng: concert.location.gpsCoordinate.coords.longitude,
     }));
 
-
-
-
-
-
-
-
   /* Example request object for DirectionsService
   {
   origin: { lat: 51.0447, lng: -114.0719 }, // Calgary
@@ -212,6 +205,20 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
     },
     handleClearActiveMarker: () => {
       setActiveMarker(null);
+    },
+    handleSetUseDirection: (useDirections) => {
+      setRequest(concertToDirections(path));
+      setUseDirections(useDirections);
+
+      if (useDirections) {
+        console.log("using google directions");
+        if (directionsResponse && directionsResponse.routes && directionsResponse.routes.length > 0) {
+          polylineRef.current.setPath(directionsResponse.routes[0].overview_path);
+        }
+      } else {
+        console.log("using simple directions");
+        polylineRef.current.setPath(path);
+      }
     }
   }));
 
@@ -391,24 +398,6 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
           )}
         </MarkerClusterer>
       </GoogleMap>
-
-
-      <Button zIndex={1000} variant="contained" color="primary" sx={{ position: "absolute", bottom: 20, right: 20 }}
-        onClick={() => {
-          setRequest(concertToDirections(path));
-          setUseDirections(prev => !prev);
-
-          if (useDirections) {
-            console.log("using google directions");
-            polylineRef.current.setPath(directionsResponse.routes[0].overview_path);
-
-          } else {
-            console.log("using simple directions");
-            polylineRef.current.setPath(path);
-          }
-        }}>
-        {useDirections ? 'Hide Directions' : 'Show Directions'}
-      </Button>
     </Box>);
 });
 

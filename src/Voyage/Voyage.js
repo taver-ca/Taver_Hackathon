@@ -45,13 +45,13 @@ const Voyage = ({
     });
     const [loading, setLoading] = useState(true);
     const [showSchedule, setShowSchedule] = useState(true);
+    const [useDirections, setUseDirections] = useState(false);
     const isScreenSmall = useMediaQuery("(max-width:1200px)");
 
     const handleDownloadImage = async function () {
 
         removeElement("UIControlsContainer", "UIControls");
         removeElement("showScheduleFabContainer", "showScheduleFab");
-
         const element = document.getElementById("sharepage");
 
         html2canvas(element, {
@@ -212,15 +212,21 @@ const Voyage = ({
                     </Stack>
                     {/* Share Button */}
                     <Stack container spacing={2} direction="row" alignItems="center" justifyContent="center" Id="UIControls">
-                        <Button id="resetButton" color="primary" disabled={concerts.length === 0}
+                        <Button color="primary" disabled={concerts.length === 0}
                             onClick={() => {
                                 mapRef.current?.handleResetMapView();
                             }} variant="contained">
                             Reset Map View
                         </Button>
-
+                        <Button variant="contained" color="primary"
+                            onClick={() => {
+                                setUseDirections(prev => !prev);
+                                mapRef.current?.handleSetUseDirection(useDirections);
+                            }}>
+                            {useDirections ? 'Hide Directions' : 'Show Directions'}
+                        </Button>
                         {(concerts.length > 0) &&
-                            <Button id="sharebutton" color="primary"
+                            <Button color="primary"
                                 onClick={async () => {
                                     await handleDownloadImage();
                                 }} variant="contained">
