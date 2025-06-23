@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, MarkerClusterer, DirectionsService } from "@react-google-maps/api";
-import { Card, Avatar, CardHeader, CardContent, Typography, Button } from "@mui/material";
+import { Card, Avatar, CardHeader, CardContent, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
 import moment from "moment";
 
@@ -139,7 +139,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
         console.error('Directions request failed due to', response?.status);
       }
     }
-  }, [request, useDirections]);
+  }, [useDirections]);
 
 
   var path = userLocation !== null
@@ -268,21 +268,56 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
   };
 
 
+  const handleClusteringEnd = useCallback((clusterer) => {
+    var pathCopy = [...path];
+    // build the clusteringPolyline
+    // get markerclusters with more than one marker inside them
+    var clustersGreaterThanOne = clusterer.clusters.filter((cluster) => cluster.markers.length > 1);
+    //console.log(`total number of clusters: ${clusterer.clusters.length}`);
+    //console.log("cluster with more than 1 marker: ");
+    clustersGreaterThanOne.forEach(cluster => console.log(cluster));
 
+    // replace all points in each cluster in path with the center point
+    clustersGreaterThanOne.forEach((cluster) => {
+      let centerPoint = cluster.getCenter();
+      let cleanedUpCenterPoint = { lat: centerPoint.lat(), lng: centerPoint.lng() };
+
+      let clusterPoints = cluster.markers.map((marker) => {
+        let markerPosition = marker.getPosition();
+        return { lat: markerPosition.lat(), lng: markerPosition.lng() };
+      });
+
+      pathCopy.forEach((point, index) => {
+        clusterPoints.forEach((clusterPoint) => {
+          if (clusterPoint.lat === point.lat && clusterPoint.lng === point.lng) {
+            pathCopy[index] = cleanedUpCenterPoint;
+          }
+        });
+      });
+    });
+
+    if (!useDirections) {
+      polylineRef.current.setPath(pathCopy);
+    }
+    else {
+      if (directionsResponse && directionsResponse.routes && directionsResponse.routes.length > 0) {
+        polylineRef.current.setPath(directionsResponse.routes[0].overview_path);
+      }
+    }
+  }, [path, useDirections, directionsResponse]);
 
 
   useEffect(() => {
-    console.log("condition check");
     if (mapRef.current !== null && mapBoundsRef.current !== null) {
       UpdateMapMarkersAndZoom(mapRef, mapBoundsRef, userLocation, markers, mapStyleId, activeMarker);
     }
-  }, [markers, mapStyleId]);
+  }, [activeMarker, userLocation, markers, mapStyleId]);
 
   return (
     <Box sx={containerStyle}>
       <GoogleMap
         style={{ overflow: "visible" }}
-        key={[mapStyle]}
+        key={mapStyle}
         onLoad={handleOnLoad}
         options={{
           mapId: mapStyle,
@@ -327,43 +362,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
           ignoreHidden={false}
           gridSize={20}
           maxZoom={10}
-          onClusteringEnd={(clusterer) => {
-            var pathCopy = [...path];
-            // build the clusteringPolyline
-            // get markerclusters with more than one marker inside them
-            var clustersGreaterThanOne = clusterer.clusters.filter((cluster) => cluster.markers.length > 1);
-            //console.log(`total number of clusters: ${clusterer.clusters.length}`);
-            //console.log("cluster with more than 1 marker: ");
-            clustersGreaterThanOne.forEach(cluster => console.log(cluster));
-
-            // replace all points in each cluster in path with the center point
-            clustersGreaterThanOne.forEach((cluster) => {
-              let centerPoint = cluster.getCenter();
-              let cleanedUpCenterPoint = { lat: centerPoint.lat(), lng: centerPoint.lng() };
-
-              let clusterPoints = cluster.markers.map((marker) => {
-                let markerPosition = marker.getPosition();
-                return { lat: markerPosition.lat(), lng: markerPosition.lng() };
-              });
-
-              pathCopy.forEach((point, index) => {
-                clusterPoints.forEach((clusterPoint) => {
-                  if (clusterPoint.lat === point.lat && clusterPoint.lng === point.lng) {
-                    pathCopy[index] = cleanedUpCenterPoint;
-                  }
-                });
-              });
-            });
-            console.log("pathCopy after clustering: ", pathCopy);
-            if (!useDirections) {
-              polylineRef.current.setPath(pathCopy);
-            }
-            else {
-              if (directionsResponse && directionsResponse.routes && directionsResponse.routes.length > 0) {
-                polylineRef.current.setPath(directionsResponse.routes[0].overview_path);
-              }
-            }
-          }}
+          onClusteringEnd={handleClusteringEnd}
         >
           {(clusterer) => (
             <div>
@@ -375,7 +374,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
                     icon={{ url: artistImageUrl, scaledSize: { width: 35, height: 35 } }}
                     clusterer={clusterer}
                     onClick={(e) => {
-                      e.stop()
+                      e.domEvent.stopPropagation()
                       handleActiveMarker(id)
                     }}
                   >
