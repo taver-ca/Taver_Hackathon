@@ -1,7 +1,7 @@
 import { Stack, Box, Fab, Typography } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api"
-import Map from "../Odyssey/Map";
+import Map from "../Odyssey/Map.js";
 import ListIcon from '@mui/icons-material/List';
 import SaveIcon from '@mui/icons-material/Save';
 import Fade from '@mui/material/Fade';
