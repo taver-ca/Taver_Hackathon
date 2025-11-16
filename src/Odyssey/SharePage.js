@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Stack, TextField, Button, CircularProgress } from '@mui/material';
-import Map from "./map";
+import Map from "./Map";
 import { useLoadScript } from "@react-google-maps/api"
 import SharePageList from './SharePageList';
 import { FetchName } from './FetchName.js';

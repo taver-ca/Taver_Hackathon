@@ -1,5 +1,5 @@
 import { Stack, Typography, Box, Button, Fab, Grid } from "@mui/material";
-import Map from "../Odyssey/map";
+import Map from "../Odyssey/Map";
 import SharePageList from "../Odyssey/SharePageList"
 import { useState, useEffect, useRef } from "react";
 import { useParams } from 'react-router-dom';

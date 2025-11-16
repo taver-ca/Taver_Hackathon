@@ -119,14 +119,13 @@ const adjustCoordinates = (markers) => {
   });
 };
 
-const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
+const Map = forwardRef(({ concerts, userLocation, mapStyle, setUserLocation }, ref) => {
 
   const [activeMarker, setActiveMarker] = useState(null);
   const [useDirections, setUseDirections] = useState(false);
   const mapRef = useRef(null);
   const mapBoundsRef = useRef(null);
   const polylineRef = useRef(null);
-
   const rawMarkers = concerts.map(concertToMarker);
   const [request, setRequest] = useState(null);
   const [directionsResponse, setDirectionsResponse] = useState(null);
@@ -319,6 +318,30 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
         style={{ overflow: "visible" }}
         key={mapStyle}
         onLoad={handleOnLoad}
+        onClick={(e) => {
+
+          if (userLocation === null) {
+            var userPickedCoords = { coords: { longitude: e.latLng.lng(), latitude: e.latLng.lat() } }
+            const candidate = { lat: userPickedCoords.coords.latitude, lng: userPickedCoords.coords.longitude };
+            const geocoder = new window.google.maps.Geocoder();
+            var address = "";
+            geocoder.geocode({ location: candidate }, (results, status) => {
+              if (status === "OK" && results[0]) {
+                address = results[0].formatted_address
+              }
+              // Show confirmation dialog
+              const confirmed = window.confirm(
+                `Are you sure ${address === "" ? 'this' : address} is where you want to set your starting location? Starting location cannot be changed unless you refresh the page.`
+              );
+
+              if (confirmed) {
+                if (setUserLocation) {
+                  setUserLocation(userPickedCoords);
+                }
+              }
+            });
+          }
+        }}
         options={{
           mapId: mapStyle,
           minZoom: 0,
@@ -376,6 +399,7 @@ const Map = forwardRef(({ concerts, userLocation, mapStyle }, ref) => {
                     onClick={(e) => {
                       e.domEvent.stopPropagation()
                       handleActiveMarker(id)
+
                     }}
                   >
                     {activeMarker === id ? (

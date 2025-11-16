@@ -1,7 +1,7 @@
 import { Stack, Box, Fab, Typography } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api"
-import Map from "../Odyssey/map";
+import Map from "../Odyssey/Map";
 import ListIcon from '@mui/icons-material/List';
 import SaveIcon from '@mui/icons-material/Save';
 import Fade from '@mui/material/Fade';
@@ -72,7 +72,7 @@ const Prologue = ({ setStartDate,
     }, mapRef)
 
     useEffect(() => {
-        if(activeTab === 2) {
+        if (activeTab === 2) {
             setShow_ToggleUIFab(false);
         }
         else {
@@ -82,25 +82,36 @@ const Prologue = ({ setStartDate,
 
     useEffect(() => {
         function showPosition(position) {
-            setUserLocation(position);          
+            setUserLocation(position);
             setLoading(false); // Hide loading animation once location is acquired
         }
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                showPosition,
-                () => {                    
-                    setLoadingMessage("Failed to acquire location. Try refreshing the page. Or allow location access for taver.ca");
-                },
-                {
-                    enableHighAccuracy: false,
-                    timeout: 30000,
-                    maximumAge: 600000
+
+        navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
+            if (permissionStatus.state === 'granted') {
+                // Permission granted, proceed to get location
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        showPosition,
+                        () => {
+                            setLoading(false);
+                            alert("Choose your starting location by tapping anywhere on the map.");
+                            //setLoadingMessage("Failed to acquire location. Try refreshing the page. Or allow location access for taver.ca");
+                        },
+                        {
+                            enableHighAccuracy: false,
+                            timeout: 30000,
+                            maximumAge: 600000
+                        }
+                    );
                 }
-            );
-        } else {
-            setLoadingMessage("Please enable location services in your browser.");            
-        }
+            } else if (permissionStatus.state === 'denied') {
+                // Permission denied, inform the user or provide instructions
+                setLoading(false);
+                alert("Choose your starting location by tapping anywhere on the map.");
+                //setLoadingMessage("Please enable location services in your browser.");      
+            }
+        });
     }, []);
 
 
@@ -137,7 +148,7 @@ const Prologue = ({ setStartDate,
                         width: '100%',
                         zIndex: 0, // Sends the map to the background
                     }}>
-                        <Map ref={mapRef} concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} />
+                        <Map ref={mapRef} concerts={concerts} userLocation={userLocation} mapStyle={mapStyle} setUserLocation={setUserLocation} />
                     </Box>
                 </Fade>
 
@@ -155,7 +166,7 @@ const Prologue = ({ setStartDate,
                 }} onClick={() => {
                     if (isScreenSmall) {
                         var tempActiveTab = activeTab;
-                        if (!showSchedule) {                           
+                        if (!showSchedule) {
                             setActiveTab(tempActiveTab);
                         }
                     }
@@ -244,7 +255,7 @@ const Prologue = ({ setStartDate,
                             posterName={posterName}
                             posterNameSuggestions={posterNameSuggestions}
                             setShow_ToggleUIFab={setShow_ToggleUIFab}
-                            setUseDirections = {(setUseDirections) => {
+                            setUseDirections={(setUseDirections) => {
                                 mapRef.current?.handleSetUseDirections(setUseDirections);
                             }}
                             clearSelectedArtist={() => {
